@@ -1,0 +1,16 @@
+the file structure for new next js apps with app directory is in the form:
+
+/app -> /ROUTEFOLDERNAME -> /page.tsx
+
+where inside page.tsx will be content of route page, this is so next js
+can automatically tell that oh ROUTEFOLDERNAME is /root/someroute and /page.tsx is its main content
+
+but for backedn stuff they still need ot be inside pages/api i think?
+
+ content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+
+  the /pages/componetns is for legacy next js whereas now /app is enough since everything is in there

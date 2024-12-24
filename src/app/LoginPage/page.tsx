@@ -1,13 +1,10 @@
 'use client';
 
-import WebsiteHeader from "@/app/components/WebsiteHeader";
+import LoginMenu from "./components/LoginMenu";
 
 export default function LoginPage() {
     return <>
-        <div className="bg-red-900 h-screen" >
-
-
-        </div>
+        <LoginMenu />
 
     </>
 }
