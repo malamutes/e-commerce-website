@@ -1,9 +1,12 @@
 "use client";
 
 import { Key, useEffect, useState } from "react";
-import ProductView from "../Components/ProductView";
-import { Product } from "../Server/tableTypes";
+import ProductView from "./components/ProductView";
+import { Product } from "./Server/tableTypes";
 import AddProduct from "./AddProduct";
+import Image from "next/image";
+import WebsiteHeader from "./components/WebsiteHeader";
+import LoginPage from "./LoginPage/page";
 
 export default function MainPage() {
     const [products, setProducts] = useState<any>([]);
@@ -25,9 +28,7 @@ export default function MainPage() {
     //fetch data on mount
 
     return (
-        <div className="grid grid-cols-4 gap-y-10">
-            <AddProduct />
-        </div>
+        <></>
     );
 }
 
