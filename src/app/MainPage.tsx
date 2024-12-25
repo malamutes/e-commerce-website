@@ -28,7 +28,11 @@ export default function MainPage() {
     //fetch data on mount
 
     return (
-        <></>
+        <>
+            <div className="h-screen bg-gray-200">
+
+            </div>
+        </>
     );
 }
 
