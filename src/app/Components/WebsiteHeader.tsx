@@ -53,7 +53,7 @@ export default function WebsiteHeader() {
     }
 
     const handleProducerDashboard = async () => {
-
+        router.push('/ProducerDashboard');
     }
 
     return <>

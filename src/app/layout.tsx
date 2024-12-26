@@ -36,7 +36,7 @@ export default function RootLayout({
 
           <WebsiteHeader />
           {/* the padding top 100px is to account for the website top bar which is 100px for now*/}
-          <div className="pt-[100px] bg-gray-300">
+          <div className="pt-[100px] bg-white">
             {children}
           </div>
           <WebsiteFooter />
