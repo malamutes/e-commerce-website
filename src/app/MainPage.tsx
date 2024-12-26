@@ -7,6 +7,7 @@ import AddProduct from "./AddProduct";
 import Image from "next/image";
 import WebsiteHeader from "./components/WebsiteHeader";
 import LoginPage from "./LoginPage/page";
+import { useSession } from "next-auth/react";
 
 export default function MainPage() {
     const [products, setProducts] = useState<any>([]);
@@ -26,6 +27,12 @@ export default function MainPage() {
         console.log(typeof products)
     }, [products])
     //fetch data on mount
+
+
+    const { data: session, status } = useSession();
+
+    console.log(session?.user.user_id, session?.user.email, status);
+
 
     return (
         <>
