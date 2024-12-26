@@ -25,10 +25,36 @@ export const authOptions = {
                     return null;
                 }
 
+                const checkUserProducer = await sql`SELECT business_name, 
+                business_type, business_location
+                FROM producers WHERE user_id = ${userLoginQuery[0].user_id}`
+
+                let isUserProducer = false;
+
+                console.log(checkUserProducer);
+
+                //should only be one unique entry
+                if (checkUserProducer.length === 1) {
+                    isUserProducer = true
+
+                    return {
+                        id: userLoginQuery[0].user_id.toString(),
+                        email: userLoginQuery[0].user_email,
+                        isUserProducer: isUserProducer,
+                        business: {
+                            businessName: checkUserProducer[0].business_name,
+                            businessType: checkUserProducer[0].business_type,
+                            businessLocation: checkUserProducer[0].business_location
+                        }
+                    };
+                }
+
+
                 //console.log("CHECK THIS IS RIGHT:", userLoginQuery[0].user_id.toString(), userLoginQuery[0].user_email)
                 return {
                     id: userLoginQuery[0].user_id.toString(),
-                    email: userLoginQuery[0].user_email
+                    email: userLoginQuery[0].user_email,
+                    isUserProducer: isUserProducer,
                 };
             }
         })
@@ -39,6 +65,8 @@ export const authOptions = {
             if (user) {
                 token.user_id = Number(user.id);
                 token.email = user.email;
+                token.isUserProducer = user.isUserProducer
+                token.business = user.business
                 //console.log("tokenHERE:", token);
             } else {
                 // console.log("No user data found in jwt callback.");
@@ -49,7 +77,9 @@ export const authOptions = {
         async session({ session, token }:
             { session: Session, token: JWT }) {
             session.user.user_id = token.user_id
-            session.user.email = token.email ?? undefined
+            session.user.email = token.email ?? undefined,
+                session.user.isUserProducer = token.isUserProducer
+            session.user.business = token.business
             console.log("session:", session)
             return session;
         },

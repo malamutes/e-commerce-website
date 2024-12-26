@@ -6,6 +6,12 @@ declare module "next-auth/jwt" {
     interface JWT {
         /** OpenID ID Token */
         user_id?: number
+        isUserProducer?: boolean
+        business?: {
+            businessName: string,
+            businessLocation: string,
+            businessType: string
+        }
     }
 }
 
@@ -17,7 +23,22 @@ declare module "next-auth" {
         user: {
             /** The user's postal address. */
             user_id?: number
-            email?: string
+            email?: string,
+            isUserProducer?: boolean
+            business?: {
+                businessName: string,
+                businessLocation: string,
+                businessType: string
+            }
+        }
+    }
+
+    interface DefaultUser {
+        isUserProducer?: boolean
+        business?: {
+            businessName: string,
+            businessLocation: string,
+            businessType: string
         }
     }
 

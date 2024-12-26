@@ -95,10 +95,7 @@ export default function LoginMenu() {
 
     return <>
         <div className='bg-gray-100'>
-            <div className='h-[200px]'>
-
-            </div>
-            <div className="h-screen flex flex-col justify-center items-center
+            <div className="flex flex-col justify-center items-center
                 lg:container mx-auto sm:pr-[50px] sm:pl-[50px] lg:pr-0 lg:pl-0 
                 pr-[15px] pl-[25px] min-w-[270px]">
                 <div className='flex flex-row lg:w-5/6 w-full'>
