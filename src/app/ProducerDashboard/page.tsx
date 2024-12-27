@@ -8,6 +8,7 @@ import Sales from "./components/Sales";
 import Settings from "./components/Settings";
 import Products from "./components/Products";
 import Operations from "./components/Operations";
+import AddProduct from "./components/AddProduct";
 
 export default function ProducerDashboard() {
 
@@ -26,6 +27,7 @@ export default function ProducerDashboard() {
         'Settings': <Settings />,
         'Products': <Products />,
         'Operations': <Operations />,
+        'AddProduct': <AddProduct />
 
     };
 
