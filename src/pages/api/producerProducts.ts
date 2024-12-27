@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Query to fetch products
         const data = await sql`
             SELECT 
+                product_id,
                 product_name, 
                 product_price, 
                 product_type, 
@@ -28,6 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             FROM products
             WHERE 
             product_producer = ${session.user.business?.businessName}`;
+
+        //prolly need to do if no items then send back you have no products or something
 
         // Respond with the data in JSON format
         res.status(200).json(data);
