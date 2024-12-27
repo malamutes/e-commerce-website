@@ -2,9 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Product } from "../ProducerDashboard/components/Products";
+import { Product } from "@/app/ProducerDashboard/components/Products";
 
-export default function ProductView() {
+export default function ProductPage() {
 
     const [currentProduct, setCurrentProduct] = useState<Product[]>([]);
     const searchParams = useSearchParams();

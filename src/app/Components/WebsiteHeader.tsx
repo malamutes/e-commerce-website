@@ -13,15 +13,17 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { clothingCategory, headers } from "../CollectionTypes";
 
 export default function WebsiteHeader() {
     const iconSize = "25px";
     const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
-    const headers = ['Products', 'Trending', 'Best Sellers', 'New'];
     const dropDownMenuItemClass = "border-2 border-black p-5";
 
     const [userIn, setUserIn] = useState(false);
     const [displayUserDropdown, setDisplayUserDrowndown] = useState(false);
+
+    const [productsDropdown, setProductsDropdown] = useState(false);
 
     const { data: session, status } = useSession();
 
@@ -70,7 +72,15 @@ export default function WebsiteHeader() {
 
                     <div className="flex flex-row ">
                         {headers.map((headline, index) => (
-                            <div key={index} className="flex flex-row items-center xl:mx-4 lg:mx-3 cursor-pointer">
+                            <div key={index}
+                                className="flex flex-row items-center xl:mx-4 lg:mx-3 cursor-pointer"
+                                onClick={() => {
+                                    if (headline === 'Products') {
+                                        setProductsDropdown(productsDropdown => !productsDropdown)
+                                    }
+                                }
+                                }
+                            >
                                 <span >
                                     {headline}
                                 </span>
@@ -78,9 +88,22 @@ export default function WebsiteHeader() {
                                     size="1x"
                                     className={iconClass} />
                             </div>
-
-
                         ))}
+
+                        <div className={`absolute translate-y-1/2
+                        grid grid-cols-3 w-fit gap-4 bg-gray-400
+                            ${productsDropdown ? "block" : "hidden"}`}>
+                            {clothingCategory.map((category) => (
+                                <Link className="border-2 border-black w-fit p-1"
+                                    key={category}
+                                    href={`/Collections/${category}`}>
+                                    <span>
+                                        {category}
+                                    </span>
+                                </Link>
+
+                            ))}
+                        </div>
                     </div>
 
                     <div className="flex flex-row items-center">
@@ -221,8 +244,6 @@ export default function WebsiteHeader() {
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <FontAwesomeIcon icon={faMagnifyingGlass}
                                 style={{ fontSize: iconSize }}

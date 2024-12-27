@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { clothingCategory, clothingColours, sexCategory } from '@/app/CollectionTypes';
 
 export default function AddProduct() {
 
@@ -108,18 +109,7 @@ export default function AddProduct() {
                     value={productType}
                     onChange={(e) => setProductType(e.target.value)}>
                     <option value="" disabled>Select Product Type</option>
-                    {[
-                        "Tops",
-                        "Bottoms",
-                        "Dresses",
-                        "Outerwear",
-                        "Hoodies & Sweatshirts",
-                        "Activewear",
-                        "Jeans",
-                        "Jackets",
-                        "T-Shirts",
-                        "Shoes"
-                    ].map((clothingType) => (
+                    {clothingCategory.map((clothingType) => (
                         <option key={clothingType} value={clothingType}>{clothingType}</option>
                     ))}
                 </select>
@@ -129,12 +119,7 @@ export default function AddProduct() {
                     value={productAudience}
                     onChange={(e) => setProductAudience(e.target.value)}>
                     <option value="" disabled>Select Product Audience</option>
-                    {[
-                        "Mens",
-                        "Womens",
-                        "Kids",
-                        "Unisex",
-                    ].map((clothingAudience) => (
+                    {sexCategory.map((clothingAudience) => (
                         <option key={clothingAudience} value={clothingAudience}>{clothingAudience}</option>
                     ))}
                 </select>
@@ -146,18 +131,7 @@ export default function AddProduct() {
                         Select a color:
                     </div>
                     <div className={`${colorDropdownOpen ? "block" : "hidden"} bg-gray-200 p-2 `}>
-                        {[
-                            'Red',
-                            'Green',
-                            'Blue',
-                            'Black',
-                            'White',
-                            'Yellow',
-                            'Pink',
-                            'Purple',
-                            'Gray',
-                            'Orange',
-                        ].map((color) => (
+                        {clothingColours.map((color) => (
                             <div key={color} className='flex flex-row'>
                                 <input
                                     type="checkbox"
