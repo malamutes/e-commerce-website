@@ -7,8 +7,9 @@ import { clothingCategory } from "../CollectionTypes";
 import Link from "next/link";
 
 export default function Collections() {
+    console.log("collections");
     return <>
-        PRODUCT VIEW
+        COLLECTIONS
         <div className="flex flex-col">
             {clothingCategory.map((category) => (
                 <Link key={category} href={`/Collections/${category}`}

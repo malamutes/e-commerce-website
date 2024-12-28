@@ -11,7 +11,8 @@ const clothingCategory = [
     "Jeans",
     "Jackets",
     "T-Shirts",
-    "Shoes"
+    "Shoes",
+    "Accessories"
 ];
 
 const sexCategory = [

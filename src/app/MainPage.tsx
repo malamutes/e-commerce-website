@@ -3,30 +3,12 @@
 import { Key, useEffect, useState } from "react";
 import ProductView from "./components/ProductView";
 import { Product } from "./Server/tableTypes";
-import AddProduct from "./AddProduct";
 import Image from "next/image";
 import WebsiteHeader from "./components/WebsiteHeader";
 import LoginPage from "./LoginPage/page";
 import { useSession } from "next-auth/react";
 
 export default function MainPage() {
-    const [products, setProducts] = useState<any>([]);
-
-    useEffect(() => {
-        async function fetchData() {
-            const response = await fetch('/api/products');
-            const data = await response.json();
-            setProducts(data);
-        }
-        fetchData();
-
-    }, []);
-
-    useEffect(() => {
-        console.log(products)
-        console.log(typeof products)
-    }, [products])
-    //fetch data on mount
 
 
     const { data: session, status } = useSession();
