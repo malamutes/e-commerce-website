@@ -5,6 +5,7 @@ import Form from "next/form";
 import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { businessLocations, businessTypes } from "@/app/CollectionTypes";
 
 export default function SignUpPage() {
     const router = useRouter();
@@ -137,10 +138,9 @@ export default function SignUpPage() {
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                                 setBusinessType(event.target.value)}>
                             <option value="" selected disabled>Select your business type</option>
-                            <option value="Manufacturer">Manufacturer</option>
-                            <option value="Wholesaler">Wholesaler</option>
-                            <option value="Independent Designer">Independent Designer</option>
-                            <option value="Retailer">Retailer</option>
+                            {businessTypes.map((bType) => (
+                                <option key={bType} value={bType}>{bType}</option>
+                            ))}
                         </select>
 
                         <label htmlFor="businessLocation" className="block text-lg font-medium mb-2 mt-5">Location</label>
@@ -149,19 +149,10 @@ export default function SignUpPage() {
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                                 setBusinessLocation(event.target.value)}>
                             <option value="" selected disabled>Select your business location</option>
-                            <option value="US">United States</option>
-                            <option value="GB">United Kingdom</option>
-                            <option value="CA">Canada</option>
-                            <option value="DE">Germany</option>
-                            <option value="IN">India</option>
-                            <option value="CN">China</option>
-                            <option value="AU">Australia</option>
-                            <option value="JP">Japan</option>
-                            <option value="BR">Brazil</option>
-                            <option value="FR">France</option>
-                            <option value="MX">Mexico</option>
-                            <option value="KR">South Korea</option>
-                            <option value="OTH">Other</option>
+                            {businessLocations.map((location) => (
+                                <option key={location} value={location}>{location}</option>
+                            ))}
+
                         </select>
                     </div>
 

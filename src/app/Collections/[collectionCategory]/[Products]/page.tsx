@@ -13,7 +13,7 @@ export default function ProductPage() {
         const productID = searchParams?.get("productID") ?? "";
 
         const getProduct = async () => {
-            const response = await fetch(`/api/getProducts?productID=${productID}`, {
+            const response = await fetch(`/api/Collections/Products?productID=${productID}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

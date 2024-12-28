@@ -21,7 +21,7 @@ export default function AddProduct() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const response = await fetch('/api/addProduct', {
+        const response = await fetch('/api/Collections/Products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -36,4 +36,13 @@ const clothingColours = [
 
 const headers = ['Products', 'Trending', 'Best Sellers', 'New'];
 
-export { clothingCategory, sexCategory, clothingColours, headers };
+const businessLocations = ['US', 'GB', 'CA', 'DE', 'IN', 'CN', 'AU', 'JP', 'BR', 'FR', 'MX', 'KR', 'OTH'];
+
+const businessTypes = [
+    "Manufacturer",
+    "Wholesaler",
+    "Independent Designer",
+    "Retailer"
+];
+
+export { clothingCategory, sexCategory, clothingColours, headers, businessLocations, businessTypes };

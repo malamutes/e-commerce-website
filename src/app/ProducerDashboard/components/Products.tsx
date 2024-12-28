@@ -18,7 +18,7 @@ export default function Products() {
 
     useEffect(() => {
         const getCurrentProduct = async () => {
-            const response = await fetch('/api/producerProducts', {
+            const response = await fetch('/api/Collections/Products', {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             })
