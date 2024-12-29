@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     const data = await sql(`
-                        SELECT * FROM products WHERE product_sales_category = '${saleCat}';
+                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"]';
                         `);
 
                     res.status(200).json(data);

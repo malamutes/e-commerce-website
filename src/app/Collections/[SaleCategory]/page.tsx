@@ -36,42 +36,19 @@ export default function CollectionCategory() {
         getSaleCategoryProducts();
     }, [])
 
+    //redo sales category neon db to a json file to fit more than 1 category
     return <>
         {saleCategory}
+
         <div className="grid grid-cols-4">
             {saleProducts.map((product, index) => (
                 <div key={index} className="bg-gray-200 m-5">
-                    <p>
-                        {product['product_name']}
-                    </p>
+                    {Object.keys(product).map((field) => (
+                        <p key={field}>
+                            {product[field]}
+                        </p>
 
-                    <p>
-                        {product['product_audience']}
-                    </p>
-
-                    <p>
-                        {product['product_colour']}
-                    </p>
-
-                    <p>
-                        {product['product_producer']}
-                    </p>
-
-                    <p>
-                        {product['product_sales_category']}
-                    </p>
-
-                    <p>
-                        {product['product_type']}
-                    </p>
-
-                    <p>
-                        {product['product_size']}
-                    </p>
-
-                    <p>
-                        {product['product_price']}
-                    </p>
+                    ))}
                 </div>
             ))}
         </div>

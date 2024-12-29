@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     if (req.query.saleCheck === 'true') {
-                        saleQuery = ` AND (product_sales_category = 'Sale')`
+                        saleQuery = ` AND (product_sales_category @> '["Sale"]')`
                     }
 
                     if (req.query.sortBy === 'price_desc') {

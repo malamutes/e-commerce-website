@@ -63,6 +63,26 @@ export default function Collections() {
     };
 
     useEffect(() => {
+        console.log(params?.getAll("size"));
+        if (params?.get("saleCheck")) {
+            setOnSale(params?.get("saleCheck") === 'true' ? 1 : 0)
+        }
+        if (params?.get("sortBy")) {
+            setSortingFilter(params?.get("sortBy") ?? "")
+        }
+        if (params?.getAll("size")) {
+            setSizeFilter(params?.getAll("size"))
+        }
+        if (params?.getAll("sex")) {
+            setSexFilter(params?.getAll("sex"))
+        }
+        if (params?.getAll("colour")) {
+            setColourFitler(params?.getAll("colour"))
+        }
+    }, [])
+
+
+    useEffect(() => {
         const sexQuery = sexFilter.map((sex) => `&sex=${sex}`).join("");
         const colQuery = colourFilter.map((colour) => `&colour=${colour}`).join("");
         const sizeQuery = sizeFilter.map((size) => `&size=${size}`).join("");
@@ -108,7 +128,9 @@ export default function Collections() {
 
 
     useEffect(() => {
-        getFilterResults();
+        if (queryUrl !== "") {
+            getFilterResults();
+        }
 
     }, [queryUrl, currCat]);
 
@@ -246,11 +268,8 @@ export default function Collections() {
                     <span>
                         {product["product_sales_category"]}
                     </span>
-
-
                 </div>
             ))}
-
         </div>
     </>
 }

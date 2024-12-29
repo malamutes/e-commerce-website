@@ -82,7 +82,7 @@ export default function Products() {
                                     left-1/2 transform -translate-x-1/2 pt-[15px] w-fit bg-gray-100
                                     flex flex-col text-nowrap p-1
                                     `}>
-                                    <Link className={productEllipsisMenuItemClass} href={`/Collections/${product['product_sales_category']}/Products/?productID=${product['product_id']}`}>
+                                    <Link className={productEllipsisMenuItemClass} href={`/Collections/Regular/Products/?productID=${product['product_id']}`}>
                                         <span >
                                             View Product
                                         </span>
