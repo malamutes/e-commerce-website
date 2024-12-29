@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { clothingCategory, clothingColours, sexCategory } from '@/app/CollectionTypes';
+import { clothingCategory, clothingColours, clothingSizes, sexCategory } from '@/app/CollectionTypes';
 
 export default function AddProduct() {
 
@@ -12,11 +12,14 @@ export default function AddProduct() {
     const [productAudience, setProductAudience] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [productColor, setProductColor] = useState<string[]>([]);
+    const [productSize, setProductSize] = useState<string[]>([]);
     const [productDetails, setProductDetails] = useState('');
 
     const fieldLabelClass = "m-2";
 
     const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
+
+    const [sizeDropdownOpen, setSizeDropdownOpen] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,7 +36,8 @@ export default function AddProduct() {
                 productAudience: productAudience,
                 productDescription: productDescription,
                 productColor: productColor,
-                productDetails: productDetails
+                productDetails: productDetails,
+                productSize: productSize
             }),
         });
 
@@ -58,6 +62,20 @@ export default function AddProduct() {
             return [...productColor, justSelectedColor];  // Add the new color to the array
         });
     };
+
+
+    const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const justSelectedSize = e.target.value;
+        setProductSize((productSize) => {
+            // If the Size is already selected, remove it
+            if (productSize.includes(justSelectedSize)) {
+                return productSize.filter(Size => Size !== justSelectedSize);  // Filter out the Size
+            }
+            // If it's not selected, add it
+            return [...productSize, justSelectedSize];  // Add the new color to the array
+        });
+    };
+
 
     return (
         <div >
@@ -128,7 +146,7 @@ export default function AddProduct() {
                 <div>
                     <div className='border-2 border-black p-1' onClick={() =>
                         setColorDropdownOpen(colorDropdownOpen => !colorDropdownOpen)}>
-                        Select a color:
+                        Select color(s):
                     </div>
                     <div className={`${colorDropdownOpen ? "block" : "hidden"} bg-gray-200 p-2 `}>
                         {clothingColours.map((color) => (
@@ -142,6 +160,28 @@ export default function AddProduct() {
                                     className="mr-2"
                                 />
                                 <label htmlFor={color}>{color}</label>
+                            </div>
+                        ))}
+                    </div>
+
+                    <label htmlFor="productSize" className={fieldLabelClass}>Select Product Size(s):</label>
+                    <div className='border-2 border-black p-1' onClick={() =>
+                        setSizeDropdownOpen(sizeDropdownOpen => !sizeDropdownOpen)}>
+                        Select size(s):
+                    </div>
+
+                    <div className={`${sizeDropdownOpen ? "block" : "hidden"} bg-gray-200 p-2 `}>
+                        {clothingSizes.map((size) => (
+                            <div key={size} className='flex flex-row'>
+                                <input
+                                    type="checkbox"
+                                    id={size}
+                                    value={size}
+                                    checked={productSize.includes(size)}
+                                    onChange={handleSizeChange}
+                                    className="mr-2"
+                                />
+                                <label htmlFor={size}>{size}</label>
                             </div>
                         ))}
                     </div>

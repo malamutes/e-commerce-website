@@ -46,4 +46,28 @@ const businessTypes = [
     "Retailer"
 ];
 
-export { clothingCategory, sexCategory, clothingColours, headers, businessLocations, businessTypes };
+const clothingSizes = [
+    'XS',
+    'S',
+    'M',
+    'L',
+    '2XL',
+]
+
+const salesCategories = [
+    "New Arrivals",
+    "Regular",
+    "Sale",
+    "Best Sellers",
+    "Exclusive",
+];
+
+const sortFeatureCategory = [
+    'price_asc',
+    'price_desc',
+    'date_desc'
+
+]
+
+
+export { clothingCategory, sexCategory, clothingColours, headers, businessLocations, businessTypes, clothingSizes, salesCategories, sortFeatureCategory };

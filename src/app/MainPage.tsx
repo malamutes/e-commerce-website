@@ -1,11 +1,7 @@
 "use client";
 
-import { Key, useEffect, useState } from "react";
-import ProductView from "./components/ProductView";
-import { Product } from "./Server/tableTypes";
-import Image from "next/image";
-import WebsiteHeader from "./components/WebsiteHeader";
-import LoginPage from "./LoginPage/page";
+import { clothingCategory, salesCategories } from "./CollectionTypes";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 
 export default function MainPage() {
@@ -18,9 +14,35 @@ export default function MainPage() {
 
     return (
         <>
-            <div className="h-screen bg-gray-200">
+            <div className="bg-gray-200 grid grid-cols-2">
+                <div className="flex flex-col">
+                    {clothingCategory.map((category) => (
+                        <Link key={category} href={`/Collections?clothingCategory=${category}`}
+                            className="border-2 border-black w-fit hover:bg-gray-400 p-2 rounded-md"
+                        >
+                            <span >
+                                {category}
+                            </span>
+                        </Link>
 
+                    ))}
+                </div>
+
+                <div className="flex flex-col mt-5">
+                    {salesCategories.filter(cat => cat != 'Regular').map((saleCategory) => (
+                        <Link key={saleCategory} href={`/Collections/${saleCategory}`}
+                            className="border-2 border-black w-fit hover:bg-gray-400 p-2 rounded-md"
+                        >
+                            <span >
+                                {saleCategory}
+                            </span>
+                        </Link>
+
+                    ))}
+                </div>
             </div>
+
+
         </>
     );
 }

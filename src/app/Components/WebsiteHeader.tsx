@@ -96,7 +96,7 @@ export default function WebsiteHeader() {
                             {clothingCategory.map((category) => (
                                 <Link className="border-2 border-black w-fit p-1"
                                     key={category}
-                                    href={`/Collections/${category}`}>
+                                    href={`/Collections?clothingCategory=${category}`}>
                                     <span>
                                         {category}
                                     </span>

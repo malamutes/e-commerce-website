@@ -56,7 +56,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 product_audience, 
                                 product_description, 
                                 product_colour, 
-                                product_details
+                                product_details,
+                                product_sales_category
                             FROM products
                             WHERE 
                             product_producer = ${session.user.business?.businessName}`;
@@ -92,7 +93,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     productAudience,
                     productDescription,
                     productColor,
-                    productDetails
+                    productDetails,
+                    productSize
                 } = req.body;
 
                 const sql = neon(process.env.DATABASE_URL!);
@@ -106,7 +108,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         product_description, 
                         product_colour, 
                         product_details,
-                        product_producer
+                        product_producer,
+                        product_size,
                     ) 
                     VALUES (
                     ${productName}, 
@@ -116,7 +119,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ${productDescription}, 
                     ${JSON.stringify(productColor)}, 
                     ${productDetails},
-                    ${session.user.business?.businessName}
+                    ${session.user.business?.businessName},
+                    ${JSON.stringify(productSize)}
                 );
                 `;
 
