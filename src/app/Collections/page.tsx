@@ -1,5 +1,5 @@
 "use client";
-import FilterTab from "./components/FilterTab";
+import FilterTabLarge, { FilterTabSmall } from "./components/FilterTab";
 import DisplayProducts from "./components/DisplayProducts";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
@@ -93,9 +93,9 @@ export default function Collections() {
     }, [queryUrl, currCat]);
 
     return (
-        <div className="flex flex-row mt-[50px] container mx-auto">
-            <div className="w-1/5">
-                <FilterTab
+        <div className="flex md:flex-row flex-col mt-[50px] lg:container mx-auto p-5">
+            <div className="w-1/5 mr-[30px] md:block hidden">
+                <FilterTabLarge
                     sexFilter={sexFilter}
                     setSexFilter={setSexFilter}
                     colourFilter={colourFilter}
@@ -111,8 +111,24 @@ export default function Collections() {
                 />
             </div>
 
+            <div className="w-full mr-[30px] md:hidden block">
+                <FilterTabSmall
+                    sexFilter={sexFilter}
+                    setSexFilter={setSexFilter}
+                    colourFilter={colourFilter}
+                    setColourFilter={setColourFilter}
+                    sizeFilter={sizeFilter}
+                    setSizeFilter={setSizeFilter}
+                    sortingFilter={sortingFilter}
+                    setSortingFilter={setSortingFilter}
+                    onSale={onSale}
+                    setOnSale={setOnSale}
+                    clothingFilter={clothingFilter}
+                    setClothingFilter={setClothingFilter}
+                />
+            </div>
 
-            <div className="w-4/5">
+            <div className="md:w-4/5">
                 <DisplayProducts
                     categoryProducts={categoryProducts}
                 />

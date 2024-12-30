@@ -8,7 +8,8 @@ interface DisplayProductProps {
 
 export default function DisplayProducts(props: DisplayProductProps) {
     return <>
-        <div className="grid grid-cols-3 pl-5">
+        <div className="grid lg:grid-cols-3 grid-cols-2 gap-y-[15px] 
+        gap-x-[15px] w-fit">
             {(props.categoryProducts).map((product, index) => (
                 <ProductCard key={index}
                     product={product}

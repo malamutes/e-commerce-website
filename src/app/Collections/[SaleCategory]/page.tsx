@@ -1,100 +1,60 @@
-'use client';
-
-import Link from "next/link";
-import { useParams, useSearchParams, usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react";
+"use client";
+import FilterTabLarge from "../components/FilterTab";
+import { FilterTabSmall } from "../components/FilterTab";
+import DisplayProducts from "../components/DisplayProducts";
+import { useState, useRef, useEffect } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Product } from "@/app/ProducerDashboard/components/Products";
-import { clothingCategory, clothingColours, clothingSizes, sexCategory } from "@/app/CollectionTypes";
-import { useRouter } from "next/navigation";
 
-export default function CollectionCategory() {
-    const params = useParams();
-    const router = useRouter();
+export default function Collections() {
     const pathname = useRef(usePathname()).current;
+    const params = useSearchParams();
+    const router = useRouter();
 
-    const saleCategory: string = decodeURIComponent((params!['SaleCategory'] as string)) ?? "";
-    const [saleProducts, setSaleProducts] = useState<Product[]>([]);
-    const [queryUrl, setQueryUrl] = useState<string>("");
+    const [currCat, setCurrCat] = useState(params?.get('clothingCategory'));
+    const [categoryProducts, setCategoryProducts] = useState<Product[]>([]);
     const [sexFilter, setSexFilter] = useState<string[]>([]);
-    const [colourFilter, setColourFitler] = useState<string[]>([]);
+    const [colourFilter, setColourFilter] = useState<string[]>([]);
     const [sizeFilter, setSizeFilter] = useState<string[]>([]);
-    console.log(saleCategory);
+    const [sortingFilter, setSortingFilter] = useState<string>("");
+    //0 is no check for sale 1 is check for sale
+    const [onSale, setOnSale] = useState("");
+    const [clothingFilter, setClothingFilter] = useState<string>(params?.get('clothingCategory') ?? "");
+    const [queryUrl, setQueryUrl] = useState<string>("");
 
     useEffect(() => {
-        const getSaleCategoryProducts = async () => {
-            const response = await fetch(`/api/Collections/${saleCategory}`, {
-                method: "GET",
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-
-            const reply = await response.json();
-
-            if (response.ok) {
-                console.log(reply);
-                setSaleProducts(reply);
-            }
-            else {
-                console.log(response.status, response.statusText);
-            }
+        console.log(params?.getAll("size"));
+        if (params?.get("saleCheck")) {
+            setOnSale(params?.get("saleCheck") ?? "")
         }
-
-        getSaleCategoryProducts();
+        if (params?.get("sortBy")) {
+            setSortingFilter(params?.get("sortBy") ?? "")
+        }
+        if (params?.getAll("size")) {
+            setSizeFilter(params?.getAll("size"))
+        }
+        if (params?.getAll("sex")) {
+            setSexFilter(params?.getAll("sex"))
+        }
+        if (params?.getAll("colour")) {
+            setColourFilter(params?.getAll("colour"))
+        }
     }, [])
 
-    const [clothingFilter, setClothingFilter] = useState<string>("All");
-    //redo sales category neon db to a json file to fit more than 1 category
-
-    const handleSexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const justSelectedSex = e.target.value;
-        setSexFilter((sexFilter) => {
-
-            if (sexFilter.includes(justSelectedSex)) {
-                return sexFilter.filter(sex => sex !== justSelectedSex);
-            }
-
-            return [...sexFilter, justSelectedSex];
-        });
-    };
-
-    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const justSelectedColor = e.target.value;
-        setColourFitler((colourFilter) => {
-
-            if (colourFilter.includes(justSelectedColor)) {
-                return colourFilter.filter(colour => colour !== justSelectedColor);
-            }
-
-            return [...colourFilter, justSelectedColor];
-        });
-    };
-
-    const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const justSelectedSize = e.target.value;
-        setSizeFilter((sizeFilter) => {
-
-            if (sizeFilter.includes(justSelectedSize)) {
-                return sizeFilter.filter(size => size !== justSelectedSize);
-            }
-
-            return [...sizeFilter, justSelectedSize];
-        });
-    };
-
     useEffect(() => {
-
-        const clothingQuery = `${clothingFilter}`;
         const sexQuery = sexFilter.map((sex) => `&sex=${sex}`).join("");
         const colQuery = colourFilter.map((colour) => `&colour=${colour}`).join("");
         const sizeQuery = sizeFilter.map((size) => `&size=${size}`).join("");
+        const clothingQuery = `${clothingFilter}`;
+        const saleQuery = `${onSale !== "" ? "&saleCheck=" : ""}${onSale}`
+        const sortQuery = `${sortingFilter !== "" ? "&sortBy=" : ""}${sortingFilter}`
 
-        router.replace(`?clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}`);
+        router.replace(`?clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
 
         //console.log(pathname + "?" + sexQuery);
+        setQueryUrl(pathname + "?clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
 
-        setQueryUrl(pathname + "?clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery);
-    }, [clothingFilter, sexFilter, colourFilter, sizeFilter]);
+    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter]);
 
     const getFilterResults = async () => {
         const response = await fetch(`
@@ -109,7 +69,7 @@ export default function CollectionCategory() {
 
         if (response.ok) {
             console.log("Items retrieved successfully!");
-            setSaleProducts(reply);
+            setCategoryProducts(reply);
             console.log(reply);
         }
         else {
@@ -117,97 +77,64 @@ export default function CollectionCategory() {
         }
     }
 
+
+    useEffect(() => {
+        const clothingCategory = params?.get('clothingCategory');
+        if (clothingCategory) {
+            setClothingFilter(clothingCategory);
+        }
+    }, [params]);
+
+
     useEffect(() => {
         if (queryUrl !== "") {
             getFilterResults();
         }
 
-    }, [queryUrl]);
+    }, [queryUrl, currCat]);
 
+    return (
+        <div className="flex md:flex-row flex-col mt-[50px] lg:container mx-auto p-5">
+            <div className="w-1/5 mr-[30px] md:block hidden">
+                <FilterTabLarge
+                    sexFilter={sexFilter}
+                    setSexFilter={setSexFilter}
+                    colourFilter={colourFilter}
+                    setColourFilter={setColourFilter}
+                    sizeFilter={sizeFilter}
+                    setSizeFilter={setSizeFilter}
+                    sortingFilter={sortingFilter}
+                    setSortingFilter={setSortingFilter}
+                    onSale={onSale}
+                    setOnSale={setOnSale}
+                    clothingFilter={clothingFilter}
+                    setClothingFilter={setClothingFilter}
+                />
+            </div>
 
-    return <>
-        {saleCategory}
+            <div className="w-full mr-[30px] md:hidden block">
+                <FilterTabSmall
+                    sexFilter={sexFilter}
+                    setSexFilter={setSexFilter}
+                    colourFilter={colourFilter}
+                    setColourFilter={setColourFilter}
+                    sizeFilter={sizeFilter}
+                    setSizeFilter={setSizeFilter}
+                    sortingFilter={sortingFilter}
+                    setSortingFilter={setSortingFilter}
+                    onSale={onSale}
+                    setOnSale={setOnSale}
+                    clothingFilter={clothingFilter}
+                    setClothingFilter={setClothingFilter}
+                />
+            </div>
 
-        <div className="flex flex-col bg-gray-400 w-fit">
-            {clothingCategory.map((clothing) => (
+            <div className="md:w-4/5">
+                <DisplayProducts
+                    categoryProducts={categoryProducts}
+                />
+            </div>
 
-                <span key={clothing} onClick={() => {
-                    if (clothingFilter !== clothing) {
-                        setClothingFilter(clothing);
-                    }
-                    else {
-                        setClothingFilter("All");
-                    }
-
-                }}
-                    className={`${clothingFilter === clothing ? "font-black font-lg" : "font-medium font-md"} cursor-pointer`}
-                >
-                    {clothing}
-                </span>
-            ))}
         </div>
-
-        <div className="flex flex-col bg-gray-400 w-fit">
-            {sexCategory.map((sex) => (
-                <span key={sex}>
-                    <input
-                        type="checkbox"
-                        id={sex}
-                        value={sex}
-                        checked={sexFilter.includes(sex)}
-                        onChange={handleSexChange}
-                        className="mr-2"
-                    />
-                    <label htmlFor={sex}>{sex}</label>
-                </span>
-            ))}
-        </div>
-
-        <div className="flex flex-col bg-gray-500 w-fit mt-5">
-            {clothingColours.map((colour) => (
-                <span key={colour}>
-                    <input
-                        type="checkbox"
-                        id={colour}
-                        value={colour}
-                        checked={colourFilter.includes(colour)}
-                        onChange={handleColorChange}
-                        className="mr-2"
-                    />
-                    <label htmlFor={colour}>{colour}</label>
-                </span>
-            ))}
-        </div>
-
-        <div className="flex flex-col bg-gray-500 w-fit mt-5">
-            {clothingSizes.map((size) => (
-                <span key={size}>
-                    <input
-                        type="checkbox"
-                        id={size}
-                        value={size}
-                        checked={sizeFilter.includes(size)}
-                        onChange={handleSizeChange}
-                        className="mr-2"
-                    />
-                    <label htmlFor={size}>{size}</label>
-                </span>
-            ))}
-        </div>
-
-        <div className="grid grid-cols-4">
-            {saleProducts.map((product, index) => (
-                <div key={index} className="bg-gray-200 m-5">
-                    {Object.keys(product).map((field) => (
-                        <p key={field}>
-                            {product[field]}
-                        </p>
-
-                    ))}
-                </div>
-            ))}
-        </div>
-
-
-    </>
+    );
 }
