@@ -10,19 +10,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (req.query) {
                 try {
 
-                    console.log(req.query);
+                    console.log(req.query, "adsaddasd");
 
                     const sql = neon(process.env.DATABASE_URL!);
 
+                    let sexArray: string[] = [];
+
                     let saleCat: string = "";
+                    let clothingCat: string = "";
+                    let sexQuery: string = "";
 
                     if (req.query.SaleCategory) {
                         saleCat = (req.query.SaleCategory as string);
                     }
 
-                    const data = await sql(`
-                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"]';
-                        `);
+                    if (req.query.clothingCategory && req.query.clothingCategory !== 'All') {
+                        clothingCat = ` AND product_type = '${req.query.clothingCategory}'`
+                    }
+
+                    if (req.query.sex) {
+                        sexArray = Array.isArray(req.query.sex) ? req.query.sex : [req.query.sex];
+                    }
+
+                    if (sexArray.length > 0) {
+                        sexQuery = ` AND (product_audience = '${sexArray.join("' OR product_audience = '")}')`;
+                    }
+
+                    const sqlQuery: string = `
+                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"]' ${clothingCat} ${sexQuery};
+                        `;
+
+                    console.log(sqlQuery);
+
+                    const data = await sql(sqlQuery);
+
 
                     res.status(200).json(data);
 

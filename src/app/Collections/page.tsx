@@ -90,7 +90,7 @@ export default function Collections() {
         const saleQuery = `&${onSale === 0 ? "saleCheck=false" : "saleCheck=true"}`
         const sortQuery = `&sortBy=${sortingFilter}`
 
-        router.push(`?clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
+        router.replace(`?clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
 
         //console.log(pathname + "?" + sexQuery);
         setQueryUrl(pathname + "?clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);

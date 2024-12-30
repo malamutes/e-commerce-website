@@ -7,6 +7,7 @@ declare module "next-auth/jwt" {
         /** OpenID ID Token */
         user_id?: number
         isUserProducer?: boolean
+        name?: string,
         business?: {
             businessName: string,
             businessLocation: string,
@@ -25,6 +26,7 @@ declare module "next-auth" {
             user_id?: number
             email?: string,
             isUserProducer?: boolean
+            name?: string,
             business?: {
                 businessName: string,
                 businessLocation: string,
@@ -35,6 +37,7 @@ declare module "next-auth" {
 
     interface DefaultUser {
         isUserProducer?: boolean
+        name?: string,
         business?: {
             businessName: string,
             businessLocation: string,

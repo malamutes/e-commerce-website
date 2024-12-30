@@ -30,7 +30,7 @@ export default function WebsiteFooter() {
     const [dealsAccordion, setDealsAccordion] = useState(false);
 
     return <>
-        <div className="bg-white w-full">
+        <div className="bg-white w-full min-w-[250px]">
             <div className="flex flex-col">
                 <div className="sm:grid lg:grid-cols-5 grid-cols-2 2xl:w-3/4 
                 xl:w-4/5 lg:w-11/12 w-4/5 mx-auto justify-between pt-5
@@ -206,7 +206,6 @@ export default function WebsiteFooter() {
                     <FontAwesomeIcon icon={faPaypal} size="2x" className={socialIconClass} />
                     <FontAwesomeIcon icon={faApplePay} size="2x" className={socialIconClass} />
                     <FontAwesomeIcon icon={faGooglePay} size="2x" className={socialIconClass} />
-
                 </div>
             </div>
 
@@ -222,11 +221,11 @@ export default function WebsiteFooter() {
                     <span>
                         Cookie Preferences
                     </span>
-                    <span className="mx-2.5">
+                    <span className="mx-2.5 xs:inline hidden">
                         |
                     </span>
 
-                    <span>
+                    <span className="block sm:inline">
                         BACK TO TOP
                     </span>
                 </div>

@@ -18,7 +18,7 @@ export const authOptions = {
                 const userPassword = credentials?.userPassword;
 
                 const sql = neon(process.env.DATABASE_URL!);
-                const userLoginQuery = await sql`SELECT user_id, user_email, user_password FROM 
+                const userLoginQuery = await sql`SELECT user_id, user_email, user_password, user_first_name FROM 
                 users WHERE user_email = ${userEmail} AND user_password = ${userPassword}`;
 
                 if (userLoginQuery.length === 0) {
@@ -41,6 +41,7 @@ export const authOptions = {
                         id: userLoginQuery[0].user_id.toString(),
                         email: userLoginQuery[0].user_email,
                         isUserProducer: isUserProducer,
+                        name: userLoginQuery[0].user_first_name,
                         business: {
                             businessName: checkUserProducer[0].business_name,
                             businessType: checkUserProducer[0].business_type,
@@ -55,6 +56,7 @@ export const authOptions = {
                     id: userLoginQuery[0].user_id.toString(),
                     email: userLoginQuery[0].user_email,
                     isUserProducer: isUserProducer,
+                    name: userLoginQuery[0].user_first_name,
                 };
             }
         })
@@ -67,6 +69,7 @@ export const authOptions = {
                 token.email = user.email;
                 token.isUserProducer = user.isUserProducer
                 token.business = user.business
+                token.name = user.name ?? "User"
                 //console.log("tokenHERE:", token);
             } else {
                 // console.log("No user data found in jwt callback.");
@@ -80,6 +83,7 @@ export const authOptions = {
             session.user.email = token.email ?? undefined,
                 session.user.isUserProducer = token.isUserProducer
             session.user.business = token.business
+            session.user.name = token.name
             console.log("session:", session)
             return session;
         },
