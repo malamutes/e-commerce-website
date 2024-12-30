@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const sql = neon(process.env.DATABASE_URL!);
 
-                    const baseQuery = `SELECT product_name, product_price, product_audience, product_producer, product_colour, product_size, product_sales_category FROM products 
+                    const baseQuery = `SELECT product_name, product_price, product_audience, product_producer, product_colour, product_size, product_sales_category, product_images FROM products 
                         WHERE product_type = '${req.query.clothingCategory}'`
 
                     if (sexArray.length > 0) {
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         sizeQuery = ` AND (product_size @> '["${sizeArray.join(`"]' OR product_size @> '["`)}"]')`;
                     }
 
-                    if (req.query.saleCheck === 'true') {
+                    if (req.query.saleCheck === 'On Sale') {
                         saleQuery = ` AND (product_sales_category @> '["Sale"]')`
                     }
 
