@@ -10,21 +10,23 @@ interface CarouselProps {
     itemsArray: string[],
 }
 
+
+const clampFunc = function clamp(value: number, min: number, max: number) {
+    return (Math.max(Math.min(value, max), min));
+}
+
+
 export default function Carousel(props: CarouselProps) {
     const numItems = props.itemsArray.length;
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    function clamp(value: number, min: number, max: number) {
-        return (Math.max(Math.min(value, max), min));
-    }
-
     return <>
         <div className="w-full h-fit flex flex-row justify-center items-center relative">
             <FontAwesomeIcon icon={faChevronLeft} size="2x" className="z-10 cursor-pointer absolute left-0"
-                onClick={() => setCurrentIndex(currentIndex => clamp(currentIndex - 1, 0, numItems - 1))}
+                onClick={() => setCurrentIndex(currentIndex => clampFunc(currentIndex - 1, 0, numItems - 1))}
             />
             <FontAwesomeIcon icon={faChevronRight} size="2x" className="z-10 cursor-pointer absolute right-0"
-                onClick={() => setCurrentIndex(currentIndex => clamp(currentIndex + 1, 0, numItems - 1))}
+                onClick={() => setCurrentIndex(currentIndex => clampFunc(currentIndex + 1, 0, numItems - 1))}
             />
 
             <div className="absolute bottom-0">
@@ -47,3 +49,5 @@ export default function Carousel(props: CarouselProps) {
         </div>
     </>
 }
+
+export { clampFunc }

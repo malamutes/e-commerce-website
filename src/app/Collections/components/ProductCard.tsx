@@ -6,7 +6,9 @@ import { faTrophy, faCrown, faTags, IconDefinition, faBoxOpen } from "@fortaweso
 import Link from "next/link";
 
 interface ProductCard {
-    product: Product
+    product: Product,
+    style?: React.CSSProperties,
+    showTags?: boolean
 }
 
 //for now just assume the image aspect ratio is 4:3 and in db it is 800:600px
@@ -29,7 +31,8 @@ export default function ProductCard(props: ProductCard) {
     return <>
         <Link
             className="w-fit"
-            href={`/Collections/All/Products/?productID=${props.product['product_id']}`}>
+            href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
+            style={props.style}>
 
             <div className="flex flex-col text-center w-fit
                 max-w-[350px] shadow-lg cursor-pointer bg-gray-300 ">
@@ -52,7 +55,7 @@ export default function ProductCard(props: ProductCard) {
                         ${props.product['product_price']}
                     </span>
 
-                    <div className="flex sm:flex-row flex-col mx-auto">
+                    <div className={`flex sm:flex-row flex-col mx-auto ${props.showTags === false ? "hidden" : ""}`}>
                         {(props.product['product_sales_category'] as string[])
                             .filter(cat => cat !== 'Regular')
                             .map((category, index) => (
