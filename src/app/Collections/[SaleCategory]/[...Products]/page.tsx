@@ -95,7 +95,7 @@ export default function ProductPage() {
                                     <div key={sizeIndex} className="w-[50px] 
                                           h-[50px] bg-white border-2 border-black m-2
                                           grid place-items-center">
-                                        {size.charAt(0)}
+                                        {size}
                                     </div>
                                 ))}
                             </div>

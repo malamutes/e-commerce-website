@@ -10,6 +10,8 @@ import Products from "./components/Products";
 import Operations from "./components/Operations";
 import AddProduct from "./components/AddProduct";
 
+import { maxDashboardHeight } from "./layout";
+
 export default function ProducerDashboard() {
 
     const searchParams = useSearchParams();
@@ -34,6 +36,9 @@ export default function ProducerDashboard() {
     console.log(currentTab);
 
     return <>
-        {tabComponentMap[currentTab]}
+        <div className={`max-h-[${maxDashboardHeight}px] overflow-y-scroll`}>
+            {tabComponentMap[currentTab]}
+        </div>
+
     </>
 }

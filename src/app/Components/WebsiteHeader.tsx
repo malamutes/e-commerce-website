@@ -55,7 +55,7 @@ export default function WebsiteHeader() {
     }
 
     const handleProducerDashboard = async () => {
-        router.push('/ProducerDashboard');
+        router.push('/ProducerDashboard?tab=Overview');
     }
 
     return <>

@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     let clothingCat: string = "";
                     let sexQuery: string = "";
                     let sortQuery: string = "";
+                    let saleQuery: string = "";
 
 
                     if (req.query.SaleCategory) {
@@ -50,6 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         sexQuery = ` AND (product_audience = '${sexArray.join("' OR product_audience = '")}')`;
                     }
 
+                    if (req.query.saleCheck === 'On Sale') {
+                        saleQuery = ` AND (product_sales_category @> '["Sale"]')`
+                    }
 
                     if (req.query.sortBy === 'price_desc') {
                         sortQuery = ` ORDER BY product_price DESC`
@@ -61,8 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         sortQuery = ` ORDER BY product_created_at DESC`
                     }
 
+
                     const sqlQuery: string = `
-                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"]' ${clothingCat} ${sexQuery}${sortQuery};
+                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"]' ${clothingCat} ${sexQuery}${saleQuery}${sortQuery};
                         `;
 
                     console.log(sqlQuery);
