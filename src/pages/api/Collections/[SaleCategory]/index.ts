@@ -21,8 +21,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     let sexQuery: string = "";
                     let sortQuery: string = "";
 
+
                     if (req.query.SaleCategory) {
-                        saleCat = (req.query.SaleCategory as string);
+                        if (req.query.SaleCategory !== 'All') {
+                            saleCat = (req.query.SaleCategory as string);
+                        }
+                        else {
+                            const data = await sql`SELECT * FROM products`;
+
+                            if (data.length === 0) {
+                                return res.status(400).json({ error: 'No Items Found' });
+                            }
+
+                            res.status(200).json(data);
+                        }
+
                     }
 
                     if (req.query.clothingCategory && req.query.clothingCategory !== 'All') {
@@ -55,9 +68,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     console.log(sqlQuery);
 
                     const data = await sql(sqlQuery);
-
-
-                    res.status(200).json(data);
 
                     if (data.length === 0) {
                         return res.status(400).json({ error: 'No Items Found' });

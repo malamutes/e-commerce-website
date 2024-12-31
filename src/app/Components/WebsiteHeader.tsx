@@ -59,7 +59,7 @@ export default function WebsiteHeader() {
     }
 
     return <>
-        <div className="fixed bg-gray-300 w-screen pt-1.5 pb-1.5 h-[100px] ">
+        <div className="fixed bg-gray-300 w-screen pt-1.5 pb-1.5 h-[100px] z-50">
             {/* hardcode website top nav to be 100px for now since im using it to sort out padding
             in main body content*/}
             <div className="hidden lg:block max-w-[2000px] mx-auto h-full">

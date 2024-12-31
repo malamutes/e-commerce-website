@@ -3,6 +3,7 @@
 import { clothingCategory, salesCategories } from "./CollectionTypes";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import Carousel from "./components/Carousel";
 
 export default function MainPage() {
 
@@ -41,8 +42,6 @@ export default function MainPage() {
                     ))}
                 </div>
             </div>
-
-
         </>
     );
 }

@@ -48,16 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     // Query to fetch products
                     const data = await sql`
-                            SELECT 
-                                product_id,
-                                product_name, 
-                                product_price, 
-                                product_type, 
-                                product_audience, 
-                                product_description, 
-                                product_colour, 
-                                product_details,
-                                product_sales_category
+                            SELECT *
                             FROM products
                             WHERE 
                             product_producer = ${session.user.business?.businessName}`;
