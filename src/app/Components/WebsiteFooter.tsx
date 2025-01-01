@@ -229,8 +229,6 @@ export default function WebsiteFooter() {
                         BACK TO TOP
                     </span>
                 </div>
-
-
             </div>
         </div>
     </>
