@@ -31,25 +31,29 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
 
     return <>
         <div className="flex flex-col mt-[50px] shadow-xl p-[25px] rounded-[25px]">
-            <div className="flex flex-row items-center justify-between">
-                <hr className="border-t-2 border-gray-300 w-5/12 " />
+            <div className="flex 2xs:flex-row flex-col items-center justify-between">
+                <div className="w-full p-[25px] sm:block hidden">
+                    <hr className="border-t-2 border-gray-300" />
+                </div>
 
-                <span className="text-2xl font-[600] text-nowrap w-2/12 text-center">
+
+                <span className="text-2xl font-[600] text-nowrap text-center">
                     {props.categoryTitle}
                 </span>
 
-                <div className="flex flex-row w-5/12 items-center ">
-                    <hr className="border-t-2 border-gray-300 w-full" />
+                <div className="flex flex-row w-full items-center 2xs:pl-[25px] 2xs:justify-end justify-center ">
+                    <hr className="border-t-2 border-gray-300 w-full sm:block hidden" />
                     <FontAwesomeIcon icon={faArrowAltCircleLeft}
-                        size="2x"
-                        className={`pl-[12.5px]  ${distance === 0 ? "text-gray-400" : "cursor-pointer"}`}
+                        className={`2xs:pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === 0 ? "text-gray-400" : "cursor-pointer"}
+                            md:text-4xl text-3xl`}
                         onClick={() => setDistance(
                             distance => clampFunc(distance + 100, -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100, 0)
                         )} />
                     {/* the 10 here is because i hardcoded backend to take 10 items can be dynamic if needed*/}
+
                     <FontAwesomeIcon icon={faArrowAltCircleRight}
-                        size="2x"
-                        className={`pl-[12.5px] ${distance === -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100 ? "text-gray-400" : "cursor-pointer "}`}
+                        className={`pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100 ? "text-gray-400" : "cursor-pointer"}
+                            md:text-4xl text-3xl`}
                         onClick={() => setDistance(
                             distance => clampFunc(distance - 100, -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100, 0)
                         )} />
@@ -95,7 +99,7 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
             </div>
 
             <Link className="bg-black text-white w-fit p-5 
-            rounded-full mx-auto mt-[25px] font-bold"
+            rounded-full mx-auto 2xs:mt-[25px] mt-[5px] font-bold text-center"
                 href={urlNavLinkMap[props.categoryTitle]}>
                 SHOP {(props.categoryTitle).toUpperCase()}</Link>
 
