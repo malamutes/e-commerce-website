@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const dataNA = await sql`
                 SELECT product_id, product_name, product_images, product_producer, product_price, product_sales_category
-                FROM products ORDER BY product_created_at DESC LIMIT 5;
+                FROM products ORDER BY product_created_at DESC LIMIT 10;
                 `;
 
 
@@ -27,18 +27,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const dataE = await sql`
                      SELECT product_id, product_name, product_images, product_producer, product_price, product_sales_category
-                FROM products WHERE product_sales_category @> '["Exclusive"]'LIMIT 5;
+                FROM products WHERE product_sales_category @> '["Exclusive"]'LIMIT 10;
                 `
 
                 const dataS = await sql`
                 SELECT product_id, product_name, product_images, product_producer, product_price, product_sales_category
-           FROM products WHERE product_sales_category @> '["Sale"]'LIMIT 5;
+           FROM products WHERE product_sales_category @> '["Sale"]'LIMIT 10;
            `
 
 
                 const dataBS = await sql`
                 SELECT product_id, product_name, product_images, product_producer, product_price, product_sales_category
-           FROM products WHERE product_sales_category @> '["Best Sellers"]'LIMIT 5;
+           FROM products WHERE product_sales_category @> '["Best Sellers"]'LIMIT 10;
            `
 
                 if (dataNA.length === 0) {
@@ -72,14 +72,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 // If the error is an instance of Error, you can access the message and stack
                 if (error instanceof Error) {
-                    res.status(500).json({
+                    res.status(1000).json({
                         error: 'Failed to fetch data',
                         message: error.message,
                         stack: error.stack,  // Stack trace will give you more details on where the error happened
                     });
                 } else {
                     // If the error is not an instance of Error, just log it as a generic object
-                    res.status(500).json({
+                    res.status(1000).json({
                         error: 'Failed to fetch data',
                         details: JSON.stringify(error),
                     });

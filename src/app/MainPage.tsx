@@ -7,7 +7,7 @@ import Carousel from "./components/Carousel";
 import MainPageHeader from "./components/MainPageHeader";
 import { useEffect, useState } from "react";
 import { Product } from "./ProducerDashboard/components/Products";
-import { MainPageHeaderBrand } from "./components/MainPageHeader";
+
 
 
 export default function MainPage() {
@@ -50,12 +50,30 @@ export default function MainPage() {
         <>
             <div className="container mx-auto" >
                 <div className="w-5/6 mx-auto flex flex-col">
-                    <MainPageHeader categoryArray={mainPageProducts?.[0] ?? []} categoryTitle="New Arrivals" />
-                    <MainPageHeaderBrand categoryArray={mainPageProducts?.[1] ?? []} categoryTitle="Popular Brands" />
-                    <MainPageHeader categoryArray={mainPageProducts?.[2] ?? []} categoryTitle="Exclusive" />
-                    <MainPageHeader categoryArray={mainPageProducts?.[3] ?? []} categoryTitle="Best Sellers" />
-                    <MainPageHeader categoryArray={mainPageProducts?.[4] ?? []} categoryTitle="On Sale" />
-                    <MainPageHeaderBrand categoryArray={mainPageProducts?.[5] ?? []} categoryTitle="Categories" />
+                    <MainPageHeader categoryArray={mainPageProducts?.[0] ?? []}
+                        categoryTitle="New Arrivals"
+                        numItemsDisplay={5}
+                    />
+                    <MainPageHeader categoryArray={mainPageProducts?.[1] ?? []}
+                        categoryTitle="Popular Brands" categories={true}
+                        numItemsDisplay={5}
+                    />
+                    <MainPageHeader categoryArray={mainPageProducts?.[2] ?? []}
+                        categoryTitle="Exclusive"
+                        numItemsDisplay={5}
+                    />
+                    <MainPageHeader categoryArray={mainPageProducts?.[3] ?? []}
+                        categoryTitle="Best Sellers"
+                        numItemsDisplay={5}
+                    />
+                    <MainPageHeader categoryArray={mainPageProducts?.[4] ?? []}
+                        categoryTitle="On Sale"
+                        numItemsDisplay={5}
+                    />
+                    <MainPageHeader categoryArray={mainPageProducts?.[5] ?? []}
+                        categoryTitle="Categories" categories={true}
+                        numItemsDisplay={6}
+                    />
                 </div>
 
             </div>

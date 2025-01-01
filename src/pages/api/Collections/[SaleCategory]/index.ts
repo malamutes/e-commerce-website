@@ -39,8 +39,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     }
 
-                    if (req.query.clothingCategory && req.query.clothingCategory !== 'All') {
-                        clothingCat = ` AND product_type = '${req.query.clothingCategory}'`
+                    if (req.query.clothingCategory) {
+                        if (req.query.clothingCategory !== 'All') {
+                            clothingCat = ` AND product_type = '${req.query.clothingCategory}'`
+                        }
+                        else if (req.query.clothingCategory === 'All') {
+                            clothingCat = ``;
+                        }
                     }
 
                     if (req.query.sex) {
@@ -52,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     if (req.query.saleCheck === 'On Sale') {
-                        saleQuery = ` AND (product_sales_category @> '["Sale"]')`
+                        saleQuery = ', "Sale"'
                     }
 
                     if (req.query.sortBy === 'price_desc') {
@@ -67,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
                     const sqlQuery: string = `
-                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"]' ${clothingCat} ${sexQuery}${saleQuery}${sortQuery};
+                        SELECT * FROM products WHERE product_sales_category @> '["${saleCat}"${saleQuery}]' ${clothingCat} ${sexQuery}${sortQuery};
                         `;
 
                     console.log(sqlQuery);
@@ -77,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     if (data.length === 0) {
                         return res.status(400).json({ error: 'No Items Found' });
                     }
-
+                    //ISSUES WHERE ON SALE CHECK DOESNT REFRESH PAGE TO BECOME NOTHING, QUERY AND BACKEND SHOULD BE CORRRECT, JUST THE FRONTEND NEEDS TO FREFRESH
                     res.status(200).json(data);
                 } catch (error) {
                     console.error("Error details:", error);

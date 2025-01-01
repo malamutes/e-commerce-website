@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     let sizeQuery = "";
                     let saleQuery: string = "";
                     let sortQuery: string = "";
+                    let categoryQuery: string = "";
 
                     if (req.query.sex) {
                         sexArray = Array.isArray(req.query.sex) ? req.query.sex : [req.query.sex];
@@ -35,8 +36,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const sql = neon(process.env.DATABASE_URL!);
 
+                    if (req.query.clothingCategory !== 'All') {
+                        categoryQuery = `product_type = '${req.query.clothingCategory}'`
+                    }
+                    else {
+                        categoryQuery = "1 = 1";
+                    }
+
                     const baseQuery = `SELECT product_id, product_name, product_price, product_audience, product_producer, product_colour, product_size, product_sales_category, product_images FROM products 
-                        WHERE product_type = '${req.query.clothingCategory}'`
+                        WHERE ${categoryQuery}`
 
                     if (sexArray.length > 0) {
                         sexQuery = ` AND (product_audience = '${sexArray.join("' OR product_audience = '")}')`;

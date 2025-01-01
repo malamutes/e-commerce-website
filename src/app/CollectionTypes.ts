@@ -35,7 +35,8 @@ const clothingColours = [
     'Orange',
 ]
 
-const headers = ['Products', 'Trending', 'Best Sellers', 'New'];
+const headers = ['Products', 'Featured', 'Upcoming Releases', 'Gifting'];
+
 
 const businessLocations = ['US', 'GB', 'CA', 'DE', 'IN', 'CN', 'AU', 'JP', 'BR', 'FR', 'MX', 'KR', 'OTH'];
 

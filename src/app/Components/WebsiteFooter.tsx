@@ -30,7 +30,7 @@ export default function WebsiteFooter() {
     const [dealsAccordion, setDealsAccordion] = useState(false);
 
     return <>
-        <div className="bg-white w-full min-w-[250px]">
+        <div className="bg-gray-100 w-full min-w-[250px]">
             <div className="flex flex-col">
                 <div className="sm:grid lg:grid-cols-5 grid-cols-2 2xl:w-3/4 
                 xl:w-4/5 lg:w-11/12 w-4/5 mx-auto justify-between pt-5
