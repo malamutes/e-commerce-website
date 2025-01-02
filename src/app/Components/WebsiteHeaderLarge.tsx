@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 
-const HeadlineDropwdownMap: { [key: string]: string[] } = {
+export const HeadlineDropwdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
     'Featured': salesCategories.filter(cat => cat !== 'Regular'),
     'Upcoming': ["null", "null", "null"],
@@ -33,9 +33,10 @@ function HeadlineDropdown(props: HeadlineDropdownProps) {
     return <>
 
         <div className={`absolute top-[100px] left-0 top-0 w-full
-                grid grid-cols-${props.numColumns} gap-x-4 bg-gray-400 pl-[100px] pr-[100px] 
+                grid gap-x-4 bg-gray-400 pl-[100px] pr-[100px] 
                 pb-[20px] font-bold place-items-center
-                ${props.show ? "block" : "hidden"}`}>
+                ${props.show ? "block" : "hidden"}`}
+            style={{ gridTemplateColumns: `repeat(${props.numColumns}, minmax(0, 1fr))` }}>
 
             {props.headlineDropdownItems.map((item, index) => {
                 let dynamicUrl: string = "";
@@ -141,8 +142,6 @@ export default function WebsiteHeaderLarge() {
                                     size="1x"
                                     className={`${iconClass} ${navDropdown === index ? "rotate-180" : "rotate-0"}`} />
                             </div>
-
-
 
                             <HeadlineDropdown
                                 headline={headline}

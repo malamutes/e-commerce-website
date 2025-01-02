@@ -1,10 +1,7 @@
 "use client";
 
-const iconSize = "25px";
-const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
-const dropDownMenuItemClass = "text-white pl-[50px] pt-[12.5px] pb-[12.5px] font-bold text-sm";
 import Image from "next/image";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faUser, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
@@ -15,13 +12,72 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { headers } from "../CollectionTypes";
+import { HeadlineDropwdownMap } from "./WebsiteHeaderLarge";
+
+
+const iconSize = "25px";
+const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
+const dropDownMenuItemClass = "text-white pl-[50px] pt-[12.5px] pb-[12.5px] font-bold text-sm";
+
+interface DropdownMenu {
+    dropdownItems: string[],
+    dropdownTitle: string
+}
+
+function DropdownMenu(props: DropdownMenu) {
+    const [closeMenu, setCloseMenu] = useState(true);
+
+    return <>
+        <div className="flex flex-col p-5">
+            <div
+                className="flex flex-row items-center xl:mx-4 lg:mx-3 font-bold pb-2.5">
+                <div className="cursor-pointer" onClick={() => setCloseMenu(closeMenu => !closeMenu)}>
+                    <span >
+                        {props.dropdownTitle}
+                    </span>
+                    <FontAwesomeIcon icon={faAngleDown}
+                        size="1x"
+                        className={`${iconClass} ${false ? "rotate-180" : "rotate-0"}`} />
+                </div>
+
+            </div>
+
+            <div className={`flex flex-col ${closeMenu ? "hidden" : "block"}`}>
+                {props.dropdownItems.map((item, index) => {
+                    let dynamicUrl: string = "";
+                    if (props.dropdownTitle === 'Products') {
+                        dynamicUrl = `/Collections?clothingCategory=${item}`
+                    }
+                    else if (props.dropdownTitle === 'Featured') {
+                        dynamicUrl = `/Collections/${item}?clothingCategory=All`
+                    }
+                    else {
+                        dynamicUrl = ""
+                    }
+
+                    return (
+                        <Link key={index} href={dynamicUrl} className="hover:shadow-lg  rounded-lg 
+                            cursor-pointer p-[5px]
+                            hover:bg-gray-300 w-fit">
+                            <span >
+                                {item}
+                            </span>
+                        </Link>
+                    );
+                })}
+            </div>
+        </div>
+
+    </>
+}
 
 export default function WebsiteHeaderSmall() {
 
     const [userIn, setUserIn] = useState(false);
     const [displayUserDropdown, setDisplayUserDrowndown] = useState(false);
 
-    const [productsDropdown, setProductsDropdown] = useState(false);
+    const [menuOffCanvas, setMenuOffCanvas] = useState(false);
 
     const { data: session, status } = useSession();
 
@@ -61,11 +117,38 @@ export default function WebsiteHeaderSmall() {
         <div className=" flex flex-row justify-between w-11/12 mx-auto block lg:hidden">
             {/* for <div> <link image> <div> both divs have the same width so the image is centered
                     with justify between as parent div*/}
+
+            <div className={`w-[80vw] overflow-y-scroll max-w-[500px] h-screen ${menuOffCanvas ? "fixed" : "hidden"} 
+                bg-white z-20 top-0 left-0 flex flex-col`}>
+                <div className="flex flex-row justify-between">
+                    <span className="text-2xl italic p-5">
+                        Navigation
+                    </span>
+                    <FontAwesomeIcon icon={faX} size="2x"
+                        onClick={() => setMenuOffCanvas(false)}
+                        className="cursor-pointer p-5" />
+                </div>
+                <div className="flex flex-col">
+                    {headers.map((headline, index) => (
+                        <DropdownMenu dropdownTitle={headline} key={index}
+                            dropdownItems={HeadlineDropwdownMap[headline]} />
+                    ))}
+
+                </div>
+            </div>
+
+            <div className={`fixed h-screen w-screen bg-black 
+            ${menuOffCanvas ? "opacity-60" : "hidden"} top-0 left-0`}
+                onClick={() => setMenuOffCanvas(false)}
+                style={{ zIndex: 0 }}>
+            </div>
+
             <div className="flex flex-row items-center justify-start w-1/3">
                 <div>
                     <FontAwesomeIcon icon={faBars}
                         style={{ fontSize: iconSize }}
                         className={iconClass}
+                        onClick={() => setMenuOffCanvas(true)}
                     />
                 </div>
 

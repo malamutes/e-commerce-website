@@ -117,7 +117,7 @@ export function FilterTabSmall(props: FilterTabProps) {
 
         <div className={`${filterOffCanvas ? "fixed" : "hidden"}
             w-5/6 bg-white flex flex-col h-screen top-0 left-0`}
-            style={{ zIndex: 1 }}
+            style={{ zIndex: 50 }}
         >
             <div className="flex justify-between">
                 <span className="text-xl">
