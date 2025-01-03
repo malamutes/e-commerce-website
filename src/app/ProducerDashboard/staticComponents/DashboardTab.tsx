@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardList, faGear, faChartBar, faScrewdriverWrench, faCircleInfo, faBox, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardList, faGear, faChartBar, faScrewdriverWrench, faCircleInfo, faBox, IconDefinition, faDesktop } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -29,27 +29,30 @@ export default function DashboardTab() {
     }, [params])
 
     return <>
-        <div className="bg-gray-800 text-gray-300 flex justify-center h-fit pb-3 pt-10 h-full">
-            <div className="flex flex-col ">
-                <div className="p-5 text-lg font-bold relative ml-[25px]">
-                    <div className="w-[3px] h-4/5 bg-white absolute 
-                    top-1/2 left-[5px] rounded-full -translate-y-1/2"></div>
-                    {session?.user.business?.businessName}'s Dashboard
+        <div className="bg-gray-800 text-gray-300 flex justify-center 
+         h-fit pb-3 pt-10 h-full">
+            <div className="flex flex-col items-center">
+                <div className="lg:p-5 md:p-3 text-lg font-bold relative lg:bg-gray-900">
+                    <div className="xl:ml-[25px] lg:block hidden">
+                        {session?.user.business?.businessName}'s Dashboard
+                    </div>
+
+                    <FontAwesomeIcon icon={faDesktop} className="text-[25px] text-gray-400 lg:hidden block mb-[15px]" />
                 </div>
 
-                <div className="ml-[50px]">
+                <div >
                     {dashboardTabs.map((tab) => (
                         <Link href={`/ProducerDashboard?tab=${tab}`} key={tab}
                             onClick={() => setCurrentTab(tab)}
-                            className={`rounded-lg w-fit p-5 flex flex-
+                            className={`rounded-lg w-fit p-5 flex lg:ml-[20px] xl:ml-[0px] 
                             ${currentTab === tab ? "bg-gray-500" : "hover:bg-gray-700 "}
                             `}
                         >
                             <div className={`flex flex-row 
                             items-center
                             `}>
-                                <FontAwesomeIcon icon={dashboardTabsIcon[tab]} className="mr-[10px]" />
-                                <span className="">
+                                <FontAwesomeIcon icon={dashboardTabsIcon[tab]} className="lg:mr-[10px] lg:text-[16px] text-[20px]" />
+                                <span className="lg:block hidden">
                                     {tab}
                                 </span>
                             </div>
@@ -58,6 +61,38 @@ export default function DashboardTab() {
                     ))}
                 </div>
 
+            </div>
+        </div>
+
+    </>
+}
+
+export function DashboardTabSmall() {
+
+    const params = useSearchParams();
+    const dashboardTabs = ['Overview', 'Products', 'Sales', 'Orders', 'Operations', 'Settings'];
+
+    const [currentTab, setCurrentTab] = useState(params?.get('tab') ?? "Overview");
+
+    useEffect(() => {
+        setCurrentTab(params?.get('tab') ?? "Overview");
+    }, [params])
+
+    return <>
+        <div className="bg-gray-800 text-gray-300 flex justify-center p-5
+        w-full rounded-full mb-[25px]">
+            <div className="xs:flex xs:flex-row grid grid-cols-3 items-center">
+                {dashboardTabs.map((tab) => (
+                    <Link href={`/ProducerDashboard?tab=${tab}`} key={tab}
+                        onClick={() => setCurrentTab(tab)}
+                        className={`rounded-full p-3 m-1 text-[20px]
+                            ${currentTab === tab ? "bg-gray-500" : "hover:bg-gray-700 "}
+                            `}
+                    >
+                        <FontAwesomeIcon icon={dashboardTabsIcon[tab]} />
+
+                    </Link>
+                ))}
             </div>
         </div>
 
