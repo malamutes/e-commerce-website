@@ -21,8 +21,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="sm:w-10/12 w-full">
                     {children}  {/* Here is where page content will go my page.tsx file anything put inside taht file
             will be rendered here and everything outside is static*/}
-
-
                 </div>
             </div>
 

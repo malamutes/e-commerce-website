@@ -4,19 +4,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import DashBoardProductCard from "./DashboardProductCard";
 
 export interface Product {
     [key: string]: string | string[]
 }
 
-const gridLayout = '0.25fr 2fr 0.75fr 0.75fr 0.75fr 0.75fr 0.75fr 1fr ';
-
 export default function Products() {
     const [currentProducts, setCurrentProducts] = useState<Product[]>([]);
-
-    const [currentProductEllipsisMenu, setCurrentProductEllipsisMenu] = useState(-1);
-
+    const [showProductEllipsisMenu, setShowProductEllipsisMenu] = useState(-1);
     const productEllipsisMenuItemClass = "cursor-pointer hover:bg-gray-300";
 
     useEffect(() => {
@@ -40,69 +35,88 @@ export default function Products() {
         getCurrentProduct();
     }, []);
 
-
     return <>
         <div className="flex flex-col bg-gray-100 pb-[25px] pt-[25px]">
-            <div className="p-[25px] flex flex-row justify-between">
-                <span className="text-xl font-bold pl-[25px]">
+            <div className="p-[25px] flex md:flex-row flex-col md:justify-between ">
+                <span className="text-xl font-bold md:pl-[25px]">
                     Your Current Products
                 </span>
-                <Link href={`/ProducerDashboard?tab=AddProduct`}>
-                    <span className=" rounded-md w-fit h-fit p-2.5
-        hover:bg-gray-400"
+                <Link href={`/ProducerDashboard?tab=AddProduct`}
+                    className="md:mt-[0px] mt-[25px]">
+                    <span className=" rounded-md w-fit h-fit p-2.5 
+                    hover:bg-gray-400"
                     >Add A Product</span>
                 </Link>
 
             </div>
 
-            <div className="flex flex-col gap-4 w-5/6 mx-auto ">
-                <div className="grid border-2 border-black w-full p-2.5 "
-                    style={{ gridTemplateColumns: `${gridLayout} 0fr` }}
-                >
-                    <span className="text-center">
-                        ID
-                    </span>
+            <div className="flex flex-col gap-4 w-5/6 min-w-[725px] ml-[50px]">
+                <table >
+                    <caption className="text-start mb-[25px] 
+                    italic font-bold">
+                        Current Products Oustanding in Store</caption>
+                    <thead className="font-bold bg-gray-500 ">
+                        <tr >
+                            <td className="pb-5 pt-5 border-x border-black text-center">ID</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Name</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Price</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Type</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Size</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Inventory</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Units Sold</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">Total Revenue</td>
+                            <td className="pb-5 pt-5 border-x border-black text-center">More</td>
+                        </tr>
 
-                    <span className="text-center">
-                        Name
-                    </span>
+                    </thead>
+                    <tbody >
+                        {currentProducts.map((product, index) => (
+                            <tr key={index} className={`${index % 2 === 0 ? "bg-gray-400" : "bg-gray-300"}`}>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_id']}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_name']}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_price']}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_type']}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{(product['product_size'] as string[]).join(" | ")}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center"><div className="relative flex items-center justify-center"
+                                    onMouseEnter={() => setShowProductEllipsisMenu(index)}
+                                    onMouseLeave={() => setShowProductEllipsisMenu(-1)}>
+                                    <FontAwesomeIcon icon={faEllipsisH}
+                                        size="2x"
+                                        className="cursor-pointer"
 
-                    <span className="text-center">
-                        Price
-                    </span>
+                                    />
 
-                    <span className="text-center">
-                        Type
-                    </span>
+                                    <div className={`absolute ${showProductEllipsisMenu === index
+                                        ? "flex" : "hidden"}
+                                    left-1/2 transform -translate-x-1/2 pt-[15px] w-fit bg-gray-300 p-2 rounded-lg
+                                    flex flex-col text-nowrap p-1 z-10
+                                    `}>
+                                        <Link className={productEllipsisMenuItemClass}
+                                            href={`/Collections/All/Products/?productID=${product['product_id']}`}>
+                                            <span >
+                                                View Product
+                                            </span>
 
-                    <span className="text-center">
-                        Size
-                    </span>
+                                        </Link>
 
-                    <span className="text-center">
-                        Inventory
-                    </span>
+                                        <span className={productEllipsisMenuItemClass}>
+                                            Update Product
+                                        </span>
 
-                    <span className="text-center">
-                        Units Sold
-                    </span>
-
-                    <span className="text-center">
-                        Total Revenue
-                    </span>
-
-                    More
-                </div>
-
-                {currentProducts.map((product, index) => (
-                    <div className="flex flex-row" key={index}>
-                        <DashBoardProductCard product={product} />
-                    </div>
-                ))}
-
+                                        <span className={productEllipsisMenuItemClass}>
+                                            Recall Product
+                                        </span>
+                                    </div>
+                                </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div >
         </div >
     </>
 }
-
-export { gridLayout };
