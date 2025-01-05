@@ -1,0 +1,159 @@
+"use client";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX, faRuler, faDollarSign, faPalette, faDollar, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import { Context, SetStateAction, useContext } from "react";
+import { ShoppingCartContext, ShoppingCartItem } from "../ShoppingCartContext";
+import Image from "next/image";
+import { ShoppingCartContextType } from "../ShoppingCartContext";
+
+interface ShoppingCartProps {
+    show: boolean,
+    setShow: React.Dispatch<SetStateAction<boolean>>;
+}
+
+interface ShoppingCartItemComponentProps {
+    shoppingCartItem: ShoppingCartItem;
+    shoppingCartContext: ShoppingCartContextType;
+
+    //type of just lets me retrieve type of object by letting ts do it rather than me manually typing out its shape
+}
+
+function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps) {
+    return <>
+        <div className="flex 2xs:flex-row flex-col justify-center 3xs:p-5 p-3">
+            <div className="flex items-center 2xs:w-1/3 w-full justify-center 2xs:pb-[0px] pb-[10px]">
+                <Image alt="ShoppingCartItemImage" src={props.shoppingCartItem.itemImage}
+                    width={150} height={150} />
+            </div>
+
+            <div className="flex flex-col justify-center 2xs:w-2/3 w-full pl-[20px] 
+            2xs:text-start text-center gap-[2.5px]">
+                <span className="text-lg italic">
+                    {props.shoppingCartItem.itemBrand}
+                </span>
+                <span className="text-xl font-bold">
+                    {props.shoppingCartItem.itemTitle}
+                </span>
+                <div className="flex flex-row justify-between 3xs:w-4/5 w-full">
+                    <div className="pt-1 pb-1 flex xs:flex-row items-center">
+                        <FontAwesomeIcon icon={faRuler} className="pr-[2px]" />
+                        <span>
+                            {props.shoppingCartItem.itemSize}
+                        </span>
+                    </div>
+
+                    <div className="pt-1 pb-1 flex xs:flex-row items-center">
+                        <FontAwesomeIcon icon={faPalette} className="pr-[2px]" />
+                        <span>
+                            {props.shoppingCartItem.itemColour}
+                        </span>
+                    </div>
+
+                    <div className="pt-1 pb-1 flex xs:flex-row items-center">
+                        <FontAwesomeIcon icon={faDollarSign} className="pr-[2px]" />
+                        <span>
+                            {(props.shoppingCartItem.itemPrice * props.shoppingCartItem.itemCount).toFixed(2)}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="flex 2xs:flex-row flex-col items-center 2xs:justify-start justify-center">
+                    <div className="flex flex-row">
+                        <FontAwesomeIcon icon={faMinusSquare}
+                            className="cursor-pointer mr-2" size="2x"
+                            onClick={() => props.shoppingCartContext.removeOneItemCountFromCart(props.shoppingCartItem)} />
+                        <span className="border-2 border-gray-400 w-[32px] h-[32px] grid place-items-center mr-2">
+                            {props.shoppingCartItem.itemCount}
+                        </span>
+                        <FontAwesomeIcon icon={faPlusSquare}
+                            className="cursor-pointer mr-2" size="2x"
+                            onClick={() => props.shoppingCartContext.addItemToCart(props.shoppingCartItem)} />
+                    </div>
+
+
+                    <div className="2xs:mt=[0px] mt-[5px]">
+                        <span className="cursor-pointer hover:underline"
+                            onClick={() => {
+                                props.shoppingCartContext.removeItemFromCart(props.shoppingCartItem)
+                            }}>
+                            Remove
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </>
+}
+
+export default function ShoppingCart(props: ShoppingCartProps) {
+
+    const shoppingCartContext = useContext(ShoppingCartContext);
+
+    return <>
+        <div className={`w-screen h-screen bg-black opacity-50 
+            left-0 top-0 ${props.show ? "fixed" : "hidden"} z-50`}
+            onClick={() => props.setShow(false)} >
+
+        </div>
+
+        <div className={`bg-white fixed right-0 top-0 3xs:w-[500px] w-11/12 h-screen ${props.show ? "block" : "hidden"}
+                z-50`}>
+            <div className="flex flex-col h-[80vh] overflow-y-scroll pb-5 
+            border-b-2 border-b-gray-500">
+                <div className="flex flex-row justify-between p-5">
+                    <span className="font-bold">
+                        YOUR SHOPPING CART
+                    </span>
+                    <div>
+                        <span className="mr-[15px] text-[14px] hover:underline cursor-pointer">
+                            VIEW CART
+                        </span>
+                        <FontAwesomeIcon icon={faX}
+                            className="cursor-pointer text-[16px]"
+                            onClick={() => props.setShow(false)}
+                        />
+                    </div>
+                </div>
+
+                <div className="flex flex-col">
+                    {Object.keys(shoppingCartContext.cartState).map((shoppingCartItem, index) => (
+                        <div key={index} className="ml-5 mr-5 mb-5 shadow-lg ">
+                            <ShoppingCartItemComponent
+                                shoppingCartItem={shoppingCartContext.cartState[shoppingCartItem]}
+                                shoppingCartContext={shoppingCartContext}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="h-[20vh] ">
+                <div>
+                    <div className="flex flex-row justify-between p-5">
+
+                        <span className="text-xl font-bold">
+                            TOTAL
+                        </span>
+
+                        <span className="text-xl font-bold">
+                            ${`${shoppingCartContext.getTotal().toFixed(2)}`}
+                        </span>
+
+                    </div>
+
+                    <button className="bg-green-700 text-white p-4 rounded-full w-2/3 block mx-auto">
+                        <span className="font-bold">
+                            Checkout Products!
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </>
+}

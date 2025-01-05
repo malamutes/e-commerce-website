@@ -32,7 +32,8 @@ export default function Carousel(props: CarouselProps) {
             <div className="absolute bottom-0">
                 {Array(numItems).fill("CircleNav").map((item, index) => (
                     <FontAwesomeIcon
-                        className="m-1 cursor-pointer"
+                        className={`m-1 cursor-pointer ${currentIndex === index ? "bg-black" : "bg-transparent"}
+                            rounded-full`}
                         icon={faCircle}
                         key={index}
                         onClick={() => setCurrentIndex(index)}

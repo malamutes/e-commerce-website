@@ -130,7 +130,7 @@ export default function Settings() {
                     </div>
                 </div >
 
-                <div className="flex justify-end mt-[25px]">
+                <div className="flex sm:justify-end justify-center mt-[25px] w-5/6 mx-auto">
                     <button className="pt-3 pb-3 pl-10 pr-10 bg-blue-700 rounded-full w-fit text-white">SAVE</button>
                 </div>
             </form>

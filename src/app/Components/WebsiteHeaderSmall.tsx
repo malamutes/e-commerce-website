@@ -9,11 +9,13 @@ import Link from "next/link";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { headers } from "../CollectionTypes";
 import { HeadlineDropwdownMap } from "./WebsiteHeaderLarge";
+import ShoppingCart from "./ShoppingCart";
+import { ShoppingCartContext } from "../ShoppingCartContext";
 
 
 const iconSize = "25px";
@@ -80,6 +82,8 @@ export default function WebsiteHeaderSmall() {
     const [menuOffCanvas, setMenuOffCanvas] = useState(false);
 
     const { data: session, status } = useSession();
+    const [showShoppingCart, setShowShoppingCart] = useState(false);
+    const { cartState } = useContext(ShoppingCartContext);
 
     useEffect(() => {
         if (status === "loading") {
@@ -226,12 +230,21 @@ export default function WebsiteHeaderSmall() {
                         style={{ fontSize: iconSize }}
                         className={iconClass} />
 
-                    <FontAwesomeIcon icon={faShoppingCart}
-                        style={{ fontSize: iconSize }}
-                        className={iconClass} />
+
+                    <div className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}
+                        onClick={() => setShowShoppingCart(true)}>
+                        <FontAwesomeIcon icon={faShoppingCart}
+                            style={{ fontSize: iconSize }}
+
+                        />
+                        <div className="bg-black text-white w-[25px] aspect-square grid 
+                                place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">
+                            {Object.keys(cartState).length}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
+        <ShoppingCart show={showShoppingCart} setShow={setShowShoppingCart} />
     </>
 }

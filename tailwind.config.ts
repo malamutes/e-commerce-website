@@ -13,6 +13,7 @@ export default {
         foreground: "var(--foreground)",
       },
       screens: {
+        '3xs': '550px',
         '2xs': '420px',
         'xs': '360px',
         'xxs': '300px',

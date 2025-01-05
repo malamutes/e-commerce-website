@@ -1,17 +1,25 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Product } from "@/app/ProducerDashboard/components/Products";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import Carousel from "@/app/components/Carousel";
+import { ShoppingCartContext, ShoppingCartItem } from "@/app/ShoppingCartContext";
+import ShoppingCart from "@/app/components/ShoppingCart";
 
 export default function ProductPage() {
 
     const [currentProduct, setCurrentProduct] = useState<Product[]>([]);
     const searchParams = useSearchParams();
+
+    const [selectedColour, setSelectedColour] = useState("");
+    const [selectedSize, setSelectedSize] = useState("");
+
+    const [showCart, setShowCart] = useState(false);
+
+    const shoppingCartContext = useContext(ShoppingCartContext);
+
 
     useEffect(() => {
         const productID = searchParams?.get("productID") ?? "";
@@ -41,9 +49,20 @@ export default function ProductPage() {
 
     }, [searchParams]);
 
-    const titleClass = "flex justify-between pt-3 items-center cursor-pointer ";
+    const addToCartSubmit = (cartItem: ShoppingCartItem) => {
+
+        if (selectedColour !== "" && selectedSize !== "") {
+            //valid selections
+            shoppingCartContext.addItemToCart(cartItem);
+            setShowCart(true);
+        }
+        else {
+            alert("Please select colour and size before adding to cart!");
+        }
+    };
 
     return <>
+        <ShoppingCart show={showCart} setShow={setShowCart} />
         <div className="lg:container mx-auto mt-[25px]">
             {currentProduct[0] ? (
                 <div className=" flex md:flex-row flex-col justify-between xl:w-11/12 w-full mx-auto pl-[25px] pr-[25px]">
@@ -90,11 +109,12 @@ export default function ProductPage() {
 
                         <span className="mb-3">
                             Sizes available In:
-                            <div className="flex flex-row">
+                            <div className="flex flex">
                                 {(currentProduct[0]['product_size'] as string[]).map((size, sizeIndex) => (
-                                    <div key={sizeIndex} className="w-[50px] 
-                                          h-[50px] bg-white border-2 border-black m-2
-                                          grid place-items-center">
+                                    <div key={sizeIndex} className={`w-[50px] 
+                                          h-[50px] bg-transparent border-2 ${selectedSize === size ? "border-black" : "border-gray-400 "} m-2
+                                          grid place-items-center cursor-pointer`}
+                                        onClick={() => setSelectedSize(size)}>
                                         {size}
                                     </div>
                                 ))}
@@ -106,10 +126,16 @@ export default function ProductPage() {
                             <div className="flex flex-row">
                                 {(currentProduct[0]['product_colour'] as string[]).map((colour, colourIndex) => (
 
-                                    <div key={colourIndex} className="w-[50px] 
-                                    h-[50px] bg-white border-2 border-black m-2
-                                    grid place-items-center rounded-full">
+                                    <div key={colourIndex} className={`rounded-full m-1 border-2 
+                                    ${selectedColour === colour ? "border-black" : "border-gray-400 "} cursor-pointer`}
+                                        onClick={() => setSelectedColour(colour)}>
+                                        <div className="w-[50px] 
+                                    h-[50px] bg-transparent m-[2.5px]
+                                    grid place-items-center rounded-full"
+                                            style={{ backgroundColor: colour }}>
+                                        </div>
                                     </div>
+
                                 ))}
                             </div>
                         </span>
@@ -126,16 +152,29 @@ export default function ProductPage() {
 
                         </div>
 
-                        <span className="mb-3 text-lg text-gray-700">
+                        <span className="mb-3 text-xl text-gray-700">
                             ${currentProduct[0]['product_price']}
                         </span>
 
                         <button className="bg-green-700 p-4 text-white
                         w-5/6 mb-3
-                        font-bold rounded-full">
+                        font-bold rounded-full"
+                            onClick={() => addToCartSubmit(
+                                {
+                                    itemID: (currentProduct[0]['product_id'] as string),
+                                    itemBrand: (currentProduct[0]['product_producer'] as string),
+                                    itemTitle: (currentProduct[0]['product_name'] as string),
+                                    itemColour: selectedColour,
+                                    itemSize: selectedSize,
+                                    itemCount: 0 /*...cartItem, itemCount: 1 makes it so its overriden to be 1 no matter what
+                                        in shopping cart logic*/,
+                                    itemImage: (currentProduct[0]['product_images'][0] as string),
+                                    itemPrice: Number(currentProduct[0]['product_price'] ?? 0.00)
+
+                                })
+                            }>
                             ADD TO CART
                         </button>
-
 
                         <span className="text-md font-bold mb-3">
                             Product ID: <span className="font-light italic">{currentProduct[0]['product_id']}</span>
