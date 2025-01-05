@@ -114,6 +114,11 @@ export default function WebsiteHeaderLarge() {
     const handleProducerDashboard = async () => {
         router.push('/ProducerDashboard?tab=Overview');
     }
+
+    const handleAccount = () => {
+        router.push('/Account');
+    }
+
     return <>
         <div style={{ zIndex: 20 }}>
             <div className="hidden lg:block max-w-[2000px] mx-auto h-full" >
@@ -193,28 +198,21 @@ export default function WebsiteHeaderLarge() {
                                         <div
                                             className={`absolute ${displayUserDropdown ? "block" : "hidden"} 
                                         left-1/2 transform -translate-x-1/2 pt-[25px] w-full `}>
-                                            <div className="bg-gray-500 flex flex-col text-gray-200 ">
-                                                <span className={`${dropDownMenuItemClass} mt-[12.5px]`}>
+                                            <div className="bg-gray-500 flex flex-col text-gray-200 pt-[12.5px]">
+                                                <span className={`${dropDownMenuItemClass}`}
+                                                    onClick={handleAccount}>
                                                     Account
                                                 </span>
 
-                                                <span className={dropDownMenuItemClass}>
-                                                    Orders
-                                                </span>
-
-                                                <span className={dropDownMenuItemClass}>
-                                                    Addresses
-                                                </span>
-
-                                                <span className={dropDownMenuItemClass}
-                                                    onClick={handleUserSignOut}>
-                                                    Sign Out
-                                                </span>
-
                                                 <span className={`${dropDownMenuItemClass} 
-                                                ${session?.user.isUserProducer === true ? "block" : "hidden"} mb-[12.5px]`}
+                                                ${session?.user.isUserProducer === true ? "block" : "hidden"}`}
                                                     onClick={handleProducerDashboard}>
                                                     Producer Dashboard
+                                                </span>
+
+                                                <span className={`${dropDownMenuItemClass}`}
+                                                    onClick={handleUserSignOut}>
+                                                    Sign Out
                                                 </span>
                                             </div>
                                         </div>

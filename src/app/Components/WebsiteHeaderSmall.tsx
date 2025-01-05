@@ -116,6 +116,11 @@ export default function WebsiteHeaderSmall() {
         router.push('/ProducerDashboard?tab=Overview');
     }
 
+    const handleAccount = () => {
+        router.push('/Account');
+    }
+
+
     return <>
 
         <div className=" flex flex-row justify-between w-11/12 mx-auto block lg:hidden">
@@ -172,33 +177,19 @@ export default function WebsiteHeaderSmall() {
                                 style={{ fontSize: iconSize }} />
                         </span>
 
-                        <div
-
-                            className={`fixed ${displayUserDropdown ? "block" : "hidden"} 
+                        <div className={`fixed ${displayUserDropdown ? "block" : "hidden"} 
                                         pt-[25px] w-[90vw] left-[5vw]`}>
 
-                            <div className="bg-gray-500 flex flex-col text-gray-600 pb-[12.5px]">
+                            <div className="bg-gray-500 flex flex-col text-gray-600 pb-[12.5px] w-[250px]">
                                 <span className={`font-bold pl-[25px] pt-[15px] mb-[12.5px] text-lg text-white`}>
-                                    Hello {session?.user.name}
+                                    Hello {session?.user.firstName}
                                 </span>
 
                                 <hr></hr>
 
-                                <span className={dropDownMenuItemClass}>
+                                <span className={dropDownMenuItemClass}
+                                    onClick={handleAccount}>
                                     Account
-                                </span>
-
-                                <span className={dropDownMenuItemClass}>
-                                    Orders
-                                </span>
-
-                                <span className={dropDownMenuItemClass}>
-                                    Addresses
-                                </span>
-
-                                <span className={`${dropDownMenuItemClass}`}
-                                    onClick={handleUserSignOut}>
-                                    Sign Out
                                 </span>
 
                                 <span className={`${dropDownMenuItemClass} 
@@ -206,6 +197,13 @@ export default function WebsiteHeaderSmall() {
                                     onClick={handleProducerDashboard}>
                                     Producer Dashboard
                                 </span>
+
+                                <span className={`${dropDownMenuItemClass}`}
+                                    onClick={handleUserSignOut}>
+                                    Sign Out
+                                </span>
+
+
                             </div>
 
                         </div>

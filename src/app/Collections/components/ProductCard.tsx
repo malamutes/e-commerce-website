@@ -34,8 +34,8 @@ export default function ProductCard(props: ProductCard) {
             href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
             style={props.style}>
 
-            <div className="flex flex-col text-center w-fit
-                max-w-[350px] shadow-lg cursor-pointer bg-gray-300 ">
+            <div className="flex flex-col text-center w-fit mx-auto
+                max-w-[350px] shadow-lg cursor-pointer bg-gray-300">
                 <Image src={props.product['product_images'][0]}
                     alt={props.product['product_images'][0]}
                     width={600}

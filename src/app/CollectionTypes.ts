@@ -67,7 +67,6 @@ const sortFeatureCategory = [
     'price_asc',
     'price_desc',
     'date_desc'
-
 ]
 
 
