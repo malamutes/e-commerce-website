@@ -16,7 +16,7 @@ export const authOptions = {
                 const userPassword = credentials?.userPassword;
 
                 const sql = neon(process.env.DATABASE_URL!);
-                const userLoginQuery = await sql`SELECT user_id, user_email, user_password, user_first_name, user_last_name FROM 
+                const userLoginQuery = await sql`SELECT user_id, user_email, user_password, user_first_name, user_last_name, user_address FROM 
                 users WHERE user_email = ${userEmail} AND user_password = ${userPassword}`;
 
                 if (userLoginQuery.length === 0) {
@@ -38,6 +38,8 @@ export const authOptions = {
                         firstName: userLoginQuery[0].user_first_name,
                         lastName: userLoginQuery[0].user_last_name,
                         phone: userLoginQuery[0].user_phone ?? "To be added.",
+                        //default in user address in DB is empty array so equal to ?? {}
+                        address: userLoginQuery[0].user_address,
                         business: {
                             businessName: checkUserProducer[0].business_name,
                             businessType: checkUserProducer[0].business_type,
@@ -53,6 +55,7 @@ export const authOptions = {
                     firstName: userLoginQuery[0].user_first_name,
                     lastName: userLoginQuery[0].user_last_name,
                     phone: userLoginQuery[0].user_phone ?? "To be added.",
+                    address: userLoginQuery[0].user_address,
                 };
             }
         })
@@ -70,7 +73,7 @@ export const authOptions = {
             //ILL NEED TO FIGURE OUT HOW NEXT AUTH ACTUALLY WORKS HOLY I AM CLULESS ON THIS SHIT
             console.log("USER BLOCK RUN ")
             if (trigger === 'update' && session?.user) {
-                console.log("USER IF BLOCK RUN ")
+                console.log("USER IF BLOCK RUN")
                 return {
                     ...token, ...session?.user
                 }
@@ -84,6 +87,7 @@ export const authOptions = {
                 token.firstName = user.firstName ?? "UserFirstName";
                 token.lastName = user.lastName ?? "UserLastName";
                 token.phone = user.phone;
+                token.address = user.address
             }
 
             console.log("TOKEN CALLBACK BLOCK");
@@ -99,6 +103,7 @@ export const authOptions = {
             session.user.firstName = token.firstName;
             session.user.lastName = token.lastName;
             session.user.phone = token.phone;
+            session.user.address = token.address
 
             console.log("TOKEN CHECK IF UPDATED");
             console.log("Session updated:");

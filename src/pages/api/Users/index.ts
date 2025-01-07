@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
         }
         case 'PATCH': {
-            if (req.query?.edit === 'Profile') {
+            if (req.query.edit === 'Profile') {
                 try {
                     const session = await getServerSession(req, res, authOptions)
 
@@ -37,7 +37,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     // Send error response back
                     return res.status(500).json({ message: "Error updating profile", error });
                 }
-            } else {
+            }
+            else if (req.query.edit === 'Address') {
+                const sql = neon(process.env.DATABASE_URL!)
+
+                const session = await getServerSession(req, res, authOptions)
+
+                if (!session) {
+                    res.status(401).json({ message: "You must be logged in." })
+                    return
+                }
+
+                //update object in database
+                console.log(req.body);
+                await sql`
+                UPDATE users
+                SET user_address = ${req.body}
+                WHERE user_id = ${session.user.user_id};
+                `;
+
+                return res.status(200).json({ message: "Updated users address successfully." })
+            }
+            else {
                 // Return an error if edit query is missing or incorrect
                 return res.status(400).json({ message: "Invalid request" });
             }

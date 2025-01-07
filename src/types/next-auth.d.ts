@@ -1,5 +1,6 @@
 import { JWT } from "next-auth/jwt"
 import NextAuth from "next-auth"
+import { DBAddressInterface } from "@/app/DataInterfaces"
 
 declare module "next-auth/jwt" {
     /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
@@ -10,6 +11,7 @@ declare module "next-auth/jwt" {
         firstName?: string,
         lastName?: string,
         phone?: string,
+        address?: DBAddressInterface,
         business?: {
             businessName: string,
             businessLocation: string,
@@ -31,6 +33,7 @@ declare module "next-auth" {
             firstName?: string,
             lastName?: string,
             phone?: string,
+            address?: DBAddressInterface,
             business?: {
                 businessName: string,
                 businessLocation: string,
@@ -44,6 +47,7 @@ declare module "next-auth" {
         firstName?: string,
         lastName?: string,
         phone?: string,
+        address?: DBAddressInterface,
         business?: {
             businessName: string,
             businessLocation: string,

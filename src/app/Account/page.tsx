@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { AddressFormat } from "./Address/components/AddressFormat";
+import { DBAddressInterface } from "../DataInterfaces";
 
 export default function AccountPage() {
     const { data: session, update } = useSession();
@@ -18,6 +20,7 @@ export default function AccountPage() {
     const [email, setEmail] = useState("");
 
     const [updatedInfo, setUpdatedInfo] = useState(false);
+    const [userAddress, setUserAddress] = useState<DBAddressInterface>({});
 
     useEffect(() => {
         if (session?.user) {
@@ -25,6 +28,9 @@ export default function AccountPage() {
             setLastName(session.user.lastName ?? "UserLastName");
             setPhone(session.user.phone ?? "UserPhone");
             setEmail(session.user.email ?? "UserEmail");
+            if (session.user.address) {
+                setUserAddress(session.user.address);
+            }
         }
     }, [session]);
 
@@ -36,7 +42,7 @@ export default function AccountPage() {
 
 
     const changeUserProfile = async () => {
-        const response = await fetch('api/Users?edit=Profile', {
+        const response = await fetch('/api/Users?edit=Profile', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -76,13 +82,15 @@ export default function AccountPage() {
     };
 
     return <>
-        <div className="container flex flex-col mx-auto p-[25px]">
+        <div className="lg:container flex flex-col mx-auto pt-[50px] pb-[50px] 2xl:pr-[100px] 2xl:pl-[100px]
+        xl:pr-[50px] xl:pl-[50px] lg:pr-[25px] lg:pl-[25px] sm:pr-[50px] sm:pl-[50px] pr-[20px] pl-[20px]">
             <span className="text-2xl font-bold">
                 MY ACCOUNT DETAILS
             </span>
-            <div className="flex flex-row mt-[50px]">
-                <div className="flex flex-col w-[30%]">
-                    <div className="flex flex-col  mr-5">
+            <div className="flex lg:flex-row flex-col mt-[25px]">
+                <div className="flex lg:flex-col sm:flex-row flex-col lg:w-[30%] 
+                lg:gap-x-0 gap-x-[25px] justify-center">
+                    <div className="flex flex-col mr-5 lg:w-full sm:w-1/3 w-full">
                         <div className="text-center bg-gray-200 pt-5 pb-5">
                             Profile Details
                         </div>
@@ -152,12 +160,12 @@ export default function AccountPage() {
                                 Save Changes
                             </button>
                         </form>
-
-
                     </div>
 
-                    <div className="flex flex-col mt-[25px]">
-                        <div className="text-center bg-gray-200 pt-5 pb-5 mr-5">
+                    <div className="flex flex-col lg:mt-[25px] lg:w-full sm:w-2/3 w-full 
+                    lg:max-h-fit lg:overflow-hidden overflow-y-scroll lg:max-h-fit max-h-[500px] 
+                    pb-[25px] sm:mt-[0px] mt-[50px]">
+                        <div className="text-center bg-gray-200 pt-5 pb-5 sm:mr-5">
                             Addresses
                             <FontAwesomeIcon icon={faPenToSquare}
                                 className="font-[16px] ml-[10px] hover:scale-125 cursor-pointer
@@ -166,19 +174,24 @@ export default function AccountPage() {
                         </div>
 
                         {/* probably make these input forms when im working on backend again */}
-                        <div className="flex flex-row p-2.5 items-center  mt-[15px]">
-                            <span className="font-bold">
-                                TO BE ADDED
-                            </span>
+                        <div className="flex flex-col items-center sm:mr-5">
+                            <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5`}
+                                onClick={() => router.push('/Account/Address')}
+                            >MANAGE ADDRESS</button>
 
-                            <span className="bg-gray-200 rounded-lg ml-[15px] p-2.5">
-                                TO BE ADDED
-                            </span>
+                            <div className="max-w-full">
+                                {Object.keys(userAddress ?? {}).map((addressKey, index) => {
+                                    return <div key={index}>
+                                        <AddressFormat address={userAddress[addressKey]} />
+                                    </div>
+                                })}
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
-                <div className="flex flex-col w-[70%] ml-5">
+                <div className="flex flex-col lg:w-[70%] w-full lg:ml-5 lg:mt-[0px] mt-[50px]">
                     <div className="text-center bg-gray-200 pt-5 pb-5 ">
                         Order history
                     </div>
