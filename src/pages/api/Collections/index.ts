@@ -37,13 +37,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const sql = neon(process.env.DATABASE_URL!);
 
                     if (req.query.clothingCategory !== 'All') {
-                        categoryQuery = `product_type = '${req.query.clothingCategory}'`
+                        categoryQuery = `products.product_type = '${req.query.clothingCategory}'`
                     }
                     else {
                         categoryQuery = "1 = 1";
                     }
 
-                    const baseQuery = `SELECT product_id, product_name, product_price, product_audience, product_producer, product_colour, product_size, product_sales_category, product_images FROM products 
+                    const baseQuery = `SELECT products.*
+                        FROM products
+                        INNER JOIN 
+                        variant
+                        ON products.product_id = variant.product_id
                         WHERE ${categoryQuery}`
 
                     if (sexArray.length > 0) {
@@ -51,11 +55,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     if (colourArray.length > 0) {
-                        colourQuery = ` AND (product_colour @> '["${colourArray.join(`"]' OR product_colour @> '["`)}"]')`;
+                        colourQuery = ` array_agg(DISTINCT variant.variant_colour) @> ARRAY['${colourArray[0].toUpperCase()}']::character varying[]`;
+
+                        for (let i = 1; i < colourArray.length; i++) {
+                            colourQuery += ` OR array_agg(DISTINCT variant.variant_colour) @> ARRAY['${colourArray[i].toUpperCase()}']::character varying[]`;
+                        }
                     }
 
                     if (sizeArray.length > 0) {
-                        sizeQuery = ` AND (product_size @> '["${sizeArray.join(`"]' OR product_size @> '["`)}"]')`;
+                        sizeQuery = ` array_agg(DISTINCT variant.variant_size) @> ARRAY['${sizeArray[0]}']::character varying[]`;
+
+                        for (let i = 1; i < sizeArray.length; i++) {
+                            sizeQuery += ` OR array_agg(DISTINCT variant.variant_size) @> ARRAY['${sizeArray[i]}']::character varying[]`;
+                        }
                     }
 
                     if (req.query.saleCheck === 'On Sale') {
@@ -63,32 +75,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     if (req.query.sortBy === 'price_desc') {
-                        sortQuery = ` ORDER BY product_price DESC`
+                        sortQuery = ` ORDER BY product_price DESC;`
                     }
                     else if (req.query.sortBy === 'price_asc') {
-                        sortQuery = ` ORDER BY product_price ASC`
+                        sortQuery = ` ORDER BY product_price ASC;`
                     }
                     else if (req.body.sortBy === 'date_desc') {
-                        sortQuery = ` ORDER BY product_created_at DESC`
+                        sortQuery = ` ORDER BY product_created_at DESC;`
                     }
 
+                    const groupByQuery = ' GROUP BY products.product_id';
+                    let sizeColQuery = ``;
 
-                    console.log(baseQuery + sexQuery + colourQuery + sizeQuery + saleQuery + sortQuery);
-                    const data = await sql(baseQuery + sexQuery + colourQuery + sizeQuery + saleQuery + sortQuery);
+                    if (sizeQuery.length === 0 && colourQuery.length > 0) {
+                        sizeColQuery = ' HAVING' + colourQuery;
+                    }
+                    else if (sizeQuery.length > 0 && colourQuery.length > 0) {
+                        sizeColQuery = ' HAVING' + sizeQuery + ' OR ' + colourQuery;
+                    }
+                    else if (sizeQuery.length > 0 && colourQuery.length === 0) {
+                        sizeColQuery = ' HAVING' + sizeQuery;
+                    }
+
+                    console.log(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery);
+                    const data = await sql(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery);
 
                     if (data.length === 0) {
-                        return res.status(400).json({ error: 'No Items Found' });
+                        return res.status(404).json({ message: 'No Items Found' });
                     }
 
                     return res.status(200).json(data);
                 } catch (error) {
-                    res.status(500).json({ error: 'Failed to fetch data', message: (error as Error).message });
+                    // Enhance error response
+                    const errorDetails = error instanceof Error
+                        ? {
+                            name: error.name,
+                            message: error.message,
+                            stack: error.stack,
+                        }
+                        : { message: 'Unknown error occurred' };
+
+                    res.status(500).json({
+                        error: 'Failed to fetch data',
+                        details: errorDetails,
+                    });
                 }
             }
-
             break
         }
-
         case 'POST': {
             //todo
         }
@@ -96,5 +130,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //TODO
         }
     }
-
 }

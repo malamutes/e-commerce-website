@@ -8,9 +8,16 @@ import Carousel from "@/app/components/Carousel";
 import { ShoppingCartContext, ShoppingCartItem } from "@/app/ShoppingCartContext";
 import ShoppingCart from "@/app/components/ShoppingCart";
 
+export type VariantCombination = {
+    [key: string]: string[];
+};
+
+
 export default function ProductPage() {
 
     const [currentProduct, setCurrentProduct] = useState<Product[]>([]);
+    const [variantCombination, setVariantCombination] = useState<VariantCombination>({});
+    const [currentColours, setCurrentColours] = useState<string[]>([]);
     const searchParams = useSearchParams();
 
     const [selectedColour, setSelectedColour] = useState("");
@@ -37,6 +44,7 @@ export default function ProductPage() {
             if (response.ok) {
                 console.log(reply);
                 setCurrentProduct(reply);
+                setVariantCombination(reply[0]['variant_combination']);
             }
             else {
                 alert("NO item found!")
@@ -60,6 +68,11 @@ export default function ProductPage() {
             alert("Please select colour and size before adding to cart!");
         }
     };
+
+    //getting available colours based on size
+    useEffect(() => {
+        setCurrentColours(variantCombination[selectedSize]);
+    }, [selectedSize])
 
     return <>
         <ShoppingCart show={showCart} setShow={setShowCart} />
@@ -100,17 +113,17 @@ export default function ProductPage() {
                     <div className="lg:w-3/12 md:w-4/12 w-full flex flex-col md:mt-[0px] 
                     mt-[25px] ">
                         <span className="text-2xl italic mb-3">
-                            {currentProduct[0]['product_producer']}
+                            {currentProduct[0]['product_producer'] as string}
                         </span>
 
                         <span className="text-3xl font-bold mb-3">
-                            {currentProduct[0]['product_name']}
+                            {currentProduct[0]['product_name'] as string}
                         </span>
 
                         <span className="mb-3">
                             Sizes available In:
                             <div className="flex flex">
-                                {(currentProduct[0]['product_size'] as string[]).map((size, sizeIndex) => (
+                                {Object.keys((currentProduct[0]['variant_combination'] as string[])).map((size, sizeIndex) => (
                                     <div key={sizeIndex} className={`w-[50px] 
                                           h-[50px] bg-transparent border-2 ${selectedSize === size ? "border-black" : "border-gray-400 "} m-2
                                           grid place-items-center cursor-pointer`}
@@ -124,8 +137,7 @@ export default function ProductPage() {
                         <span className="mb-3">
                             Colours available In:
                             <div className="flex flex-row">
-                                {(currentProduct[0]['product_colour'] as string[]).map((colour, colourIndex) => (
-
+                                {(currentColours ?? []).map((colour, colourIndex) => (
                                     <div key={colourIndex} className={`rounded-full m-1 border-2 
                                     ${selectedColour === colour ? "border-black" : "border-gray-400 "} cursor-pointer`}
                                         onClick={() => setSelectedColour(colour)}>
@@ -143,17 +155,17 @@ export default function ProductPage() {
 
                         <div className="mb-3 md:text-start md:w-full w-3/4">
                             <span>
-                                {currentProduct[0]['product_description']}
+                                {currentProduct[0]['product_description'] as string}
                             </span>
 
                             <span>
-                                {currentProduct[0]['product_details']}
+                                {currentProduct[0]['product_details'] as string}
                             </span>
 
                         </div>
 
                         <span className="mb-3 text-xl text-gray-700">
-                            ${currentProduct[0]['product_price']}
+                            ${currentProduct[0]['product_price'] as string}
                         </span>
 
                         <button className="bg-green-700 p-4 text-white
@@ -168,16 +180,16 @@ export default function ProductPage() {
                                     itemSize: selectedSize,
                                     itemCount: 0 /*...cartItem, itemCount: 1 makes it so its overriden to be 1 no matter what
                                         in shopping cart logic*/,
-                                    itemImage: (currentProduct[0]['product_images'][0] as string),
-                                    itemPrice: Number(currentProduct[0]['product_price'] ?? 0.00)
-
+                                    itemImage: ((currentProduct[0]['product_images'] as string[])[0] as string),
+                                    itemPrice: Number(currentProduct[0]['product_price'] ?? 0.00),
+                                    itemCartKey: ""
                                 })
                             }>
                             ADD TO CART
                         </button>
 
                         <span className="text-md font-bold mb-3">
-                            Product ID: <span className="font-light italic">{currentProduct[0]['product_id']}</span>
+                            Product ID: <span className="font-light italic">{currentProduct[0]['product_id'] as string}</span>
                         </span>
                     </div>
 

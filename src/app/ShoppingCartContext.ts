@@ -8,7 +8,8 @@ export interface ShoppingCartItem {
     itemPrice: number
     itemBrand: string,
     itemID: string,
-    itemColour: string
+    itemColour: string,
+    itemCartKey: string
 }
 
 export interface ShoppingCart { [itemID: string]: ShoppingCartItem };

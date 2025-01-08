@@ -71,6 +71,10 @@ export default function Collections() {
             setCategoryProducts(reply);
             console.log(reply);
         }
+        else if (response.status === 404) {
+            setCategoryProducts([]);
+            console.log("NO ITEMS FOUND FOR COLLECTION QUERY!");
+        }
         else {
             console.log(response.status, response.statusText)
         }

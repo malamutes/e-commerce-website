@@ -22,10 +22,10 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
 
 
     const addToCart = (cartItem: ShoppingCartItem) => {
-        const itemCartKey = `${cartItem.itemID}-${cartItem.itemSize}-${cartItem.itemColour}`;
+        const itemCartKey = `SKU-${cartItem.itemID}-${cartItem.itemColour}-${cartItem.itemSize}`;
 
         setShoppingCart((prevShoppingCart) => {
-            console.log("I AM TESTING I AM TESTING");
+            console.log("SHOPPING CART BLOCK");
             //stuff here being ran twice
 
             const shoppingCartCopy = { ...prevShoppingCart };
@@ -43,7 +43,8 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
                 //item dont exist, add it 
                 shoppingCartCopy[itemCartKey] = {
                     //unpacking cartitem and overriding item count with 1
-                    ...cartItem, itemCount: 1
+                    ...cartItem, itemCount: 1,
+                    itemCartKey: itemCartKey
                 }
 
             }
@@ -54,7 +55,7 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
     }
 
     const removeOneItemCountFromCart = (cartItem: ShoppingCartItem) => {
-        const itemCartKey = `${cartItem.itemID}-${cartItem.itemSize}-${cartItem.itemColour}`;
+        const itemCartKey = `SKU-${cartItem.itemID}-${cartItem.itemColour}-${cartItem.itemSize}`;
 
         //should be no need to check if item exists in cart becuase by definition the UI component is where i do this
         setShoppingCart((prevShoppingCart) => {
@@ -77,7 +78,7 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
     }
 
     const removeItemFromCart = (cartItem: ShoppingCartItem) => {
-        const itemCartKey = `${cartItem.itemID}-${cartItem.itemSize}-${cartItem.itemColour}`;
+        const itemCartKey = `SKU-${cartItem.itemID}-${cartItem.itemColour}-${cartItem.itemSize}`;
 
         setShoppingCart((prevShoppingCart) => {
             //just removes the item from the cart altogether 
@@ -87,7 +88,7 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
     }
 
     const setCountAmount = (cartItem: ShoppingCartItem, count: number) => {
-        const itemCartKey = `${cartItem.itemID}-${cartItem.itemSize}-${cartItem.itemColour}`;
+        const itemCartKey = `SKU-${cartItem.itemID}-${cartItem.itemColour}-${cartItem.itemSize}`;
         setShoppingCart((prevShoppingCart) => {
             const shoppingCartCopy = { ...prevShoppingCart };
             shoppingCartCopy[itemCartKey] = {

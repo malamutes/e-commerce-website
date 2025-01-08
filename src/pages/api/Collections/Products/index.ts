@@ -19,8 +19,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const sql = neon(process.env.DATABASE_URL!);
 
+                    //need to revisit this query, i was kinda close 
                     const data = await sql`
-                        SELECT * FROM products WHERE product_id = ${productID}
+                        SELECT products.*,
+                        jsonb_object_agg(variant_colours.variant_size, variant_colours.variant_combination) AS variant_combination
+                        FROM products
+                        INNER JOIN (
+                        SELECT variant.product_id,
+                        variant.variant_size,
+                        array_agg(DISTINCT variant.variant_colour) AS variant_combination
+                        FROM variant
+                        GROUP BY variant.product_id, variant.variant_size
+                        ) variant_colours
+                        ON products.product_id = variant_colours.product_id
+                        WHERE products.product_id = ${productID}
+                        GROUP BY products.product_id;
                         `;
 
                     if (data.length === 0) {

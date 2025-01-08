@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 export interface Product {
-    [key: string]: string | string[]
+    [key: string]: string | string[] | {}
 }
 
 export default function Products() {
@@ -61,7 +61,6 @@ export default function Products() {
                             <td className="pb-5 pt-5 border-x border-black text-center">Name</td>
                             <td className="pb-5 pt-5 border-x border-black text-center">Price</td>
                             <td className="pb-5 pt-5 border-x border-black text-center">Type</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Size</td>
                             <td className="pb-5 pt-5 border-x border-black text-center">Inventory</td>
                             <td className="pb-5 pt-5 border-x border-black text-center">Units Sold</td>
                             <td className="pb-5 pt-5 border-x border-black text-center">Total Revenue</td>
@@ -72,13 +71,12 @@ export default function Products() {
                     <tbody >
                         {currentProducts.map((product, index) => (
                             <tr key={index} className={`${index % 2 === 0 ? "bg-gray-400" : "bg-gray-300"}`}>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_id']}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_name']}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_price']}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_type']}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{(product['product_size'] as string[]).join(" | ")}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_id'] as string}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_name'] as string}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_price'] as string}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_type'] as string}</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_stock_count'] as string}</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center"><div className="relative flex items-center justify-center"
                                     onMouseEnter={() => setShowProductEllipsisMenu(index)}
