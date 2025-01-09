@@ -67,7 +67,7 @@ export interface AddressFormatProps {
 
 export function AddressFormat(props: AddressFormatProps) {
     return <>
-        <div className="flex flex-col bg-gray-100 p-2 mt-5 break-words">
+        <div className="flex flex-col bg-gray-100 p-2 break-words">
             <div className="mb-4 shadow-lg p-2  ">
                 <p className="text-lg font-bold">
                     {props.address.addressName} ({props.address.firstName} {props.address.lastName})

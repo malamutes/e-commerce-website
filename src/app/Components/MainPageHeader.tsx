@@ -79,7 +79,7 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                                 <Link className="w-full aspect-square bg-gray-300 grid place-items-center m-5" key={index}
                                     href={product['product_producer'] ? "/" : `/Collections?clothingCategory=${product['product_type']}`}> {/* TBA To sort stuff out via brands*/}
                                     <span>
-                                        {product['product_producer'] ?? product['product_type']}
+                                        {product['product_producer'] as string ?? product['product_type'] as string}
                                     </span>
                                 </Link>
                             ) : (

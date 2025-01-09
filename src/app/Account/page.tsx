@@ -175,11 +175,11 @@ export default function AccountPage() {
 
                         {/* probably make these input forms when im working on backend again */}
                         <div className="flex flex-col items-center sm:mr-5">
-                            <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5`}
+                            <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5 mb-5`}
                                 onClick={() => router.push('/Account/Address')}
                             >MANAGE ADDRESS</button>
 
-                            <div className="max-w-full">
+                            <div className="max-w-full flex flex-col gap-5">
                                 {Object.keys(userAddress ?? {}).map((addressKey, index) => {
                                     return <div key={index}>
                                         <AddressFormat address={userAddress[addressKey]} />

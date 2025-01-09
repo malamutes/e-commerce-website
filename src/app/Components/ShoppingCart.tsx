@@ -6,20 +6,22 @@ import { Context, SetStateAction, useContext } from "react";
 import { ShoppingCartContext, ShoppingCartItem } from "../ShoppingCartContext";
 import Image from "next/image";
 import { ShoppingCartContextType } from "../ShoppingCartContext";
+import { useRouter } from "next/navigation";
 
 interface ShoppingCartProps {
     show: boolean,
     setShow: React.Dispatch<SetStateAction<boolean>>;
 }
 
-interface ShoppingCartItemComponentProps {
+export interface ShoppingCartItemComponentProps {
     shoppingCartItem: ShoppingCartItem;
     shoppingCartContext: ShoppingCartContextType;
 
     //type of just lets me retrieve type of object by letting ts do it rather than me manually typing out its shape
 }
 
-function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps) {
+export function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps) {
+
     return <>
         <div className="flex 2xs:flex-row flex-col justify-center 3xs:p-5 p-3">
             <div className="flex items-center 2xs:w-1/3 w-full justify-center 2xs:pb-[0px] pb-[10px]">
@@ -91,6 +93,11 @@ function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps) {
 export default function ShoppingCart(props: ShoppingCartProps) {
 
     const shoppingCartContext = useContext(ShoppingCartContext);
+    const router = useRouter();
+    const handleCheckout = () => {
+        router.push('/Checkout');
+        props.setShow(false);
+    }
 
     return <>
         <div className={`w-screen h-screen bg-black opacity-50 
@@ -101,21 +108,26 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
         <div className={`bg-white fixed right-0 top-0 3xs:w-[500px] w-11/12 h-screen ${props.show ? "block" : "hidden"}
                 z-50`}>
-            <div className="flex flex-col h-[80vh] overflow-y-scroll pb-5 
-            border-b-2 border-b-gray-500">
+            <div className={`flex flex-col h-[80vh] overflow-y-scroll pb-5 
+             ${Object.keys(shoppingCartContext.cartState).length === 0
+                    ? ""
+                    : "border-b-2 border-b-gray-500"}
+            `}>
                 <div className="flex flex-row justify-between p-5">
                     <span className="font-bold">
                         YOUR SHOPPING CART
                     </span>
-                    <div>
-                        <span className="mr-[15px] text-[14px] hover:underline cursor-pointer">
-                            VIEW CART
-                        </span>
-                        <FontAwesomeIcon icon={faX}
-                            className="cursor-pointer text-[16px]"
-                            onClick={() => props.setShow(false)}
-                        />
-                    </div>
+                    <FontAwesomeIcon icon={faX}
+                        className="cursor-pointer text-[16px]"
+                        onClick={() => props.setShow(false)}
+                    />
+
+                </div>
+
+                <div className={`h-[20vh] ${Object.keys(shoppingCartContext.cartState).length === 0 ? "block" : "hidden"} pl-5`}>
+                    <span className="italic">
+                        There are currently no items in your cart!
+                    </span>
                 </div>
 
                 <div className="flex flex-col">
@@ -130,7 +142,7 @@ export default function ShoppingCart(props: ShoppingCartProps) {
                 </div>
             </div>
 
-            <div className="h-[20vh] ">
+            <div className={`h-[20vh] ${Object.keys(shoppingCartContext.cartState).length === 0 ? "hidden" : "block"}`}>
                 <div>
                     <div className="flex flex-row justify-between p-5">
 
@@ -144,7 +156,7 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
                     </div>
 
-                    <button className="bg-green-700 text-white p-4 rounded-full w-2/3 block mx-auto">
+                    <button className="bg-green-700 text-white p-4 rounded-full w-2/3 block mx-auto disabled:bg-gray-400" onClick={handleCheckout}>
                         <span className="font-bold">
                             Checkout Products!
                         </span>
@@ -154,6 +166,8 @@ export default function ShoppingCart(props: ShoppingCartProps) {
                 </div>
 
             </div>
+
+
         </div>
     </>
 }
