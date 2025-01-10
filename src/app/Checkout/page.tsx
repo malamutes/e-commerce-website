@@ -15,13 +15,13 @@ import { CheckoutShoppingCartItem } from "./components/CheckoutShoppingCartItem"
 import { ShoppingCartContext } from "../ShoppingCartContext";
 import { useRouter } from "next/navigation";
 
-const shippingMethods: { [key: string]: number } = {
+export const shippingMethods: { [key: string]: number } = {
     'Standard Shipping (3 - 7 business days)': 10,
     'Express Shipping (2 - 4 business days)': 15,
     'Priority Shipping (1 - 2 business days)': 30,
 }
 
-type Pair<T, U> = {
+export type ShippingMethodPair<T, U> = {
     shippingMethod: T;
     shippingPrice: U;
 };
@@ -59,7 +59,7 @@ export default function CheckoutPage() {
     const [showAddressFormat, setShowAddressFormat] = useState(true);
 
     const [showshippingMethod, setShowShippingMethod] = useState(false);
-    const [selectedShippingMethod, setSelectedShippingMethod] = useState<Pair<string, number>>({
+    const [selectedShippingMethod, setSelectedShippingMethod] = useState<ShippingMethodPair<string, number>>({
         shippingMethod: "Standard Shipping (3 - 7 business days)",
         shippingPrice: shippingMethods['Standard Shipping (3 - 7 business days)']
     });
@@ -192,6 +192,7 @@ export default function CheckoutPage() {
     }, [shoppingCartContext.cartState])
 
     const handlePayNow = async () => {
+        const orderID = uuidv4();
         const response = await fetch('/api/Checkout', {
             method: 'POST',
             headers: {
@@ -200,28 +201,20 @@ export default function CheckoutPage() {
             body: JSON.stringify({
                 order: {
                     userID: session?.user.user_id,
-                    orderID: uuidv4(),
+                    orderID: orderID,
                     ordersTotalPrice: totalPrice + selectedShippingMethod.shippingPrice,
-                    ordersShippingAddress: selectedShippingAddress,
+                    ordersShippingAddress: session?.user.address?.[selectedShippingAddress] ?? "",
                     ordersEmail: session?.user.email,
-                    ordersShippingMethod: selectedShippingMethod.shippingMethod
+                    ordersShippingMethod: selectedShippingMethod.shippingMethod,
+                    ordersShippingPrice: selectedShippingMethod.shippingPrice
                 },
                 orderItems: shoppingCartContext.cartState
             })
         })
 
         if (response.ok) {
-            localStorage.setItem('CheckoutReceipt', JSON.stringify({
-                order: {
-                    userID: session?.user.user_id,
-                    orderID: uuidv4(),
-                    ordersTotalPrice: totalPrice + selectedShippingMethod.shippingPrice,
-                    ordersShippingAddress: selectedShippingAddress,
-                    ordersEmail: session?.user.email,
-                    ordersShippingMethod: selectedShippingMethod.shippingMethod
-                },
-                orderItems: shoppingCartContext.cartState
-            }))
+            //need a better solution than this which is just to store in local storage but we'll see
+            localStorage.setItem('CheckoutReceiptID', orderID);
             shoppingCartContext.clearShoppingCart();
             router.push('/Checkout/Receipt');
         }
@@ -254,7 +247,7 @@ export default function CheckoutPage() {
                         <div className="flex flex-row cursor-pointer justify-between"
                             onClick={() => setShowShippingAddress(showShippingAddress => !showShippingAddress)}>
                             <div>
-                                <p className="hover:text-blue-700 text-lg italic">
+                                <p className="text-lg italic">
                                     Shipping Address
                                 </p>
                                 <span className="text-sm block mt-1">
@@ -373,7 +366,6 @@ export default function CheckoutPage() {
                     </span>
 
                 </div>
-
 
                 <div className="flex flex-col lg:w-1/2 sm:w-2/3 w-full lg:ml-[15px] lg:mt-[0px] mt-[50px]">
                     <span className="mb-[25px] text-xl font-bold italic">

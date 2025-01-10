@@ -5,7 +5,45 @@ import { getServerSession } from "next-auth/next"
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case 'GET': {
-            // Your GET logic here
+            if (req.query.orderID) {
+                try {
+                    console.log(req.query);
+                    const sql = neon(process.env.DATABASE_URL!);
+
+                    const orderReceiptData = await sql`
+                    SELECT orders.*, 
+                    array_agg(
+                        json_build_object(
+                            'product_id', orders_items.orders_items_product_id,
+                            'quantity', orders_items.orders_items_count,
+                            'price', orders_items.orders_items_price,
+                            'combination', orders_items.orders_items_variant_combination,
+                            'image', ( SELECT products.product_images[0]
+                                FROM products
+                                WHERE products.product_id = orders_items.orders_items_product_id),
+                            'name', (
+                            SELECT products.product_name
+                            FROM products
+                            WHERE products.product_id = orders_items.orders_items_product_id
+                            )
+                        )
+                    ) as orders_items_list
+                    FROM orders 
+                    INNER JOIN orders_items 
+                        ON orders.orders_id = orders_items.orders_id 
+                    WHERE orders.orders_id = ${req.query.orderID}
+                    GROUP BY orders.orders_id;
+                    `;
+
+                    console.log("ORDER DATA RETRIEVED FROM DB", orderReceiptData);
+
+                    return res.status(200).json({ message: "Order Data retrieved!", data: orderReceiptData })
+                }
+                catch (error) {
+                    console.log("Error:", error);
+                    res.status(500).json({ error: 'Failed to upload order', details: error instanceof Error ? error.message : 'Unknown error' });
+                }
+            }
         }
 
         case 'POST': {
@@ -21,7 +59,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         req.body.order.ordersShippingAddress,
                         req.body.order.ordersEmail,
                         'COMPLETED', // Order status
-                        req.body.order.ordersShippingMethod
+                        req.body.order.ordersShippingMethod,
+                        req.body.order.ordersShippingPrice
                     ];
 
                     // Insert into orders table
@@ -33,7 +72,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         orders_shipping_address,
                         orders_email,
                         orders_order_status,
-                        orders_shipping_method
+                        orders_shipping_method,
+                        orders_shipping_price
                     ) 
                     VALUES (
                         ${orderValues[0]},
@@ -42,7 +82,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         ${orderValues[3]},
                         ${orderValues[4]},
                         ${orderValues[5]},
-                        ${orderValues[6]}
+                        ${orderValues[6]},
+                         ${orderValues[7]}
                     );
                     `;
 

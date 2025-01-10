@@ -18,6 +18,10 @@ export default {
         'xs': '360px',
         'xxs': '300px',
       },
+      lineHeight: {
+        'extra-loose': '2.5',
+        'super-loose': '3',
+      },
     },
   },
   plugins: [],
