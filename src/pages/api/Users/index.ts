@@ -6,8 +6,52 @@ import { authOptions } from "../auth/[...nextauth]";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case 'GET': {
-            //TODO: Handle GET request here
-            break;
+            if (req.query.userID) {
+                try {
+                    const sql = neon(process.env.DATABASE_URL!);
+
+                    //using orderhistorycard interface to rename so i can acceess keys here
+                    const userOrderHistory = await sql`
+                    SELECT users.user_id, 
+                        orders.orders_id, 
+                        orders.orders_order_time, 
+                        orders.orders_total_price, 
+                        orders.orders_order_status,
+                        json_agg(products.product_images[0]) as orders_image
+                    FROM users 
+                    INNER JOIN orders 
+                    ON
+                        users.user_id = orders.user_id
+                        INNER JOIN orders_items
+                    ON 
+                        orders.orders_id = orders_items.orders_id
+                        INNER JOIN products
+                    ON
+                        orders_items.orders_items_product_id = products.product_id
+                    WHERE users.user_id = 40
+                    GROUP BY users.user_id, orders.orders_id;
+                    `;
+
+                    if (userOrderHistory.length >= 0) {
+                        res.status(200).json({
+                            message: "User Order History Retrieved!",
+                            userOrderHistory: userOrderHistory
+                        });
+                    }
+
+                    else {
+                        res.status(404).json({ message: "No order history found" });
+                    }
+
+                }
+                catch (error) {
+                    console.error(error);
+                    // Send error response back
+                    return res.status(500).json({ message: "Error getting user order history", error });
+                }
+            }
+            //TODO: getting order history of user 
+            return res.status(200).json({ message: "API CONNECTED FOR USER GET!" })
         }
         case 'PATCH': {
             if (req.query.edit === 'Profile') {

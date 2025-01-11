@@ -13,4 +13,13 @@ interface AddressInterface {
 
 interface DBAddressInterface { [key: string]: AddressInterface };
 
-export type { AddressInterface, DBAddressInterface };
+interface UserOrderHistory {
+    user_id: string,
+    orders_id: string,
+    orders_order_time: Date,
+    orders_total_price: number,
+    orders_order_status: string,
+    orders_image: string[]
+}
+
+export type { AddressInterface, DBAddressInterface, UserOrderHistory };

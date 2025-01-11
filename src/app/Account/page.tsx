@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AddressFormat } from "./Address/components/AddressFormat";
 import { DBAddressInterface } from "../DataInterfaces";
+import { UserOrderHistory } from "../DataInterfaces";
+import OrderHistoryCard from "./components/OrderHistoryCard";
 
 export default function AccountPage() {
     const { data: session, update } = useSession();
@@ -22,6 +24,8 @@ export default function AccountPage() {
     const [updatedInfo, setUpdatedInfo] = useState(false);
     const [userAddress, setUserAddress] = useState<DBAddressInterface>({});
 
+    const [userOrderHistory, setUserOrderHistory] = useState<UserOrderHistory[]>([]);
+
     useEffect(() => {
         if (session?.user) {
             setFirstName(session.user.firstName ?? "UserFirstName");
@@ -34,12 +38,34 @@ export default function AccountPage() {
         }
     }, [session]);
 
-    //UPDATING DB WORKS BUT GETTING THIS INFO TO REFLECT IN OUR CLIENT/SERVER SIDE WILL BE ROUGH
+    useEffect(() => {
+        const retrieveOrderHistory = async (userID: number) => {
+            const response = await fetch(`/api/Users?userID=${userID}`, {
+                method: "GET",
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const reply = await response.json()
+
+            if (response.ok) {
+                setUserOrderHistory(reply.userOrderHistory);
+                console.log(reply.userOrderHistory);
+            }
+            else {
+                console.log(response.status, response.statusText);
+            }
+        }
+
+        if (session?.user.user_id) {
+            retrieveOrderHistory(session?.user.user_id);
+        }
+    }, [session?.user.user_id])
 
     const handleEditAddresses = () => {
         router.push('/Account/Address');
     };
-
 
     const changeUserProfile = async () => {
         const response = await fetch('/api/Users?edit=Profile', {
@@ -89,7 +115,7 @@ export default function AccountPage() {
             </span>
             <div className="flex lg:flex-row flex-col mt-[25px]">
                 <div className="flex lg:flex-col sm:flex-row flex-col lg:w-[30%] 
-                lg:gap-x-0 gap-x-[25px] justify-center">
+                lg:gap-x-0 gap-x-[25px] ">
                     <div className="flex flex-col mr-5 lg:w-full sm:w-1/3 w-full">
                         <div className="text-center bg-gray-200 pt-5 pb-5">
                             Profile Details
@@ -165,7 +191,7 @@ export default function AccountPage() {
                     <div className="flex flex-col lg:mt-[25px] lg:w-full sm:w-2/3 w-full 
                     lg:max-h-fit lg:overflow-hidden overflow-y-scroll lg:max-h-fit max-h-[500px] 
                     pb-[25px] sm:mt-[0px] mt-[50px]">
-                        <div className="text-center bg-gray-200 pt-5 pb-5 sm:mr-5">
+                        <div className="text-center bg-gray-200 pt-5 pb-5">
                             Addresses
                             <FontAwesomeIcon icon={faPenToSquare}
                                 className="font-[16px] ml-[10px] hover:scale-125 cursor-pointer
@@ -174,7 +200,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* probably make these input forms when im working on backend again */}
-                        <div className="flex flex-col items-center sm:mr-5">
+                        <div className="flex flex-col items-center ">
                             <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5 mb-5`}
                                 onClick={() => router.push('/Account/Address')}
                             >MANAGE ADDRESS</button>
@@ -194,6 +220,24 @@ export default function AccountPage() {
                 <div className="flex flex-col lg:w-[70%] w-full lg:ml-5 lg:mt-[0px] mt-[50px]">
                     <div className="text-center bg-gray-200 pt-5 pb-5 ">
                         Order history
+                    </div>
+
+                    <div className="flex flex-col gap-4 pt-[15px] max-h-[1050px] pr-3 pt-3 pb-3
+                    overflow-y-scroll">
+                        {userOrderHistory.map((orderItem) => (
+                            <div key={orderItem.orders_id}>
+                                <OrderHistoryCard
+                                    orders_id={orderItem.orders_id}
+                                    orders_image={orderItem.orders_image}
+                                    orders_order_status={orderItem.orders_order_status}
+                                    orders_order_time={new Date(orderItem.orders_order_time)}
+                                    orders_total_price={orderItem.orders_total_price}
+                                    user_id={orderItem.user_id}
+                                />
+                            </div>
+
+
+                        ))}
                     </div>
                 </div>
 
