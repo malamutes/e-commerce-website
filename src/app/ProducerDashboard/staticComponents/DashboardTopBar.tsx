@@ -8,7 +8,7 @@ export default function DashboardTopBar() {
         <div className="flex flex-row pt-10 pb-10">
             <div>
                 <p className="text-2xl font-bold">
-                    Welcome Back, {session?.user.name}!
+                    Welcome Back, {session?.user.firstName}!
                 </p>
 
                 <span className="italic">

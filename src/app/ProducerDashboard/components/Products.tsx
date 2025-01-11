@@ -75,8 +75,8 @@ export default function Products() {
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_name'] as string}</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_price'] as string}</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_type'] as string}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_stock_count'] as string}</td>
+                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
                                 <td className="pt-2.5 pb-2.5 border-x border-black text-center"><div className="relative flex items-center justify-center"
                                     onMouseEnter={() => setShowProductEllipsisMenu(index)}

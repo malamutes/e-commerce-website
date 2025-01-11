@@ -71,7 +71,6 @@ export default function OrderHistoryCard(props: UserOrderHistory) {
                                 VIEW ORDER DETAILS
                             </span>
                         </Link>
-
                     </div>
                 </div>
 
