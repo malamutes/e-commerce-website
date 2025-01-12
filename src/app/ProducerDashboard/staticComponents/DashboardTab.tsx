@@ -31,8 +31,8 @@ export default function DashboardTab() {
     return <>
         <div className="bg-gray-800 text-gray-300 flex justify-center 
          h-fit pb-3 pt-10 h-full">
-            <div className="flex flex-col items-center">
-                <div className="lg:p-5 md:p-3 text-lg font-bold relative lg:bg-gray-900">
+            <div className="flex flex-col items-center overflow-hidden">
+                <div className="lg:p-5 md:p-3 text-lg font-bold relative lg:bg-gray-900 ">
                     <div className="xl:ml-[25px] lg:block hidden">
                         {session?.user.business?.businessName}'s Dashboard
                     </div>
@@ -44,7 +44,7 @@ export default function DashboardTab() {
                     {dashboardTabs.map((tab) => (
                         <Link href={`/ProducerDashboard?tab=${tab}`} key={tab}
                             onClick={() => setCurrentTab(tab)}
-                            className={`rounded-lg w-fit p-5 flex lg:ml-[20px] xl:ml-[0px] 
+                            className={`rounded-lg w-fit p-5 xl:mr-0 lg:mr-5 mr-0 flex lg:ml-[20px] xl:ml-[0px] 
                             ${currentTab === tab ? "bg-gray-500" : "hover:bg-gray-700 "}
                             `}
                         >

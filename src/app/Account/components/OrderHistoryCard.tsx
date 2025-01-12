@@ -9,7 +9,7 @@ import { clampFunc } from "@/app/components/Carousel";
 import Link from "next/link";
 import { useMatchMediaQuery } from "@/app/MatchMediaQuery";
 
-const orderStatusMap: { [key: string]: string } = {
+export const orderStatusMap: { [key: string]: string } = {
     'COMPLETED': 'green',
     'CANCELLED': 'red',
     'SHIPPING': 'blue',

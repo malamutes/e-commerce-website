@@ -3,17 +3,15 @@ import DashboardTab from "./staticComponents/DashboardTab";
 import DashboardTopBar from "./staticComponents/DashboardTopBar";
 import { DashboardTabSmall } from "./staticComponents/DashboardTab";
 
-const maxDashboardHeight = 750;
-
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex flex-col sm:container mx-auto p-5">
+        <div className="flex flex-col sm:container mx-auto p-5 min-w-[300px]">
             <DashboardTopBar />
             <div className=" sm:hidden block flex flex-row justify-center">
                 <DashboardTabSmall />
             </div>
 
-            <div className={`flex flex-row overflow-hidden h-[${maxDashboardHeight}px]`} style={{ borderRadius: '50px 0px 0px 50px' }}>
+            <div className={`flex flex-row overflow-hidden h-[750px]`}>
                 <div className="w-2/12 sm:block hidden">
                     <DashboardTab />
                 </div>
@@ -28,5 +26,3 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
     );
 }
-
-export { maxDashboardHeight }
