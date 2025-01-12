@@ -11,26 +11,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     console.log(req.query.orderID);
                     //using orderhistorycard interface to rename so i can acceess keys here
                     const userOrderHistoryDetails = await sql`
-                    SELECT orders.orders_id, 
-                    orders.orders_total_price, 
-                    orders.orders_shipping_address,
-                    orders.orders_shipping_method,
-                    orders.orders_order_time,
-                    orders.orders_shipping_price
-                    , array_agg(
-                    json_build_object(
-                        'product_id', orders_items.orders_items_product_id,
-                        'sku', orders_items.orders_items_variant_sku,
-                        'price', orders_items.orders_items_price,
-                        'quantity', orders_items.orders_items_count,
-                        'combination', orders_items.orders_items_variant_combination
-                    )
-                    ) as orders_items_array
-                    FROM orders 
-                    INNER JOIN orders_items
-                    ON orders.orders_id = orders_items.orders_id
-                    WHERE orders.orders_id = ${req.query.orderID}
-                    GROUP BY orders.orders_id;
+                            SELECT 
+                            orders.orders_id, 
+                            orders.orders_total_price, 
+                            orders.orders_shipping_address,
+                            orders.orders_shipping_method,
+                            orders.orders_order_time,
+                            orders.orders_shipping_price,
+                            orders.orders_order_status,
+                            array_agg(
+                                json_build_object(
+                                    'product_id', orders_items.orders_items_product_id,
+                                    'sku', orders_items.orders_items_variant_sku,
+                                    'price', orders_items.orders_items_price,
+                                    'quantity', orders_items.orders_items_count,
+                                    'combination', orders_items.orders_items_variant_combination,
+                                    'image', (
+                                        SELECT products.product_images[0]
+                                        FROM products 
+                                        WHERE products.product_id = orders_items.orders_items_product_id
+                                        LIMIT 1
+                                    ),
+                                    'name', (
+                                        SELECT products.product_name
+                                        FROM products 
+                                        WHERE products.product_id = orders_items.orders_items_product_id
+                                        LIMIT 1
+                                    ),
+                                    'producer', (
+                                        SELECT products.product_producer
+                                        FROM products 
+                                        WHERE products.product_id = orders_items.orders_items_product_id
+                                        LIMIT 1
+                                    )
+                                )
+                            ) AS orders_items_array
+                        FROM 
+                            orders 
+                        INNER JOIN 
+                            orders_items
+                        ON 
+                            orders.orders_id = orders_items.orders_id
+                        WHERE 
+                            orders.orders_id = ${req.query.orderID}
+                        GROUP BY 
+                            orders.orders_id;
                     `;
 
                     //console.log("API ENDPOINT userOrderHistoryDetails", userOrderHistoryDetails);

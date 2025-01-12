@@ -208,7 +208,7 @@ export default function AddAddressForm(props: AddAddressFormProps) {
                 </div>
             </div>
 
-            <div className="flex flex-row">
+            <div className="flex flex-row mb-[25px]">
                 <button className="bg-black text-white w-fit p-3 rounded-full text-sm mr-[20px]"
                     type="submit">{props.handleEditAddress ? "UPDATE" : "ADD"} ADDRESS</button>
                 <button className=" w-fit text-sm hover:underline" onClick={(e) => {

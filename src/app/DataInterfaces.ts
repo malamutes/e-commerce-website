@@ -26,7 +26,10 @@ interface UserOrderHistoryDetailsItem {
     sku: string,
     price: number,
     quantity: number,
-    combination: string[]
+    combination: string[],
+    image: string,
+    name: string,
+    producer: string
 }
 
 interface UserOrderHistoryDetails {
@@ -36,7 +39,8 @@ interface UserOrderHistoryDetails {
     orders_total_price: number,
     orders_shipping_price: number,
     orders_shipping_address: AddressInterface,
-    orders_items_array: UserOrderHistoryDetailsItem[]
+    orders_items_array: UserOrderHistoryDetailsItem[],
+    orders_order_status: string
 }
 
 interface ProducerOrderHistoryItem {

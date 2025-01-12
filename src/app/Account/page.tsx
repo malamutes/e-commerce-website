@@ -109,7 +109,8 @@ export default function AccountPage() {
 
     return <>
         <div className="lg:container flex flex-col mx-auto pt-[50px] pb-[50px] 2xl:pr-[100px] 2xl:pl-[100px]
-        xl:pr-[50px] xl:pl-[50px] lg:pr-[25px] lg:pl-[25px] sm:pr-[50px] sm:pl-[50px] pr-[20px] pl-[20px]">
+        xl:pr-[50px] xl:pl-[50px] lg:pr-[25px] lg:pl-[25px] sm:pr-[50px] sm:pl-[50px] pr-[20px] pl-[20px]
+        min-w-[280px]">
             <span className="text-2xl font-bold">
                 MY ACCOUNT DETAILS
             </span>
@@ -200,7 +201,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* probably make these input forms when im working on backend again */}
-                        <div className="flex flex-col items-center ">
+                        <div className="flex flex-col items-center max-h-[400px] overflow-y-scroll pr-[5px]">
                             <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5 mb-5`}
                                 onClick={() => router.push('/Account/Address')}
                             >MANAGE ADDRESS</button>
@@ -235,8 +236,6 @@ export default function AccountPage() {
                                     user_id={orderItem.user_id}
                                 />
                             </div>
-
-
                         ))}
                     </div>
                 </div>
