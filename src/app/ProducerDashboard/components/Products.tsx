@@ -11,8 +11,7 @@ export interface Product {
 
 export default function Products() {
     const [currentProducts, setCurrentProducts] = useState<Product[]>([]);
-    const [showProductEllipsisMenu, setShowProductEllipsisMenu] = useState(-1);
-    const productEllipsisMenuItemClass = "cursor-pointer hover:bg-gray-300";
+    const gridTableLinkClass = "pt-4 pb-4 grid place-items-center rounded-xl text-white font-bold text-sm w-full "
 
     useEffect(() => {
         const getCurrentProduct = async () => {
@@ -37,84 +36,130 @@ export default function Products() {
 
     return <>
         <div className="flex flex-col bg-gray-100 pb-[25px] pt-[25px]">
-            <div className="p-[25px] flex md:flex-row flex-col md:justify-between ">
-                <span className="text-xl font-bold md:pl-[25px]">
-                    Your Current Products
-                </span>
-                <Link href={`/ProducerDashboard?tab=AddProduct`}
-                    className="md:mt-[0px] mt-[25px]">
-                    <span className=" rounded-md w-fit h-fit p-2.5 
-                    hover:bg-gray-400"
-                    >Add A Product</span>
-                </Link>
+            <div className="pr-5 pt-5 lg:pb-5 pl-5">
+                <div className="flex md:flex-row flex-col md:justify-between ">
+                    <span className="text-xl font-bold ">
+                        Your Current Products
+                    </span>
+                    <Link href={`/ProducerDashboard?tab=AddProduct`}
+                        className="md:mt-[0px] mt-[10px]">
+                        <span className=" rounded-md w-fit h-fit p-2.5 bg-gray-600 
+                        font-bold text-sm text-white hover:bg-gray-900"
+                        >Add A Product</span>
+                    </Link>
 
+                </div>
+                <span className="font-bold italic mt-[10px] block">
+                    Current Products Oustanding in Store
+                </span>
             </div>
 
-            <div className="flex flex-col gap-4 w-5/6 min-w-[725px] ml-[50px]">
-                <table >
-                    <caption className="text-start mb-[25px] 
-                    italic font-bold">
-                        Current Products Oustanding in Store</caption>
-                    <thead className="font-bold bg-gray-500 ">
-                        <tr >
-                            <td className="pb-5 pt-5 border-x border-black text-center">ID</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Name</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Price</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Type</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Inventory</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Units Sold</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">Total Revenue</td>
-                            <td className="pb-5 pt-5 border-x border-black text-center">More</td>
-                        </tr>
+            <div>
+                <div className="pr-5 lg:pt-5 pb-5 pl-5">
+                    <div className="lg:grid hidden grid-cols-11 gap-5 font-bold text-lg p-5 bg-gray-300">
+                        <span className="col-span-2">
+                            Product ID
+                        </span>
 
-                    </thead>
-                    <tbody >
+                        <span className="col-span-2">
+                            Unit Price
+                        </span>
+
+                        <span className="col-span-2">
+                            Total Sales
+                        </span>
+
+                        <span className="col-span-2">
+                            Inventory
+                        </span>
+
+                        <span className="col-span-3">
+                            More
+                        </span>
+                    </div>
+
+                    <div className="flex flex-col gap-5 mt-5">
                         {currentProducts.map((product, index) => (
-                            <tr key={index} className={`${index % 2 === 0 ? "bg-gray-400" : "bg-gray-300"}`}>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_id'] as string}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_name'] as string}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_price'] as string}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_type'] as string}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">{product['product_stock_count'] as string}</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center">0</td>
-                                <td className="pt-2.5 pb-2.5 border-x border-black text-center"><div className="relative flex items-center justify-center"
-                                    onMouseEnter={() => setShowProductEllipsisMenu(index)}
-                                    onMouseLeave={() => setShowProductEllipsisMenu(-1)}>
-                                    <FontAwesomeIcon icon={faEllipsisH}
-                                        size="2x"
-                                        className="cursor-pointer"
+                            <div className="grid lg:grid-cols-11 
+                            3xs:grid-cols-4 grid-cols-2 lg:gap-5 gap-x-[50px] gap-y-[20px] shadow-lg p-5" key={index}>
+                                <div className="flex flex-col col-span-2 gap-2">
+                                    <span className="lg:hidden inline-block font-bold underline">
+                                        Product ID
+                                    </span>
+                                    <span>
+                                        <span className="font-bold">ID: {product['product_id'] as string}</span> <br />
+                                        <span className="text-gray-600 font-bold break-auto pr-5">{product['product_name'] as string}</span> <br />
+                                        <span className="text-gray-800 italic"> - {product['product_type'] as string}</span>
+                                    </span>
+                                </div>
 
-                                    />
+                                <span className="col-span-2 flex flex-col gap-2">
+                                    <span className="lg:hidden inline-block font-bold underline">
+                                        Unit Price
+                                    </span>
+                                    ${product['product_price'] as string}
+                                </span>
 
-                                    <div className={`absolute ${showProductEllipsisMenu === index
-                                        ? "flex" : "hidden"}
-                                    left-1/2 transform -translate-x-1/2 pt-[15px] w-fit bg-gray-300 p-2 rounded-lg
-                                    flex flex-col text-nowrap p-1 z-10
-                                    `}>
-                                        <Link className={productEllipsisMenuItemClass}
-                                            href={`/Collections/All/Products/?productID=${product['product_id']}`}>
-                                            <span >
-                                                View Product
-                                            </span>
+                                <div className="flex flex-col gap-2 col-span-2">
+                                    <span className="lg:hidden inline font-bold underline">
+                                        Total Sales
+                                    </span>
+                                    <span>
+                                        Units Sold: <br /> TBA
+                                    </span>
 
+                                    <span>
+                                        Total Revenue: <br /> TBA
+                                    </span>
+                                </div>
+
+
+                                <span className="col-span-2 flex flex-col gap-2">
+                                    <span className="lg:hidden inline font-bold underline">
+                                        Inventory <br />
+                                    </span>
+                                    {product['product_stock_count'] as string} in stock
+                                </span>
+
+                                <div className="col-span-3">
+                                    <span className="lg:hidden inline-block font-bold underline mb-[15px]">
+                                        More About Product
+                                    </span>
+                                    <div className="grid grid-cols-2 gap-5 col-span-3 w-full">
+                                        <Link
+                                            className={`bg-blue-800 hover:bg-blue-600 text-white ${gridTableLinkClass}`}
+                                            href={`/Collections/All/Products/?productID=${product['product_id']}`}
+                                        >
+                                            <span>View</span>
                                         </Link>
 
-                                        <span className={productEllipsisMenuItemClass}>
-                                            Update Product
-                                        </span>
+                                        <Link
+                                            className={`bg-yellow-600 hover:bg-orange-600 text-white ${gridTableLinkClass}`}
+                                            href={`TBA`}
+                                        >
+                                            <span>Update</span>
+                                        </Link>
 
-                                        <span className={productEllipsisMenuItemClass}>
-                                            Recall Product
-                                        </span>
+                                        <Link
+                                            className={`bg-green-800 hover:bg-green-600 text-white ${gridTableLinkClass}`}
+                                            href={`TBA`}
+                                        >
+                                            <span>Restock</span>
+                                        </Link>
+
+                                        <Link
+                                            className={`bg-red-800 hover:bg-red-600 text-white ${gridTableLinkClass}`}
+                                            href={`TBA`}
+                                        >
+                                            <span>Recall</span>
+                                        </Link>
                                     </div>
                                 </div>
-                                </td>
-                            </tr>
+                            </div>
                         ))}
-                    </tbody>
-                </table>
-            </div >
+                    </div>
+                </div>
+            </div>
         </div >
     </>
 }

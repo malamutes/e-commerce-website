@@ -44,7 +44,7 @@ export default function DashboardTab() {
                     {dashboardTabs.map((tab) => (
                         <Link href={`/ProducerDashboard?tab=${tab}`} key={tab}
                             onClick={() => setCurrentTab(tab)}
-                            className={`rounded-lg w-fit p-5 xl:mr-0 lg:mr-5 mr-0 flex lg:ml-[20px] xl:ml-[0px] 
+                            className={`rounded-lg w-fit p-5 xl:mr-0 lg:mr-5 mr-0 flex lg:ml-[20px] xl:ml-[0px] mt-[10px]
                             ${currentTab === tab ? "bg-gray-500" : "hover:bg-gray-700 "}
                             `}
                         >
@@ -81,11 +81,11 @@ export function DashboardTabSmall() {
     return <>
         <div className="bg-gray-800 text-gray-300 flex justify-center p-5
         w-full rounded-full mb-[25px]">
-            <div className="xs:flex xs:flex-row grid grid-cols-3 items-center">
+            <div className="xs:flex xs:flex-row grid grid-cols-3 items-center ">
                 {dashboardTabs.map((tab) => (
                     <Link href={`/ProducerDashboard?tab=${tab}`} key={tab}
                         onClick={() => setCurrentTab(tab)}
-                        className={`rounded-full p-3 m-1 text-[20px]
+                        className={`rounded-full p-3 text-[20px]
                             ${currentTab === tab ? "bg-gray-500" : "hover:bg-gray-700 "}
                             `}
                     >

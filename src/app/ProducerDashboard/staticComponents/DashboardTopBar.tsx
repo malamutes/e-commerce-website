@@ -11,7 +11,7 @@ export default function DashboardTopBar() {
                     Welcome Back, {session?.user.firstName}!
                 </p>
 
-                <span className="italic">
+                <span className="italic block mt-[10px]">
                     Your central hub for managing production and performance.
                 </span>
             </div>
