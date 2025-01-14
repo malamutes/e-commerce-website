@@ -4,9 +4,9 @@ import "./globals.css";
 import WebsiteHeader from "./components/WebsiteHeader";
 import WebsiteFooter from "./components/WebsiteFooter";
 import ClientSessionProvider from "./sessionProvider";
-import { ShoppingCartContext } from "./ShoppingCartContext";
-import { ShoppingCartItem } from "./ShoppingCartContext";
-import ShoppingCartContextWrapper from "./ShoppingCartContextWrapper";
+import ShoppingCartContextWrapper from "./(Contexts)/ShoppingCartContextWrapper";
+import GlobalLoginPromptContextWrapper from "./(Contexts)/GlobalLoginPromptContextWrapper";
+import { GlobalLoginTypeContextWrapper } from "./(Contexts)/GlobalLoginPromptContextWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,12 +36,16 @@ export default function RootLayout({
 
         <ClientSessionProvider >
           <ShoppingCartContextWrapper >
-            <WebsiteHeader />
-            {/* the padding top 100px is to account for the website top bar which is 100px for now*/}
-            <div className="pt-[100px] bg-white" >
-              {children}
-            </div>
-            <WebsiteFooter />
+            <GlobalLoginTypeContextWrapper >
+              <GlobalLoginPromptContextWrapper >
+                <WebsiteHeader />
+                {/* the padding top 100px is to account for the website top bar which is 100px for now*/}
+                <div className="pt-[100px] bg-white" >
+                  {children}
+                </div>
+                <WebsiteFooter />
+              </GlobalLoginPromptContextWrapper>
+            </GlobalLoginTypeContextWrapper>
           </ShoppingCartContextWrapper>
         </ClientSessionProvider>
       </body>

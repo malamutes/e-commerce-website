@@ -17,7 +17,7 @@ interface MainPageHeaderProps {
 
 const urlNavLinkMap: { [key: string]: string } = {
     'New Arrivals': `/Collections/New Arrivals?clothingCategory=All`,
-    'Popular Brands': '/Collections/Brands',
+    'Popular Brands': '/Collections/Brands?clothingCategory=All',
     'Exclusive': `/Collections/Exclusive?clothingCategory=All`,
     'Best Sellers': `/Collections/Best Sellers?clothingCategory=All`,
     'On Sale': `/Collections/Sale?clothingCategory=All`,
@@ -76,7 +76,7 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                             {/* we are setting it to 5 items at a time so it will always shift via 50 % we can obv 
                             make it more general by passing in props too but that refractoring can come later when i need to adapt it*/}
                             {props.categories === true ? (
-                                <Link className="w-full aspect-square bg-gray-300 grid place-items-center m-5" key={index}
+                                <Link className="w-full aspect-square bg-gray-300 grid place-items-center" key={index}
                                     href={product['product_producer'] ? "/" : `/Collections?clothingCategory=${product['product_type']}`}> {/* TBA To sort stuff out via brands*/}
                                     <span>
                                         {product['product_producer'] as string ?? product['product_type'] as string}

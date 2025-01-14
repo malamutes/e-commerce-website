@@ -8,7 +8,7 @@ interface UseMatchMediaQueryProps {
 // NEED TO COME BACK TO THIS SINCE IT IS A CUSTOM HOOK
 
 export function useMatchMediaQuery({ size }: UseMatchMediaQueryProps) {
-    const [matches, setMatches] = useState<boolean>(window.innerWidth >= size);
+    const [matches, setMatches] = useState<boolean>(true);
 
     useEffect(() => {
         const mediaQueryList = window.matchMedia(`(min-width: ${size}px)`);

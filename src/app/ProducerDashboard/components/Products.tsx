@@ -49,7 +49,7 @@ export default function Products() {
                     </Link>
 
                 </div>
-                <span className="font-bold italic mt-[10px] block">
+                <span className="font-bold italic md:mt-[15px] mt-[25px] block">
                     Current Products Oustanding in Store
                 </span>
             </div>

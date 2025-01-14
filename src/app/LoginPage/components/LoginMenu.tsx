@@ -5,12 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons/faXTwitter';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { GlobalLoginTypeContext } from '@/app/(Contexts)/GlobalLoginPromptContext';
 
 export default function LoginMenu() {
-    const [newUserMenu, setNewUserMenu] = useState(false);
+    const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -18,6 +20,7 @@ export default function LoginMenu() {
     const [lName, setLName] = useState("");
 
     const router = useRouter();
+
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -99,17 +102,17 @@ export default function LoginMenu() {
                 lg:container mx-auto sm:pr-[50px] sm:pl-[50px] lg:pr-0 lg:pl-0 
                 pr-[15px] pl-[25px] min-w-[270px]">
                 <div className='flex flex-row lg:w-5/6 w-full'>
-                    <div className={`w-1/2  ${newUserMenu ? "bg-black" : "bg-gray-400 "} 
-            text-${newUserMenu ? "white" : "black"} p-5 cursor-pointer`}
-                        onClick={() => setNewUserMenu(true)}>
+                    <div className={`w-1/2  ${logIn ? "bg-black" : "bg-gray-400 "} 
+            text-${logIn ? "white" : "black"} p-5 cursor-pointer`}
+                        onClick={() => setLogIn(true)}>
                         <h1 className="text-lg font-semibold text-center">
                             FIRST TIME?
                         </h1>
                     </div>
 
-                    <div className={`w-1/2  ${newUserMenu ? "bg-gray-400" : "bg-black"} 
-            text-${newUserMenu ? "black" : "white"}  p-5 cursor-pointer`}
-                        onClick={() => setNewUserMenu(false)}>
+                    <div className={`w-1/2  ${logIn ? "bg-gray-400" : "bg-black"} 
+            text-${logIn ? "black" : "white"}  p-5 cursor-pointer`}
+                        onClick={() => setLogIn(false)}>
                         <h1 className={`text-lg font-semibold text-center`}>
                             SIGN IN HERE!
                         </h1>
@@ -118,7 +121,7 @@ export default function LoginMenu() {
                 </div>
 
                 <div className="lg:w-5/6 w-full h-fit bg-gray-200 p-[3.75%] ">
-                    <div className={`${newUserMenu ? "hidden" : "block"}`}>
+                    <div className={`${logIn ? "hidden" : "block"}`}>
                         <h1 className="text-lg font-semibold ">
                             SIGN IN
                         </h1>
@@ -179,7 +182,7 @@ export default function LoginMenu() {
                                 <div className=' p-2.5 w-5/6 text-white bg-blue-900 
                 flex justify-between items-center cursor-pointer 
                 hover:bg hover:brightness-150 transition-all duration-300
-                mb-5 mt-10' >
+                mb-5 mt-10 gap-3' >
                                     Sign in with Facebook
                                     <FontAwesomeIcon icon={faFacebookF} />
                                 </div>
@@ -187,7 +190,7 @@ export default function LoginMenu() {
                                 <div className=' p-2.5 w-5/6 text-white bg-red-900
                 flex justify-between items-center cursor-pointer 
                 hover:bg hover:brightness-150 transition-all duration-300
-                mb-5' >
+                mb-5 gap-3' >
                                     Sign in with Google
                                     <div>
                                         <FontAwesomeIcon icon={faGoogle} />
@@ -198,7 +201,7 @@ export default function LoginMenu() {
                                 <div className=' p-2.5 w-5/6 text-white bg-cyan-600
                 flex justify-between items-center cursor-pointer 
                 hover:bg hover:brightness-150 transition-all duration-300
-                mb-5' >
+                mb-5 gap-3' >
                                     Sign in with Twitter
                                     <FontAwesomeIcon icon={faXTwitter} />
                                 </div>
@@ -208,7 +211,7 @@ export default function LoginMenu() {
                         </div>
                     </div>
 
-                    <div className={`${newUserMenu ? "block" : "hidden"}`}>
+                    <div className={`${logIn ? "block" : "hidden"}`}>
                         <h1 className="text-lg font-semibold ">
                             SIGN UP
                         </h1>
@@ -307,7 +310,7 @@ export default function LoginMenu() {
                                 <div className=' p-2.5 w-5/6 text-white bg-blue-900 
                 flex justify-between items-center cursor-pointer 
                 hover:bg hover:brightness-150 transition-all duration-300
-                mb-2.5 mt-10' >
+                mb-2.5 mt-10 gap-3' >
                                     Sign up with Facebook
                                     <FontAwesomeIcon icon={faFacebookF} />
                                 </div>
@@ -315,7 +318,7 @@ export default function LoginMenu() {
                                 <div className=' p-2.5 w-5/6 text-white bg-red-900
                 flex justify-between items-center cursor-pointer 
                 hover:bg hover:brightness-150 transition-all duration-300
-                mb-2.5 mt-10' >
+                mb-2.5 mt-10 gap-3' >
                                     Sign up with Google
                                     <div>
                                         <FontAwesomeIcon icon={faGoogle} />
@@ -326,7 +329,7 @@ export default function LoginMenu() {
                                 <div className=' p-2.5 w-5/6 text-white bg-cyan-600
                 flex justify-between items-center cursor-pointer 
                 hover:bg hover:brightness-150 transition-all duration-300
-                mb-2.5 mt-10' >
+                mb-2.5 mt-10 gap-3' >
                                     Sign up with Twitter
                                     <FontAwesomeIcon icon={faXTwitter} />
                                 </div>

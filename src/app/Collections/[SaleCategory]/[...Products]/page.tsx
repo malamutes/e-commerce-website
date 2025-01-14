@@ -5,8 +5,9 @@ import { useState, useEffect, useContext } from "react";
 import { Product } from "@/app/ProducerDashboard/components/Products";
 import Image from "next/image";
 import Carousel from "@/app/components/Carousel";
-import { ShoppingCartContext, ShoppingCartItem } from "@/app/ShoppingCartContext";
+import { ShoppingCartContext, ShoppingCartItem } from "@/app/(Contexts)/ShoppingCartContext";
 import ShoppingCart from "@/app/components/ShoppingCart";
+import WishlistBookmark from "@/app/components/WishlistBookmark";
 
 export type VariantCombination = {
     [key: string]: string[];
@@ -187,6 +188,10 @@ export default function ProductPage() {
                             }>
                             ADD TO CART
                         </button>
+
+                        <div className="w-fit mb-3 ">
+                            <WishlistBookmark />
+                        </div>
 
                         <span className="text-md font-bold mb-3">
                             Product ID: <span className="font-light italic">{currentProduct[0]['product_id'] as string}</span>

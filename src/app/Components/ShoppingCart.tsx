@@ -3,9 +3,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faRuler, faDollarSign, faPalette, faDollar, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
 import { Context, SetStateAction, useContext } from "react";
-import { ShoppingCartContext, ShoppingCartItem } from "../ShoppingCartContext";
+import { ShoppingCartContext, ShoppingCartItem } from "../(Contexts)/ShoppingCartContext";
 import Image from "next/image";
-import { ShoppingCartContextType } from "../ShoppingCartContext";
+import { ShoppingCartContextType } from "../(Contexts)/ShoppingCartContext";
 import { useRouter } from "next/navigation";
 
 interface ShoppingCartProps {
@@ -23,13 +23,13 @@ export interface ShoppingCartItemComponentProps {
 export function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps) {
 
     return <>
-        <div className="flex 2xs:flex-row flex-col justify-center 3xs:p-5 p-3">
+        <div className="flex 2xs:flex-row flex-col justify-center 3xs:p-5 p-3 min-w-[200px]">
             <div className="flex items-center 2xs:w-1/3 w-full justify-center 2xs:pb-[0px] pb-[10px]">
-                <Image alt="ShoppingCartItemImage" src={props.shoppingCartItem.itemImage}
+                <Image alt="ShoppingCartItemImage" src={props.shoppingCartItem.itemImage ?? null}
                     width={150} height={150} />
             </div>
 
-            <div className="flex flex-col justify-center 2xs:w-2/3 w-full pl-[20px] 
+            <div className="flex flex-col justify-center 2xs:w-2/3 w-full 2xs:pl-[20px] 
             2xs:text-start text-center gap-[2.5px]">
                 <span className="text-lg italic">
                     {props.shoppingCartItem.itemBrand}
@@ -37,7 +37,7 @@ export function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps)
                 <span className="text-xl font-bold">
                     {props.shoppingCartItem.itemTitle}
                 </span>
-                <div className="flex flex-row justify-between 3xs:w-4/5 w-full">
+                <div className="flex flex-row justify-between 3xs:w-4/5 w-full ">
                     <div className="pt-1 pb-1 flex xs:flex-row items-center">
                         <FontAwesomeIcon icon={faRuler} className="pr-[2px]" />
                         <span>
@@ -106,7 +106,7 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
         </div>
 
-        <div className={`bg-white fixed right-0 top-0 3xs:w-[500px] w-11/12 h-screen ${props.show ? "block" : "hidden"}
+        <div className={`bg-white right-0 top-0 3xs:w-[500px] w-11/12 h-screen ${props.show ? "fixed" : "hidden"}
                 z-50`}>
             <div className={`flex flex-col h-[80vh] overflow-y-scroll pb-5 
              ${Object.keys(shoppingCartContext.cartState).length === 0

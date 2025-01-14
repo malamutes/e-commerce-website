@@ -15,7 +15,7 @@ import { signOut } from "next-auth/react";
 import { headers } from "../CollectionTypes";
 import { HeadlineDropwdownMap } from "./WebsiteHeaderLarge";
 import ShoppingCart from "./ShoppingCart";
-import { ShoppingCartContext } from "../ShoppingCartContext";
+import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 
 
 const iconSize = "25px";
@@ -123,7 +123,7 @@ export default function WebsiteHeaderSmall() {
 
     return <>
 
-        <div className=" flex flex-row justify-between w-11/12 mx-auto block lg:hidden">
+        <div className=" flex flex-row justify-between w-11/12 mx-auto block lg:hidden min-w-[275px]">
             {/* for <div> <link image> <div> both divs have the same width so the image is centered
                     with justify between as parent div*/}
 

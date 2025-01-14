@@ -8,14 +8,31 @@ import MainPageHeader from "./components/MainPageHeader";
 import { useEffect, useState } from "react";
 import { Product } from "./ProducerDashboard/components/Products";
 import { useMatchMediaQuery } from "./MatchMediaQuery";
+import WishlistBookmark from "./components/WishlistBookmark";
 
+interface MainProductPageDbData {
+    Best_Sellers: Product[];
+    Clothing: Product[];
+    Exclusive: Product[];
+    New_Arrivals: Product[];
+    Producer: Product[];
+    Sale: Product[];
+}
 
 export default function MainPage() {
     const { data: session, status } = useSession();
 
     console.log(session?.user.user_id, session?.user.email, status);
 
-    const [mainPageProducts, setMainPageProducts] = useState<Product[][] | null>(null);
+    const [mainPageProducts, setMainPageProducts] = useState<MainProductPageDbData>({
+        Exclusive: [],
+        Best_Sellers: [],
+        Sale: [],
+        New_Arrivals: [],
+        Clothing: [],
+        Producer: [],
+
+    });
     const [numItemsDisplay, setNumItemsDisplay] = useState(5);
 
     //3 cases, large screen more than 1024 pixels, then from 768 to 1024 and then finally anythting below
@@ -47,11 +64,6 @@ export default function MainPage() {
 
     }, []);
 
-    useEffect(() => {
-        if (mainPageProducts) {
-            console.log(mainPageProducts[1])
-        }
-    }, [mainPageProducts])
 
     // NEED TO COME BACK TO THIS SINCE IT IS A CUSTOM HOOK
     useEffect(() => {
@@ -68,27 +80,27 @@ export default function MainPage() {
         <>
             <div className="container mx-auto" >
                 <div className="w-11/12 xl:w-5/6 mx-auto flex flex-col ">
-                    <MainPageHeader categoryArray={mainPageProducts?.[0] ?? []}
+                    <MainPageHeader categoryArray={mainPageProducts?.Best_Sellers ?? []}
                         categoryTitle="New Arrivals"
                         numItemsDisplay={numItemsDisplay}
                     />
-                    <MainPageHeader categoryArray={mainPageProducts?.[1] ?? []}
+                    <MainPageHeader categoryArray={mainPageProducts?.Producer ?? []}
                         categoryTitle="Popular Brands" categories={true}
                         numItemsDisplay={numItemsDisplay}
                     />
-                    <MainPageHeader categoryArray={mainPageProducts?.[2] ?? []}
+                    <MainPageHeader categoryArray={mainPageProducts?.Exclusive ?? []}
                         categoryTitle="Exclusive"
                         numItemsDisplay={numItemsDisplay}
                     />
-                    <MainPageHeader categoryArray={mainPageProducts?.[3] ?? []}
+                    <MainPageHeader categoryArray={mainPageProducts?.Best_Sellers ?? []}
                         categoryTitle="Best Sellers"
                         numItemsDisplay={numItemsDisplay}
                     />
-                    <MainPageHeader categoryArray={mainPageProducts?.[4] ?? []}
+                    <MainPageHeader categoryArray={mainPageProducts?.Sale ?? []}
                         categoryTitle="On Sale"
                         numItemsDisplay={numItemsDisplay}
                     />
-                    <MainPageHeader categoryArray={mainPageProducts?.[5] ?? []}
+                    <MainPageHeader categoryArray={mainPageProducts?.Clothing ?? []}
                         categoryTitle="Categories" categories={true}
                         numItemsDisplay={numItemsDisplay}
                     />

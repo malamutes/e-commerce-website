@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
-import { ShoppingCartContext } from "../ShoppingCartContext";
+import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 
 export const HeadlineDropwdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
