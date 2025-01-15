@@ -15,6 +15,7 @@ import { signOut } from "next-auth/react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
+import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 
 export const HeadlineDropwdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
@@ -82,7 +83,9 @@ export default function WebsiteHeaderLarge() {
 
     const { data: session, status } = useSession();
 
-    const { cartState } = useContext(ShoppingCartContext)
+    const { cartState } = useContext(ShoppingCartContext);
+
+    const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
 
     useEffect(() => {
         if (status === "loading") {
@@ -224,15 +227,23 @@ export default function WebsiteHeaderLarge() {
                             <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: iconSize }}
                                 className={iconClass} />
 
-                            <FontAwesomeIcon icon={faBookmark}
-                                style={{ fontSize: iconSize }}
-                                className={iconClass} />
+                            <Link href={"/Wishlist"}
+                                className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
+                                <FontAwesomeIcon icon={faBookmark}
+                                    style={{ fontSize: iconSize }}
+                                />
+
+                                <div className="bg-black text-white w-[25px] aspect-square grid 
+                                                            place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">
+                                    {allWishlistedItems.size}
+                                </div>
+                            </Link>
+
 
                             <div className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}
                                 onClick={() => setShowShoppingCart(true)}>
                                 <FontAwesomeIcon icon={faShoppingCart}
                                     style={{ fontSize: iconSize }}
-
                                 />
                                 <div className="bg-black text-white w-[25px] aspect-square grid 
                                                             place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">

@@ -7,6 +7,8 @@ import ClientSessionProvider from "./sessionProvider";
 import ShoppingCartContextWrapper from "./(Contexts)/ShoppingCartContextWrapper";
 import GlobalLoginPromptContextWrapper from "./(Contexts)/GlobalLoginPromptContextWrapper";
 import { GlobalLoginTypeContextWrapper } from "./(Contexts)/GlobalLoginPromptContextWrapper";
+import WishlistContextWrapper from "./(Contexts)/WishlistModalContextWrapper";
+import GlobalWishlistTrackerContextWrapper from "./(Contexts)/GlobalWishlistTrackerContextWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,17 +35,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-
         <ClientSessionProvider >
           <ShoppingCartContextWrapper >
             <GlobalLoginTypeContextWrapper >
               <GlobalLoginPromptContextWrapper >
-                <WebsiteHeader />
-                {/* the padding top 100px is to account for the website top bar which is 100px for now*/}
-                <div className="pt-[100px] bg-white" >
-                  {children}
-                </div>
-                <WebsiteFooter />
+                <GlobalWishlistTrackerContextWrapper >
+                  <WishlistContextWrapper >
+                    <WebsiteHeader />
+                    {/* the padding top 100px is to account for the website top bar which is 100px for now*/}
+                    <div className="pt-[100px] bg-white" >
+                      {children}
+                    </div>
+                    <WebsiteFooter />
+                  </WishlistContextWrapper>
+                </GlobalWishlistTrackerContextWrapper>
               </GlobalLoginPromptContextWrapper>
             </GlobalLoginTypeContextWrapper>
           </ShoppingCartContextWrapper>

@@ -16,6 +16,7 @@ import { headers } from "../CollectionTypes";
 import { HeadlineDropwdownMap } from "./WebsiteHeaderLarge";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
+import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 
 
 const iconSize = "25px";
@@ -85,6 +86,8 @@ export default function WebsiteHeaderSmall() {
     const [showShoppingCart, setShowShoppingCart] = useState(false);
     const { cartState } = useContext(ShoppingCartContext);
 
+    const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
+
     useEffect(() => {
         if (status === "loading") {
         } else if (status === "authenticated") {
@@ -127,6 +130,7 @@ export default function WebsiteHeaderSmall() {
             {/* for <div> <link image> <div> both divs have the same width so the image is centered
                     with justify between as parent div*/}
 
+
             <div className={`w-[80vw] overflow-y-scroll max-w-[500px] h-screen ${menuOffCanvas ? "fixed" : "hidden"} 
                 bg-white z-20 top-0 left-0 flex flex-col`}>
                 <div className="flex flex-row justify-between">
@@ -137,6 +141,10 @@ export default function WebsiteHeaderSmall() {
                         onClick={() => setMenuOffCanvas(false)}
                         className="cursor-pointer p-5" />
                 </div>
+
+                <span className="text-xl cursor-text p-5">
+                    Search
+                </span>
                 <div className="flex flex-col">
                     {headers.map((headline, index) => (
                         <DropdownMenu dropdownTitle={headline} key={index}
@@ -220,13 +228,18 @@ export default function WebsiteHeaderSmall() {
             <div className="flex flex-row items-center justify-end w-1/3">
                 <div className="flex flex-row items-center">
 
-                    <FontAwesomeIcon icon={faMagnifyingGlass}
-                        style={{ fontSize: iconSize }}
-                        className={iconClass} />
 
-                    <FontAwesomeIcon icon={faBookmark}
-                        style={{ fontSize: iconSize }}
-                        className={iconClass} />
+
+                    <Link href={"/Wishlist"}
+                        className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
+                        <FontAwesomeIcon icon={faBookmark}
+                            style={{ fontSize: iconSize }} />
+                        <div className="bg-black text-white w-[25px] aspect-square grid 
+                                place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">
+                            {allWishlistedItems.size}
+                        </div>
+                    </Link>
+
 
 
                     <div className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}

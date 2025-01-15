@@ -2,14 +2,37 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
+import { WishlistContext } from "../(Contexts)/WishlistModalContext";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 
-export default function WishlistBookmark() {
+//<a href="https://www.flaticon.com/free-icons/saved" title="saved icons">Saved icons created by NX Icon - Flaticon</a>
+//<a href="https://www.flaticon.com/free-icons/bookmark" title="bookmark icons">Bookmark icons created by Freepik - Flaticon</a>
+
+interface WishlistBookmarkProps {
+    currentItemBrand: string;
+    currentItemName: string;
+    currentItemImage: string;
+    currentItemID: string
+}
+
+export default function WishlistBookmark(props: WishlistBookmarkProps) {
     const [showText, setShowText] = useState(false);
 
     const { setShowLoginPrompt, setMessage } = useContext(GlobalLoginPromptContext);
+    const { setShowModal, setCurrentItemBrand,
+        setCurrentItemImage, setCurrentItemName, setCurrentItemID, setUpdate }
+        = useContext(WishlistContext);
+
+    const { isItemWishlisted, allWishlistedItems, updateWishlistedItem } = useContext(GlobalWishlistTrackerContext);
+    const [itemWishlisted, setItemWishlisted] = useState(isItemWishlisted(props.currentItemID))
+
+    useEffect(() => {
+        setItemWishlisted(isItemWishlisted(props.currentItemID));
+    }, [allWishlistedItems])
 
     const { data: session, status } = useSession();
 
@@ -19,21 +42,50 @@ export default function WishlistBookmark() {
             setShowLoginPrompt(true);
         }
         else {
-            alert("ADSAD")
+            setCurrentItemBrand(props.currentItemBrand);
+            setCurrentItemImage(props.currentItemImage);
+            setCurrentItemName(props.currentItemName);
+            setCurrentItemID(props.currentItemID);
+            setUpdate(false);
+            setShowModal(true);
         }
     }
 
-    return <>
-        <div className="bg-white border-2 border-black border-opacity-75
-         p-2 flex flex-row items-center justify-center rounded-full shadow-lg cursor-pointer"
-            onMouseEnter={() => setShowText(true)}
-            onMouseLeave={() => setShowText(false)}
-            onClick={addToWishlist}>
-            <FontAwesomeIcon icon={faBookmark} className="w-[20px] h-[20px]" />
+    const updateWishList = async () => {
+        setCurrentItemBrand(props.currentItemBrand);
+        setCurrentItemImage(props.currentItemImage);
+        setCurrentItemName(props.currentItemName);
+        setCurrentItemID(props.currentItemID);
+        setUpdate(true);
+        setShowModal(true);
+    }
 
-            <span className={`${showText ? "block" : "hidden"} text-xs ml-[5px] font-bold`}>
-                Wishlist Me!
-            </span>
-        </div>
+    return <>
+        {itemWishlisted
+            ?
+            (<div className="bg-white border-2 border-black border-opacity-75
+                p-2 flex flex-row items-center justify-center rounded-full shadow-lg cursor-pointer"
+                onMouseEnter={() => setShowText(true)}
+                onMouseLeave={() => setShowText(false)}
+                onClick={updateWishList}>
+                <FontAwesomeIcon icon={faCheck} className="w-[20px] h-[20px]" />
+
+                <span className={`${showText ? "block" : "hidden"} text-xs ml-[5px] font-bold`}>
+                    Item Wishlisted!
+                </span>
+            </div>)
+            :
+            (<div className="bg-white border-2 border-black border-opacity-75
+         p-2 flex flex-row items-center justify-center rounded-full shadow-lg cursor-pointer"
+                onMouseEnter={() => setShowText(true)}
+                onMouseLeave={() => setShowText(false)}
+                onClick={addToWishlist}>
+                <FontAwesomeIcon icon={faBookmark} className="w-[20px] h-[20px]" />
+
+                <span className={`${showText ? "block" : "hidden"} text-xs ml-[5px] font-bold`}>
+                    Wishlist Me!
+                </span>
+            </div>)}
+
     </>
 }

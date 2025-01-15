@@ -86,7 +86,12 @@ export default function ProductCard(props: ProductCard) {
             </Link>
 
             <div className="absolute top-0 right-0 m-2">
-                <WishlistBookmark />
+                <WishlistBookmark
+                    currentItemBrand={props.product['product_producer'] as string ?? ""}
+                    currentItemImage={(props.product['product_images'] as string[])[0] ?? ""}
+                    currentItemName={props.product['product_name'] as string ?? ""}
+                    currentItemID={props.product['product_id'] as string ?? ""}
+                />
             </div>
 
         </div>

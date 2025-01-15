@@ -38,11 +38,11 @@ function GlobalLoginPrompt(props: GlobalLoginPromptProps) {
 
         </div>
 
-        <div className={`${props.show ? "fixed" : "hidden"} w-screen h-screen top-0 left-0 grid 
-        place-items-center pointer-events-none`}
+        <div className={`${props.show ? "fixed" : "hidden"} w-screen h-screen top-0 left-0 flex 
+        items-center justify-center pointer-events-none`}
             style={{ zIndex: 40 }}>
             <div className={`absolute pointer-events-auto ${props.show
-                ? "flex flex-col p-3 gap-5 rounded-2xl"
+                ? "flex flex-col p-3 gap-5 rounded-2xl w-8/12 max-w-[350px] min-w-[230px]"
                 : "hidden"} bg-white `}
                 style={{ zIndex: 40 }}>
                 <div className="flex flex-row justify-between gap-3 items-center font-bold">
@@ -80,7 +80,8 @@ function GlobalLoginPrompt(props: GlobalLoginPromptProps) {
                             setLogIn(false)
                         }}
                         className="p-3 font-bold text-sm rounded-full 
-                    bg-blue-800 text-white w-1/2 text-center whitespace-nowrap">
+                    bg-blue-800 text-white w-1/2 text-center 2xs:whitespace-nowrap
+                    break-auto">
                         <span >
                             Welcome back!
                         </span>
