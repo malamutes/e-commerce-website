@@ -42,8 +42,9 @@ function WishlistModal(props: WishlistModalProps) {
         let sendNewListName = "";
         if (newListSelected === true) {
             newSet.add(newListName);
-            sendNewListName = newListName;
         };
+
+        sendNewListName = newListName;
 
         console.log("NEW SET", newSet);
 
@@ -81,9 +82,9 @@ function WishlistModal(props: WishlistModalProps) {
         let sendNewListName = "";
         if (newListSelected === true) {
             newSet.add(newListName);
-            sendNewListName = newListName;
         };
 
+        sendNewListName = newListName;
         const response = await fetch('/api/Wishlist', {
 
             method: "PATCH",

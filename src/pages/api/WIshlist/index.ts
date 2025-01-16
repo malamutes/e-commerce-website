@@ -101,8 +101,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const sql = neon(process.env.DATABASE_URL!);
 
-                    //this is for inserting NEW wishlists names 
-                    if (req.body.newWishlist !== "") {
+                    if (req.body.newWishlist !== '') {
                         await sql`
                         INSERT INTO wishlists (wishlist_name, user_id)
                         VALUES (${req.body.newWishlist}, ${session.user.user_id});
@@ -120,9 +119,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     console.log(queryStart + queryEnd);
 
-                    await sql(queryStart + queryEnd);
+                    if (req.body.wishlistSelected.length !== 0) {
+                        await sql(queryStart + queryEnd);
+                        return res.status(200).json({ message: "WISHLIST API BACKEND, INSERT SUCCESSFUL " })
+                    }
 
-                    res.status(200).json({ message: "WISHLIST API BACKEND, INSERT SUCCESSFUL " })
+
+                    res.status(200).json({ message: "NEW LIST ADDED, NO INSERTS " });
                 } catch (error) {
                     console.error("Error details:", error);
 
@@ -160,7 +163,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     //[ 'LOLOKRIOT', 'Wishlist 5', 'Wishlist 4' ];
 
-                    if (req.body.newWishlist !== "") {
+                    if (req.body.newWishlist !== '') {
                         await sql`
                         INSERT INTO wishlists (wishlist_name, user_id)
                         VALUES (${req.body.newWishlist}, ${session.user.user_id});

@@ -38,11 +38,14 @@ export default function GlobalWishlistTrackerContextWrapper({ children }: { chil
     }, [])
 
     const addToWishlistedItems = (productID: string, wishListNames: string[]) => {
-        setAllWishlistedItems((previousMap) => {
-            const newMap = new Map(previousMap);
-            newMap.set(productID, wishListNames);
-            return newMap;
-        });
+        if (wishListNames.length !== 0) {
+            setAllWishlistedItems((previousMap) => {
+                const newMap = new Map(previousMap);
+                newMap.set(productID, wishListNames);
+                return newMap;
+            });
+        }
+
     };
 
     const updateWishlistedItem = (productID: string, wishListNames: string[]) => {
