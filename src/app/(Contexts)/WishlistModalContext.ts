@@ -3,7 +3,7 @@ import { createContext } from "react";
 export interface WishlistContextType {
     currentItemBrand: string;
     currentItemName: string;
-    currentItemImage: string;
+    currentItemImage: string | null;
     currentItemID: string,
     selectedWishlist: Set<string>;
     wishListArray: string[],
@@ -12,7 +12,7 @@ export interface WishlistContextType {
     setCurrentItemBrand: React.Dispatch<React.SetStateAction<string>>;
     setCurrentItemName: React.Dispatch<React.SetStateAction<string>>;
     setCurrentItemID: React.Dispatch<React.SetStateAction<string>>;
-    setCurrentItemImage: React.Dispatch<React.SetStateAction<string>>;
+    setCurrentItemImage: React.Dispatch<React.SetStateAction<string | null>>;
     setSelectedWishlist: React.Dispatch<React.SetStateAction<Set<string>>>;
     setWishListArray: React.Dispatch<React.SetStateAction<string[]>>;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,7 +23,7 @@ export interface WishlistContextType {
 const WishlistContext = createContext<WishlistContextType>({
     currentItemBrand: "",
     currentItemName: "",
-    currentItemImage: "",
+    currentItemImage: null,
     currentItemID: "",
     selectedWishlist: new Set(),
     showModal: false,

@@ -190,7 +190,12 @@ export default function ProductPage() {
                         </button>
 
                         <div className="w-fit mb-3 ">
-                            <WishlistBookmark />
+                            <WishlistBookmark
+                                currentItemBrand={currentProduct[0]['product_producer'] as string}
+                                currentItemID={currentProduct[0]['product_id'] as string}
+                                currentItemImage={(currentProduct[0]['product_images'] as string[])[0]}
+                                currentItemName={currentProduct[0]['product_name'] as string}
+                            />
                         </div>
 
                         <span className="text-md font-bold mb-3">

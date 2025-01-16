@@ -3,16 +3,17 @@
 import { HTMLInputTypeAttribute, useContext, useEffect, useState } from "react"
 import { WishlistContext } from "./WishlistModalContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faCircleXmark, faSave } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { GlobalWishlistTrackerContext } from "./GlobalWishlistTrackerContext";
+import { faCircle } from "@fortawesome/free-regular-svg-icons/faCircle";
 
 interface WishlistModalProps {
     showModal: boolean,
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
     currentItemBrand: string;
     currentItemName: string;
-    currentItemImage: string;
+    currentItemImage: string | null;
     currentItemID: string,
     wishListArray: string[],
     setSelectedWishlist: React.Dispatch<React.SetStateAction<Set<string>>>,
@@ -126,33 +127,48 @@ function WishlistModal(props: WishlistModalProps) {
         <div className={`${props.showModal ? "fixed" : "hidden"} w-screen h-screen top-0 left-0 flex 
         items-center justify-center pointer-events-none`}
             style={{ zIndex: 40 }}>
-            <div className="bg-white flex flex-col pointer-events-auto">
-                <div className="flex flex-row gap-5 justify-between">
-                    <div className="flex flex-row gap-3">
-
-                    </div>
-
-                    <span>
-                        {props.currentItemName} <br />
-                        {props.currentItemBrand}
+            <div className="bg-white sm:w-[500px] w-4/5 min-w-[260px] p-5 rounded-xl flex flex-col pointer-events-auto relative gap-5">
+                <div className="absolute right-0 top-0 -translate-y-[40px]
+                text-[30px] cursor-pointer flex flex-row items-center gap-2">
+                    <span className="text-[15px] text-white font-bold">
+                        CLOSE
                     </span>
-                    <FontAwesomeIcon icon={faX} size="2x"
-                        onClick={() => handleCloseModal()} />
+                    <FontAwesomeIcon icon={faCircleXmark}
+                        onClick={() => handleCloseModal()}
+                        style={{ filter: 'invert(1)' }} />
+                </div>
+
+                <div className="flex flex-row justify-between" >
+                    <div className="flex xs:flex-row flex-col xs:text-start text-center 
+                    gap-3 p-3 rounded-2xl items-center" style={{
+                            boxShadow: `0 4px 6px rgba(0, 0, 0, 0.25),
+                     0 1px 3px rgba(0, 0, 0, 0.25)` }}>
+                        <div className="max-w-[60px] rounded-full overflow-hidden">
+                            {props.currentItemImage ? (<Image src={props.currentItemImage} alt={props.currentItemImage}
+                                width={500} height={500} />) : (null)}
+                        </div>
+
+                        <div>
+                            <span className="font-bold">{props.currentItemName}</span> <br />
+                            <span className="italic text-gray-600">{props.currentItemBrand}</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-3">
+                    <div className="flex flex-row font-bold text-[18px]">
+                        Add item to a wishlist!
+                    </div>
                     {
                         props.wishListArray.map((wishList) => (
-                            <div key={wishList} className="flex flex-row justify-between">
-                                <span key={wishList}>
+                            <div key={wishList} className="flex flex-row justify-between items-center rounded-xl p-2" style={{
+                                boxShadow: `0 4px 6px rgba(0, 0, 0, 0.25),
+                             2.5px -1px 3px rgba(0, 0, 0, 0.1)` }}>
+                                <span key={wishList} className="text-gray-700 truncate">
                                     {wishList}
                                 </span>
 
-                                <div className={`w-[35px] h-[35px]
-                                    ${currentlySelectedWishlists.has(wishList)
-                                        ? "bg-purple-900"
-                                        : " bg-red-900"}
-                                    `}
+                                <div className={'w-[35px] h-[35px] cursor-pointer grid place-items-center'}
                                     onClick={() => setCurrentlySelectedWishlists((currentlySelectedWishlists) => {
                                         const returnSet = new Set(currentlySelectedWishlists);
                                         if (currentlySelectedWishlists.has(wishList)) {
@@ -164,43 +180,70 @@ function WishlistModal(props: WishlistModalProps) {
                                         }
                                         return returnSet;
                                     })}>
+                                    {currentlySelectedWishlists.has(wishList)
+                                        ? (
+                                            <FontAwesomeIcon icon={faCircleCheck} className="text-[25px] " />
+                                        )
+                                        : (
+                                            <FontAwesomeIcon icon={faCircle} className="text-[25px]" />
+                                        )}
                                 </div>
                             </div>
                         ))
                     }
                 </div>
 
-                <div className={`${showCreateList ? "block" : "hidden"}`}>
-                    <input
-                        className="bg-gray-200 p-3"
-                        value={newListName}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewListName(e.target.value)}
-                    />
-                    <div className={`w-[35px] h-[35px]
-                                    ${newListSelected
-                            ? "bg-purple-900"
-                            : "bg-red-900"}
-                                    `}
-                        onClick={() => setNewListSelected(newListSelected => !newListSelected)}>
+                <div className={`${showCreateList ? "flex" : "hidden"} flex-col gap-3 p-2`}>
+                    <div className="flex flex-row gap-3 items-center">
+                        <input
+                            className="bg-gray-200 p-3 w-full"
+                            value={newListName}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewListName(e.target.value)}
+                        />
+                        <div className={'w-[35px] h-[35px] grid place-items-center'}
+                            onClick={() => setNewListSelected(newListSelected => !newListSelected)}>
+                            {newListSelected
+                                ? (
+                                    <FontAwesomeIcon icon={faCircleCheck} className="text-[25px]" />
+                                )
+                                : (
+                                    <FontAwesomeIcon icon={faCircle} className="text-[25px]" />
+                                )}
+                        </div>
+                    </div>
+
+                    <div className="hover:underline text-red-600 font-bold 
+                    text-md w-fit cursor-pointer "
+                        onClick={() => setShowCreateList(false)}>
+                        Cancel
                     </div>
                 </div>
 
-                <button className="p-3 bg-black text-white m-3 w-fit disabled:bg-gray-200"
-                    onClick={() => { setShowCreateList(true); setNewListSelected(true) }}
-                    disabled={showCreateList === true}
-                >CREATE NEW LIST</button>
 
+                <div className="flex 2xs:flex-row flex-col 2xs:gap-0 gap-3 items-center ">
+                    <button className="p-3 bg-black text-white rounded-full font-bold text-sm 2xs:mr-3
+                     w-fit disabled:bg-gray-200"
+                        onClick={() => { setShowCreateList(true); setNewListSelected(true) }}
+                        disabled={showCreateList === true}
+                    >CREATE NEW LIST</button>
 
-                {props.update
-                    ?
-                    (<button className="p-3 bg-black text-white m-3 w-fit"
-                        onClick={handleUpdateWishlists}>UPDATE LIST </button>)
-                    :
-                    (<button className="p-3 bg-black text-white m-3 w-fit"
-                        onClick={handleAddToWishlists}>ADD TO LIST</button>)}
+                    {props.update
+                        ?
+                        (<div className="p-3 bg-black text-white rounded-full 
+                            font-bold text-sm w-fit cursor-pointer flex flex-row gap-2 items-center
+                            whitespace-nowrap"
+                            onClick={handleUpdateWishlists}>UPDATE LIST
+                            <FontAwesomeIcon icon={faSave} className="text-[20px]" />
+                        </div>)
+                        :
+                        (<div className="p-3 bg-black text-white rounded-full 
+                            font-bold text-sm w-fit cursor-pointer flex flex-row gap-2 items-center
+                            whitespace-nowrap"
+                            onClick={handleAddToWishlists}>ADD TO LIST
+                            <FontAwesomeIcon icon={faSave} className="text-[20px]" />
+                        </div>)}
+                </div>
             </div>
-
-
         </div>
     </>
 }
@@ -208,7 +251,7 @@ function WishlistModal(props: WishlistModalProps) {
 export default function WishlistContextWrapper({ children }: { children: React.ReactNode }) {
     const [currentItemBrand, setCurrentItemBrand] = useState<string>("");
     const [currentItemName, setCurrentItemName] = useState<string>("");
-    const [currentItemImage, setCurrentItemImage] = useState<string>("");
+    const [currentItemImage, setCurrentItemImage] = useState<string | null>(null);
     const [currentItemID, setCurrentItemID] = useState<string>("");
     const [selectedWishlist, setSelectedWishlist] = useState<Set<string>>(new Set());
     const [showModal, setShowModal] = useState<boolean>(false);
