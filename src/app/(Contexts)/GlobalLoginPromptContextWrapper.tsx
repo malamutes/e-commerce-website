@@ -59,7 +59,7 @@ function GlobalLoginPrompt(props: GlobalLoginPromptProps) {
                     <Link href={"/LoginPage"}
                         onClick={() => {
                             props.setShow(false);
-                            setLogIn(true)
+                            setLogIn(false)
                         }}
                         className="p-3 font-bold text-sm rounded-full 
                     bg-green-800 text-white w-1/2 text-center whitespace-nowrap ">
@@ -77,7 +77,7 @@ function GlobalLoginPrompt(props: GlobalLoginPromptProps) {
                     <Link href={"/LoginPage"}
                         onClick={() => {
                             props.setShow(false);
-                            setLogIn(false)
+                            setLogIn(true)
                         }}
                         className="p-3 font-bold text-sm rounded-full 
                     bg-blue-800 text-white w-1/2 text-center 2xs:whitespace-nowrap

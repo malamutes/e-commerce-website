@@ -16,6 +16,7 @@ import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
+import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
 
 export const HeadlineDropwdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
@@ -86,6 +87,8 @@ export default function WebsiteHeaderLarge() {
     const { cartState } = useContext(ShoppingCartContext);
 
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
+    const { setShowLoginPrompt, setMessage } = useContext(GlobalLoginPromptContext);
+
 
     useEffect(() => {
         if (status === "loading") {
@@ -120,6 +123,16 @@ export default function WebsiteHeaderLarge() {
 
     const handleAccount = () => {
         router.push('/Account');
+    }
+
+    const handleWishlistClick = () => {
+        if (status !== "authenticated") {
+            setMessage("You need to be logged in to wishlist items!");
+            setShowLoginPrompt(true);
+        }
+        else if (status === "authenticated") {
+            router.push('/Wishlist');
+        }
     }
 
     return <>
@@ -227,7 +240,7 @@ export default function WebsiteHeaderLarge() {
                             <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: iconSize }}
                                 className={iconClass} />
 
-                            <Link href={"/Wishlist"}
+                            <div onClick={handleWishlistClick}
                                 className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
                                 <FontAwesomeIcon icon={faBookmark}
                                     style={{ fontSize: iconSize }}
@@ -237,7 +250,7 @@ export default function WebsiteHeaderLarge() {
                                                             place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">
                                     {allWishlistedItems.size}
                                 </div>
-                            </Link>
+                            </div>
 
 
                             <div className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}

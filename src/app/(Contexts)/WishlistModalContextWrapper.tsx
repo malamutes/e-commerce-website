@@ -160,38 +160,41 @@ function WishlistModal(props: WishlistModalProps) {
                     <div className="flex flex-row font-bold text-[18px]">
                         Add item to a wishlist!
                     </div>
-                    {
-                        props.wishListArray.map((wishList) => (
-                            <div key={wishList} className="flex flex-row justify-between items-center rounded-xl p-2" style={{
-                                boxShadow: `0 4px 6px rgba(0, 0, 0, 0.25),
+                    <div className="flex flex-col gap-3 max-h-[500px] overflow-auto p-1.5">
+                        {
+                            props.wishListArray.map((wishList) => (
+                                <div key={wishList} className="flex flex-row justify-between items-center rounded-xl p-2" style={{
+                                    boxShadow: `0 4px 6px rgba(0, 0, 0, 0.25),
                              2.5px -1px 3px rgba(0, 0, 0, 0.1)` }}>
-                                <span key={wishList} className="text-gray-700 truncate">
-                                    {wishList}
-                                </span>
+                                    <span key={wishList} className="text-gray-700 truncate">
+                                        {wishList}
+                                    </span>
 
-                                <div className={'w-[35px] h-[35px] cursor-pointer grid place-items-center'}
-                                    onClick={() => setCurrentlySelectedWishlists((currentlySelectedWishlists) => {
-                                        const returnSet = new Set(currentlySelectedWishlists);
-                                        if (currentlySelectedWishlists.has(wishList)) {
-                                            returnSet.delete(wishList);
-                                        }
-                                        else {
-                                            returnSet.add(wishList)
+                                    <div className={'w-[35px] h-[35px] cursor-pointer grid place-items-center'}
+                                        onClick={() => setCurrentlySelectedWishlists((currentlySelectedWishlists) => {
+                                            const returnSet = new Set(currentlySelectedWishlists);
+                                            if (currentlySelectedWishlists.has(wishList)) {
+                                                returnSet.delete(wishList);
+                                            }
+                                            else {
+                                                returnSet.add(wishList)
 
-                                        }
-                                        return returnSet;
-                                    })}>
-                                    {currentlySelectedWishlists.has(wishList)
-                                        ? (
-                                            <FontAwesomeIcon icon={faCircleCheck} className="text-[25px] " />
-                                        )
-                                        : (
-                                            <FontAwesomeIcon icon={faCircle} className="text-[25px]" />
-                                        )}
+                                            }
+                                            return returnSet;
+                                        })}>
+                                        {currentlySelectedWishlists.has(wishList)
+                                            ? (
+                                                <FontAwesomeIcon icon={faCircleCheck} className="text-[25px] " />
+                                            )
+                                            : (
+                                                <FontAwesomeIcon icon={faCircle} className="text-[25px]" />
+                                            )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    }
+                            ))
+                        }
+                    </div>
+
                 </div>
 
                 <div className={`${showCreateList ? "flex" : "hidden"} flex-col gap-3 p-2`}>
@@ -261,7 +264,7 @@ export default function WishlistContextWrapper({ children }: { children: React.R
 
     useEffect(() => {
         const getWishlistFromDB = async () => {
-            const response = await fetch('/api/Wishlist?requestType=Modal', {
+            const response = await fetch(`/api/Wishlist?requestType=Modal`, {
                 method: "GET",
                 headers: {
                     'Accept': 'application/json'
@@ -271,7 +274,13 @@ export default function WishlistContextWrapper({ children }: { children: React.R
             if (response.ok) {
                 const reply = await response.json()
                 console.log("GETTING WISHLISTED ARRAYS", reply)
-                setWishListArray(reply[0].array_agg);
+                if (reply.length !== 0) {
+                    setWishListArray(reply[0].array_agg);
+                }
+                else {
+                    setWishListArray([]);
+                }
+
             }
             else {
                 console.log(response.statusText)

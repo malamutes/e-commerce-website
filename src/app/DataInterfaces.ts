@@ -57,8 +57,18 @@ interface ProducerOrderHistoryItem {
     orders_items_variant_combination: string[]
 }
 
+interface ProductCardType {
+    product_id: string,
+    product_name: string,
+    product_images: string[],
+    product_sales_category: string[],
+    product_price: number,
+    product_producer: string
+}
+
 export type {
     AddressInterface, DBAddressInterface,
     UserOrderHistory, UserOrderHistoryDetails, UserOrderHistoryDetailsItem,
-    ProducerOrderHistoryItem
+    ProducerOrderHistoryItem,
+    ProductCardType
 };

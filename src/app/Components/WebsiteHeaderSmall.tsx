@@ -17,6 +17,7 @@ import { HeadlineDropwdownMap } from "./WebsiteHeaderLarge";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
+import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
 
 
 const iconSize = "25px";
@@ -121,6 +122,18 @@ export default function WebsiteHeaderSmall() {
 
     const handleAccount = () => {
         router.push('/Account');
+    }
+
+    const { setShowLoginPrompt, setMessage } = useContext(GlobalLoginPromptContext);
+
+    const handleWishlistClick = () => {
+        if (status !== "authenticated") {
+            setMessage("You need to be logged in to wishlist items!");
+            setShowLoginPrompt(true);
+        }
+        else if (status === "authenticated") {
+            router.push('/Wishlist');
+        }
     }
 
 
@@ -230,7 +243,7 @@ export default function WebsiteHeaderSmall() {
 
 
 
-                    <Link href={"/Wishlist"}
+                    <div onClick={handleWishlistClick}
                         className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
                         <FontAwesomeIcon icon={faBookmark}
                             style={{ fontSize: iconSize }} />
@@ -238,7 +251,7 @@ export default function WebsiteHeaderSmall() {
                                 place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">
                             {allWishlistedItems.size}
                         </div>
-                    </Link>
+                    </div>
 
 
 

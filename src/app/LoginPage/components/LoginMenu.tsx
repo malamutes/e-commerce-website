@@ -21,7 +21,6 @@ export default function LoginMenu() {
 
     const router = useRouter();
 
-
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -102,17 +101,17 @@ export default function LoginMenu() {
                 lg:container mx-auto sm:pr-[50px] sm:pl-[50px] lg:pr-0 lg:pl-0 
                 pr-[15px] pl-[25px] min-w-[270px]">
                 <div className='flex flex-row lg:w-5/6 w-full'>
-                    <div className={`w-1/2  ${logIn ? "bg-black" : "bg-gray-400 "} 
-            text-${logIn ? "white" : "black"} p-5 cursor-pointer`}
-                        onClick={() => setLogIn(true)}>
+                    <div className={`w-1/2  ${logIn ? "bg-gray-400" : "bg-black "} 
+            text-${logIn ? "black" : "white"} p-5 cursor-pointer`}
+                        onClick={() => setLogIn(false)}>
                         <h1 className="text-lg font-semibold text-center">
                             FIRST TIME?
                         </h1>
                     </div>
 
-                    <div className={`w-1/2  ${logIn ? "bg-gray-400" : "bg-black"} 
-            text-${logIn ? "black" : "white"}  p-5 cursor-pointer`}
-                        onClick={() => setLogIn(false)}>
+                    <div className={`w-1/2  ${logIn ? "bg-black" : "bg-gray-400"} 
+            text-${logIn ? "white" : "black"}  p-5 cursor-pointer`}
+                        onClick={() => setLogIn(true)}>
                         <h1 className={`text-lg font-semibold text-center`}>
                             SIGN IN HERE!
                         </h1>
@@ -121,7 +120,7 @@ export default function LoginMenu() {
                 </div>
 
                 <div className="lg:w-5/6 w-full h-fit bg-gray-200 p-[3.75%] ">
-                    <div className={`${logIn ? "hidden" : "block"}`}>
+                    <div className={`${logIn ? "block" : "hidden"}`}>
                         <h1 className="text-lg font-semibold ">
                             SIGN IN
                         </h1>
@@ -211,7 +210,7 @@ export default function LoginMenu() {
                         </div>
                     </div>
 
-                    <div className={`${logIn ? "block" : "hidden"}`}>
+                    <div className={`${logIn ? "hidden" : "block"}`}>
                         <h1 className="text-lg font-semibold ">
                             SIGN UP
                         </h1>

@@ -21,11 +21,11 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
     }, [shoppingCart]);
 
 
-    const addToCart = (cartItem: ShoppingCartItem) => {
+    const addItemToCart = (cartItem: ShoppingCartItem) => {
         const itemCartKey = `SKU-${cartItem.itemID}-${cartItem.itemColour}-${cartItem.itemSize}`;
 
         setShoppingCart((prevShoppingCart) => {
-            console.log("SHOPPING CART BLOCK");
+            //console.log("SHOPPING CART BLOCK");
             //stuff here being ran twice
 
             const shoppingCartCopy = { ...prevShoppingCart };
@@ -116,7 +116,7 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
         <ShoppingCartContext.Provider value={{
             cartState: shoppingCart,
             setCartState: setShoppingCart,
-            addItemToCart: addToCart,
+            addItemToCart: addItemToCart,
             removeItemFromCart: removeItemFromCart,
             removeOneItemCountFromCart: removeOneItemCountFromCart,
             setCountAmount: setCountAmount,

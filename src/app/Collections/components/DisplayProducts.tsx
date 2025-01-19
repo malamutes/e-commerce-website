@@ -1,9 +1,10 @@
 "use client";
-import { Product } from "@/app/ProducerDashboard/components/Products";
+
 import ProductCard from "./ProductCard";
+import { ProductCardType } from "@/app/DataInterfaces";
 
 interface DisplayProductProps {
-    categoryProducts: Product[]
+    categoryProducts: ProductCardType[]
 }
 
 export default function DisplayProducts(props: DisplayProductProps) {

@@ -9,7 +9,7 @@ import WishlistBookmark from "@/app/components/WishlistBookmark";
 interface ProductCard {
     product: Product,
     style?: React.CSSProperties,
-    showTags?: boolean
+    showTags?: boolean,
 }
 
 //for now just assume the image aspect ratio is 4:3 and in db it is 800:600px
