@@ -9,7 +9,7 @@ import { Product } from "@/app/ProducerDashboard/components/Products";
 import ProductCard from "@/app/Collections/components/ProductCard";
 import { ShoppingCartContext } from "@/app/(Contexts)/ShoppingCartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faCircleXmark, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface generalItemInfoType {
     itemTitle: string,
@@ -149,129 +149,143 @@ export default function WishlistDetailPage() {
             </div>
 
             <div className={`top-0 left-0 w-screen h-screen 
-                grid place-items-center ${showAddToCartModal ? "fixed " : "hidden"}`}>
+                    grid place-items-center ${showAddToCartModal ? "fixed " : "hidden"}`}>
 
                 <div className="fixed w-screen h-screen bg-black opacity-75 top-0 left-0"
                     onClick={() => setShowAddToCartModal(false)}>
 
                 </div>
-                <div className="w-3/5 flex flex-col gap-5 bg-gray-200 relative p-5 mt-[100px]
-                overflow-auto max-h-[500px]" style={{ zIndex: 1 }}>
-                    <FontAwesomeIcon icon={faCircleXmark}
-                        className="absolute right-0 text-[30px] -translate-y-[60px]"
-                        onClick={() => setShowAddToCartModal(false)}
-                        style={{ filter: 'invert(1)' }} />
-                    <span className="text-center text-xl font-bold">
-                        Add wishlist items to cart!
-                    </span>
 
-                    <button className="bg-black p-3 text-white"
-                        onClick={() => handleAddToCart()}>ADD TO CART</button>
+                <div className="relative 2xl:w-1/2 3xs:w-3/5 w-5/6 min-w-[250px]">
+                    <div className="flex flex-col gap-5 bg-gray-200 p-5
+                    overflow-auto max-h-[500px]" style={{ zIndex: 1 }}>
 
-                    {wishlists.map((product) => (
-                        <div key={product['product_id'] as string} className="flex flex-col">
-                            <span>
-                                {product['product_name'] as string}, {product['product_producer'] as string}
-                            </span>
+                        <span className="text-2xl font-bold bg-gray-300 p-3 rounded-xl">
+                            Add wishlisted items to cart!
+                        </span>
+
+                        <div className="grid md:grid-cols-2 grid-cols-1 gap-y-5 gap-x-10 p-2">
+                            {wishlists.map((product) => (
+                                <div key={product['product_id'] as string} className="flex flex-col gap-1 bg-gray-300 p-3 rounded-xl">
+                                    <div className="flex flex-col gap-1">
+                                        <div>
+                                            <span className="font-bold text-lg">{product['product_name'] as string} </span><br />
+                                            <span className="text-gray-700 italic text-lg">- {product['product_producer'] as string}</span>
+                                        </div>
 
 
-                            <div className={`w-[25px] h-[25px] 
-                            ${addToCartMap.has(product['product_id'] as string) ? "bg-red-900" : "bg-purple-900"}`}
-                                onClick={(() => {
-                                    const newAddToCartMap = new Map(addToCartMap);
-                                    if (newAddToCartMap.has(product['product_id'] as string)) {
-                                        newAddToCartMap.delete(product['product_id'] as string)
-                                    }
-                                    else {
-                                        newAddToCartMap.set(product['product_id'] as string, {
-                                            generalItemInfo: {
-                                                itemBrand: product['product_producer'] as string,
-                                                itemCount: 0 as number,
-                                                itemID: product['product_id'] as string,
-                                                itemImage: (product['product_images'] as string[])[0] as string,
-                                                itemPrice: product['product_price'] as number,
-                                                itemTitle: product['product_name'] as string
-                                            },
-                                            specificItemInfo: {}
-                                        })
-                                    }
-
-                                    setAddToCartMap(newAddToCartMap);
-                                })}
-                            >
-
-                            </div>
-                            {(product['variant_combination'] as []).map((combination, index) => {
-                                // Define local state or other logic here
-                                return (
-                                    <div key={index} className={`
-                                    ${addToCartMap.has(product['product_id'] as string) ?
-                                            "text-gray-600 pointer-events-auto" :
-                                            "text-gray-300 pointer-events-none"}
-                                    `}
-                                    >
-                                        {(combination['colours'] as string[]).map((colour) => {
-                                            return (
-                                                <p
-                                                    key={colour}
-                                                    className={`cursor-pointer border-2 border-black w-fit m-2
-                                                    ${Object.keys((addToCartMap.get(product['product_id'] as string) ?? {}).specificItemInfo ?? {}).includes(combination['size'])
-                                                            && (addToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']].includes(colour) ?? false)
-                                                            ? "text-black font-bold"
-                                                            : ""}`}
-
-                                                    onClick={() => {
-                                                        const newAddToCartMap = new Map(addToCartMap);
-
-                                                        const currentProductInfo = newAddToCartMap.get(product['product_id'] as string);
-                                                        const currentProductVariantCombination = currentProductInfo?.specificItemInfo;
-
-                                                        const generalItemInfo = currentProductInfo?.generalItemInfo ?? {
+                                        <div className="w-fit"
+                                            onClick={(() => {
+                                                const newAddToCartMap = new Map(addToCartMap);
+                                                if (newAddToCartMap.has(product['product_id'] as string)) {
+                                                    newAddToCartMap.delete(product['product_id'] as string)
+                                                }
+                                                else {
+                                                    newAddToCartMap.set(product['product_id'] as string, {
+                                                        generalItemInfo: {
                                                             itemBrand: product['product_producer'] as string,
                                                             itemCount: 0 as number,
                                                             itemID: product['product_id'] as string,
                                                             itemImage: (product['product_images'] as string[])[0] as string,
                                                             itemPrice: product['product_price'] as number,
                                                             itemTitle: product['product_name'] as string
-                                                        }
+                                                        },
+                                                        specificItemInfo: {}
+                                                    })
+                                                }
 
-                                                        if ((newAddToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']] ?? []).includes(colour) ?? false) {
-                                                            newAddToCartMap.set(product['product_id'] as string,
-                                                                {
-                                                                    generalItemInfo: generalItemInfo,
-                                                                    specificItemInfo: {
-                                                                        ...currentProductInfo?.specificItemInfo,
-                                                                        [combination['size']]: currentProductInfo?.specificItemInfo?.[combination['size']].filter(colours => colours !== colour)
-                                                                    }
-                                                                })
-                                                        }
-                                                        else {
-                                                            newAddToCartMap.set(product['product_id'] as string,
-                                                                {
-                                                                    generalItemInfo: generalItemInfo,
-                                                                    specificItemInfo: {
-                                                                        ...currentProductInfo?.specificItemInfo,
-                                                                        [combination['size']]: currentProductInfo?.specificItemInfo?.[combination['size']]
-                                                                            ? [...currentProductInfo.specificItemInfo[combination['size']], colour]
-                                                                            : [colour]
-                                                                    }
-                                                                })
+                                                setAddToCartMap(newAddToCartMap);
+                                            })}
+                                        >
 
-                                                        }
+                                            {addToCartMap.has(product['product_id'] as string)
+                                                ? <FontAwesomeIcon icon={faCheckCircle} className="text-[25px] cursor-pointer" />
+                                                : <FontAwesomeIcon icon={faPlusCircle} className="text-[25px] cursor-pointer" />}
 
-
-                                                        setAddToCartMap(newAddToCartMap);
-                                                    }}>
-                                                    {combination['size']} :{colour}
-                                                </p>
-                                            );
-                                        })}
+                                        </div>
                                     </div>
-                                );
-                            })}
+
+                                    {(product['variant_combination'] as []).map((combination, index) => {
+                                        // Define local state or other logic here
+                                        return (
+                                            <div key={index} className={`
+                                        ${addToCartMap.has(product['product_id'] as string) ?
+                                                    "text-gray-800 pointer-events-auto " :
+                                                    "text-gray-400 pointer-events-none"}
+                                        `}
+                                            >
+                                                {(combination['colours'] as string[]).map((colour) => {
+                                                    return (
+                                                        <p
+                                                            key={colour}
+                                                            className={`cursor-pointer w-fit mb-1 pr-2 pl-2 pt-1 pb-1 rounded-full 
+                                                                border-2 border-black border-opacity-0 hover:border-opacity-100
+                                                        ${Object.keys((addToCartMap.get(product['product_id'] as string) ?? {}).specificItemInfo ?? {}).includes(combination['size'])
+                                                                    && (addToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']].includes(colour) ?? false)
+                                                                    ? "text-black font-bold border-2 border-black border-opacity-100 bg-gray-300"
+                                                                    : ""}`}
+
+                                                            onClick={() => {
+                                                                const newAddToCartMap = new Map(addToCartMap);
+
+                                                                const currentProductInfo = newAddToCartMap.get(product['product_id'] as string);
+                                                                const currentProductVariantCombination = currentProductInfo?.specificItemInfo;
+
+                                                                const generalItemInfo = currentProductInfo?.generalItemInfo ?? {
+                                                                    itemBrand: product['product_producer'] as string,
+                                                                    itemCount: 0 as number,
+                                                                    itemID: product['product_id'] as string,
+                                                                    itemImage: (product['product_images'] as string[])[0] as string,
+                                                                    itemPrice: product['product_price'] as number,
+                                                                    itemTitle: product['product_name'] as string
+                                                                }
+
+                                                                if ((newAddToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']] ?? []).includes(colour) ?? false) {
+                                                                    newAddToCartMap.set(product['product_id'] as string,
+                                                                        {
+                                                                            generalItemInfo: generalItemInfo,
+                                                                            specificItemInfo: {
+                                                                                ...currentProductInfo?.specificItemInfo,
+                                                                                [combination['size']]: currentProductInfo?.specificItemInfo?.[combination['size']].filter(colours => colours !== colour)
+                                                                            }
+                                                                        })
+                                                                }
+                                                                else {
+                                                                    newAddToCartMap.set(product['product_id'] as string,
+                                                                        {
+                                                                            generalItemInfo: generalItemInfo,
+                                                                            specificItemInfo: {
+                                                                                ...currentProductInfo?.specificItemInfo,
+                                                                                [combination['size']]: currentProductInfo?.specificItemInfo?.[combination['size']]
+                                                                                    ? [...currentProductInfo.specificItemInfo[combination['size']], colour]
+                                                                                    : [colour]
+                                                                            }
+                                                                        })
+                                                                }
+                                                                setAddToCartMap(newAddToCartMap);
+                                                            }}>
+                                                            {combination['size']} - {colour}
+                                                        </p>
+                                                    );
+                                                })}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                        <button className="bg-black p-3 text-white rounded-xl"
+                            onClick={() => handleAddToCart()}>ADD TO CART</button>
+
+                    </div>
+
+                    <FontAwesomeIcon icon={faCircleXmark}
+                        className="absolute right-0 text-[35px] top-0 -translate-y-[45px] cursor-pointer"
+                        onClick={() => setShowAddToCartModal(false)}
+                        style={{ filter: 'invert(1)' }}
+                    />
                 </div>
+
             </div>
         </>
     );
