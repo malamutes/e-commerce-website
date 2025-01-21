@@ -30,7 +30,7 @@ export default function GlobalWishlistTrackerContextWrapper({ children }: { chil
 
             }
             else {
-                alert("DIDNT WORK TO GET WISHLISTED ITEMS IN TRACKER CONTEXT")
+                //alert("DIDNT WORK TO GET WISHLISTED ITEMS IN TRACKER CONTEXT")
             }
         }
 

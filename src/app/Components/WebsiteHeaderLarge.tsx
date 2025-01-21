@@ -156,7 +156,7 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                                         </span>
                                     </div>
 
-                                    <div className={props.userIn ? "block" : "hidden"}>
+                                    <div className={props.userIn ? "block " : "hidden"}>
                                         <span>
                                             {session?.user.email}
 
@@ -166,8 +166,8 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
 
                                         <div
                                             className={`absolute ${props.displayUserDropdown ? "block" : "hidden"} 
-                                        left-1/2 transform -translate-x-1/2 pt-[25px] w-full `}>
-                                            <div className="bg-gray-500 flex flex-col text-gray-200 pt-[12.5px]">
+                                        left-1/2 transform -translate-x-1/2 pt-[15px] w-full `}>
+                                            <div className="bg-gray-500 flex flex-col text-gray-200 pt-[12.5px] pb-[12.5px] min-w-[200px]">
                                                 <span className={`${props.dropDownMenuItemClass}`}
                                                     onClick={props.handleAccount}>
                                                     Account

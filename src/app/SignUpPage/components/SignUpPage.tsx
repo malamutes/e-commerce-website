@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { businessLocations, businessTypes } from "@/app/CollectionTypes";
+import Link from "next/link";
 
 export default function SignUpPage() {
     const router = useRouter();
@@ -175,9 +176,10 @@ export default function SignUpPage() {
                     THANK YOU FOR SIGNING UP!
                 </span>
 
-                <button className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full mt-7 
+                <Link href={"/"}
+                    className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full mt-7 
                                                     w-fit ml-auto mr-auto'
-                >START SHOPPING!</button>
+                >START SHOPPING!</Link>
 
                 <button className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full mt-7 
                                                     w-fit ml-auto mr-auto'

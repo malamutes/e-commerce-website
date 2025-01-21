@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { GlobalLoginTypeContext } from '@/app/(Contexts)/GlobalLoginPromptContext';
+import LoginError, { PasswordValidator } from './LoginSignupError';
 
 export default function LoginMenu() {
     const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)
@@ -19,81 +20,109 @@ export default function LoginMenu() {
     const [fName, setFName] = useState("");
     const [lName, setLName] = useState("");
 
+    const [showErrorSignIn, setShowErrorSignIn] = useState(false);
+
     const router = useRouter();
+
+    const [lengthValid, setLengthValid] = useState(false);
+    const [lowercaseValid, setLowercaseValid] = useState(false);
+    const [uppercaseValid, setUppercaseValid] = useState(false);
+    const [numberValid, setNumberValid] = useState(false);
+    const [specialCharValid, setSpecialCharValid] = useState(false);
+
+    //regex stuff done using chat
+    const finalPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,24}$/;
+    const lengthRegex = /^.{8,24}$/;
+    const lowercaseRegex = /(?=.*[a-z])/;
+    const uppercaseRegex = /(?=.*[A-Z])/;
+    const numberRegex = /(?=.*\d)/;
+    const specialCharRegex = /(?=.*[!@#$%^&*(),.?":{}|<>])/;
+
+
+    const handlePasswordChange = (password: string) => {
+        setPassword(password);
+
+        // Instant feedback regex checks
+        setLengthValid(lengthRegex.test(password));
+        setLowercaseValid(lowercaseRegex.test(password));
+        setUppercaseValid(uppercaseRegex.test(password));
+        setNumberValid(numberRegex.test(password));
+        setSpecialCharValid(specialCharRegex.test(password));
+    };
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const loginResult = await signIn('credentials', {
-            redirect: true,
+            redirect: false,
             userEmail: email,
             userPassword: password,
-            callbackUrl: '/'
         });
 
         if (loginResult?.ok) {
-            console.log("Sign in successful!");
-            console.log("CallbackURL", loginResult?.url);
+            router.push('/');
         }
         else {
-            console.log("Status Code", loginResult?.status);
-            console.log("Error:", loginResult?.error);
+            setEmail("");
+            setPassword("");
+            setShowErrorSignIn(true);
         }
     }
 
     const handleSignUpSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('/api/userSignUp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName: fName,
-                    lastName: lName,
-                    email: email,
-                    password: password
+            if (finalPasswordRegex.test(password)) {
+                const response = await fetch('/api/userSignUp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName: fName,
+                        lastName: lName,
+                        email: email,
+                        password: password
+                    })
                 })
-            })
 
-            const reply = await response.json();
+                const reply = await response.json();
 
-            if (response.ok) {
-                const loginResult = await signIn('credentials', {
-                    redirect: false,
-                    userEmail: email,
-                    userPassword: password,
-                });
+                if (response.ok) {
+                    const loginResult = await signIn('credentials', {
+                        redirect: false,
+                        userEmail: email,
+                        userPassword: password,
+                    });
 
-                if (loginResult?.ok) {
-                    console.log("Sign in successful!");
-                    router.push('/SignUpPage');
+                    if (loginResult?.ok) {
+                        console.log("Sign in successful!");
+                        router.push('/SignUpPage');
+                    }
+                    else {
+                        console.log("Status Code", loginResult?.status);
+                        console.log("Error:", loginResult?.error);
+                        alert("Could not sign in!")
+                    }
+
                 }
+
                 else {
-                    console.log("Status Code", loginResult?.status);
-                    console.log("Error:", loginResult?.error);
-                    alert("Could not sign in!")
+                    console.log("Cant sign up.");
+                    console.log("reply:", reply);
+                    //router.push('/ErrorPage');
                 }
 
+                setFName("");
+                setLName("");
+                setEmail("");
+                setPassword("");
             }
-
-            else {
-                console.log("Cant sign up.");
-                console.log("reply:", reply);
-                //router.push('/ErrorPage');
-            }
-
-            setFName("");
-            setLName("");
-            setEmail("");
-            setPassword("");
         }
         catch (error) {
             console.error(error, "Issues with creating account");
         }
     }
-
 
     return <>
         <div className='bg-gray-100'>
@@ -132,8 +161,15 @@ export default function LoginMenu() {
                                 <h1 className="text-2xl font-bold mt-1 ml-auto mr-auto">
                                     ... with Email
                                 </h1>
+
                                 <Form action="text" className='w-10/12'
                                     onSubmit={handleLoginSubmit}>
+
+                                    <LoginError
+                                        show={showErrorSignIn}
+                                        setShow={setShowErrorSignIn}
+                                    />
+
                                     <label htmlFor="email" className="block text-lg font-medium mb-2 mt-5">Email</label>
                                     <input name="Email" type='email'
                                         className='border-solid border-[1.5px] 
@@ -154,6 +190,7 @@ export default function LoginMenu() {
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}
                                         required={true}
                                     />
+
                                     <button className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full 
                                 mt-7 w-fit block mx-auto'
                                         type='submit'
@@ -179,17 +216,17 @@ export default function LoginMenu() {
                                 </h1>
 
                                 <div className=' p-2.5 w-5/6 text-white bg-blue-900 
-                flex justify-between items-center cursor-pointer 
-                hover:bg hover:brightness-150 transition-all duration-300
-                mb-5 mt-10 gap-3' >
+                                    flex justify-between items-center cursor-pointer 
+                                    hover:bg hover:brightness-150 transition-all duration-300
+                                    mb-5 mt-10 gap-3' >
                                     Sign in with Facebook
                                     <FontAwesomeIcon icon={faFacebookF} />
                                 </div>
 
                                 <div className=' p-2.5 w-5/6 text-white bg-red-900
-                flex justify-between items-center cursor-pointer 
-                hover:bg hover:brightness-150 transition-all duration-300
-                mb-5 gap-3' >
+                                    flex justify-between items-center cursor-pointer 
+                                    hover:bg hover:brightness-150 transition-all duration-300
+                                    mb-5 gap-3' >
                                     Sign in with Google
                                     <div>
                                         <FontAwesomeIcon icon={faGoogle} />
@@ -198,9 +235,9 @@ export default function LoginMenu() {
                                 </div>
 
                                 <div className=' p-2.5 w-5/6 text-white bg-cyan-600
-                flex justify-between items-center cursor-pointer 
-                hover:bg hover:brightness-150 transition-all duration-300
-                mb-5 gap-3' >
+                                    flex justify-between items-center cursor-pointer 
+                                    hover:bg hover:brightness-150 transition-all duration-300
+                                    mb-5 gap-3' >
                                     Sign in with Twitter
                                     <FontAwesomeIcon icon={faXTwitter} />
                                 </div>
@@ -276,13 +313,20 @@ export default function LoginMenu() {
                                             placeholder='Password'
                                             required={true}
                                             value={password}
-                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}
+                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handlePasswordChange(event.target.value)}
 
+                                        />
+                                        <PasswordValidator
+                                            lengthValid={lengthValid}
+                                            lowercaseValid={lowercaseValid}
+                                            uppercaseValid={uppercaseValid}
+                                            numberValid={numberValid}
+                                            specialCharValid={specialCharValid}
                                         />
                                     </div>
 
-                                    <button className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full mt-7 
-                                    w-fit ml-auto mr-auto'
+                                    <button className='bg-black text-white pt-3 pb-3 pl-5 pr-5 rounded-full mt-7 
+                                    lg:w-fit w-full ml-auto mr-auto'
                                         type='submit'
                                     >REGISTER</button>
 
@@ -307,17 +351,17 @@ export default function LoginMenu() {
                                 </h1>
 
                                 <div className=' p-2.5 w-5/6 text-white bg-blue-900 
-                flex justify-between items-center cursor-pointer 
-                hover:bg hover:brightness-150 transition-all duration-300
-                mb-2.5 mt-10 gap-3' >
+                                    flex justify-between items-center cursor-pointer 
+                                    hover:bg hover:brightness-150 transition-all duration-300
+                                    mb-2.5 mt-10 gap-3' >
                                     Sign up with Facebook
                                     <FontAwesomeIcon icon={faFacebookF} />
                                 </div>
 
                                 <div className=' p-2.5 w-5/6 text-white bg-red-900
-                flex justify-between items-center cursor-pointer 
-                hover:bg hover:brightness-150 transition-all duration-300
-                mb-2.5 mt-10 gap-3' >
+                                    flex justify-between items-center cursor-pointer 
+                                    hover:bg hover:brightness-150 transition-all duration-300
+                                    mb-2.5 mt-10 gap-3' >
                                     Sign up with Google
                                     <div>
                                         <FontAwesomeIcon icon={faGoogle} />
@@ -326,9 +370,9 @@ export default function LoginMenu() {
                                 </div>
 
                                 <div className=' p-2.5 w-5/6 text-white bg-cyan-600
-                flex justify-between items-center cursor-pointer 
-                hover:bg hover:brightness-150 transition-all duration-300
-                mb-2.5 mt-10 gap-3' >
+                                    flex justify-between items-center cursor-pointer 
+                                    hover:bg hover:brightness-150 transition-all duration-300
+                                    mb-2.5 mt-10 gap-3' >
                                     Sign up with Twitter
                                     <FontAwesomeIcon icon={faXTwitter} />
                                 </div>
@@ -338,6 +382,5 @@ export default function LoginMenu() {
                 </div>
             </div>
         </div>
-
     </>
 }
