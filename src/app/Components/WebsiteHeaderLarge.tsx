@@ -9,12 +9,13 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
+import Searchbar from "./Searchbar";
 
 export const HeadlineDropwdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
@@ -77,6 +78,7 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
 
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
 
+    const [showSearchbar, setShowSearchbar] = useState(false);
 
     useEffect(() => {
         if (status === "loading") {
@@ -191,7 +193,7 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
 
 
                             <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: props.iconSize }}
-                                className={props.iconClass} />
+                                className={props.iconClass} onClick={() => setShowSearchbar(true)} />
 
                             <div onClick={props.handleWishlistClick}
                                 className={` ${props.iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
@@ -225,5 +227,6 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
             <ShoppingCart show={props.showShoppingCart} setShow={props.setShowShoppingCart} />
         </div>
 
+        <Searchbar show={showSearchbar} setShow={setShowSearchbar} />
     </>
 }

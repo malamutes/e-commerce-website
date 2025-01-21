@@ -9,7 +9,8 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { GlobalLoginTypeContext } from '@/app/(Contexts)/GlobalLoginPromptContext';
-import LoginError, { PasswordValidator } from './LoginSignupError';
+import LoginError from './LoginSignupError';
+import { PasswordValidator } from './PasswordValidator';
 
 export default function LoginMenu() {
     const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)

@@ -18,7 +18,7 @@ export default function SignUpPage() {
     const [businessRegistrationNumber, setBusinessRegistrationNumber] = useState("");
     const [businessLocation, setBusinessLocation] = useState("");
 
-    const userTypeSelectClass = "w-[200px] h-[200px] border-2 border-black flex justify-center items-center mx-[25px] cursor-pointer hover:bg-gray-300";
+    const userTypeSelectClass = "3xs:w-[180px] 3xs:h-[180px] w-full h-[100px] border-2 border-black flex justify-center items-center mx-[25px] cursor-pointer hover:bg-gray-300";
 
     const { data: session, status, update } = useSession();
 
@@ -71,13 +71,14 @@ export default function SignUpPage() {
     }
 
     return <>
-        <div className="bg-gray-200 h-screen flex flex-col justify-center items-center ">
-            <div className={`text-center ${userProducer !== null ? "hidden" : "block"}`}>
+        <div className="bg-gray-200 h-fit min-h-[75vh]
+         flex flex-col justify-center items-center min-w-[250px]">
+            <div className={`text-center ${userProducer !== null ? "hidden" : "block"} p-5`}>
                 <span className="text-2xl font-bold">
                     WHAT USER TYPE ARE YOU?
                 </span>
 
-                <div className="flex flex-row mt-[25px]">
+                <div className="flex 3xs:flex-row flex-col items-center gap-y-5 mt-[25px]">
                     <div className={userTypeSelectClass}
                         onClick={() => setUserProducer(false)}>
                         <span>
@@ -95,9 +96,10 @@ export default function SignUpPage() {
 
             </div>
 
-            <div className={`${userProducer === true ? "flex" : "hidden"} flex-col w-1/3
-                justify-center items-center`}>
-                <span>
+            <div className={`${userProducer === true ? "flex" : "hidden"} flex-col justify-center 
+            items-center sm:w-[600px] 2xs:w-5/6 w-full
+                `}>
+                <span className="text-lg font-bold pr-5 pl-5">
                     COMPANY/ RETAIL DETAILS
                 </span>
                 <Form action="text" className='flex lg:flex-col flex-col justify-between w-10/12'
@@ -138,7 +140,7 @@ export default function SignUpPage() {
                             value={businessType}
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                                 setBusinessType(event.target.value)}>
-                            <option value="" selected disabled>Select your business type</option>
+                            <option value="" disabled>Select your business type</option>
                             {businessTypes.map((bType) => (
                                 <option key={bType} value={bType}>{bType}</option>
                             ))}
@@ -149,7 +151,7 @@ export default function SignUpPage() {
                             value={businessLocation}
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
                                 setBusinessLocation(event.target.value)}>
-                            <option value="" selected disabled>Select your business location</option>
+                            <option value="" disabled>Select your business location</option>
                             {businessLocations.map((location) => (
                                 <option key={location} value={location}>{location}</option>
                             ))}
@@ -170,10 +172,10 @@ export default function SignUpPage() {
 
             </div>
 
-            <div className={`${userProducer === false ? "flex" : "hidden"} flex-col w-1/3
+            <div className={`${userProducer === false ? "flex" : "hidden"} flex-col w-full
                 justify-center items-center`}>
-                <span>
-                    THANK YOU FOR SIGNING UP!
+                <span className="font-bold text-lg text-center">
+                    THANKS FOR JOINING US!
                 </span>
 
                 <Link href={"/"}

@@ -15,6 +15,7 @@ import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import { DropdownMenu } from "./WebsiteHeader";
+import { SearchbarSmall } from "./Searchbar";
 
 const iconSize = "25px";
 const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
@@ -46,8 +47,7 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
             {/* for <div> <link image> <div> both divs have the same width so the image is centered
                     with justify between as parent div*/}
 
-
-            <div className={`w-[80vw] overflow-y-scroll max-w-[500px] h-screen ${menuOffCanvas ? "fixed" : "hidden"} 
+            <div className={`2xs:w-[80vw] w-[85vw] min-w-[250px] overflow-y-scroll max-w-[500px] h-screen ${menuOffCanvas ? "fixed" : "hidden"} 
                 bg-white z-20 top-0 left-0 flex flex-col`}>
                 <div className="flex flex-row justify-between">
                     <span className="text-2xl italic p-5">
@@ -58,9 +58,8 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
                         className="cursor-pointer p-5" />
                 </div>
 
-                <span className="text-xl cursor-text p-5">
-                    Search
-                </span>
+                <SearchbarSmall />
+
                 <div className="flex flex-col">
                     {props.headers.map((headline, index) => (
                         <DropdownMenu dropdownTitle={headline} key={index}
@@ -126,10 +125,7 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
                                     onClick={props.handleUserSignOut}>
                                     Sign Out
                                 </span>
-
-
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -137,7 +133,7 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
 
             <Link href={"/"}>
                 <Image src={"/Logo.png"} alt="WebsiteLogo"
-                    width={100} height={100} className="min-w-[100px]" />
+                    width={115} height={115} />
             </Link>
 
 
