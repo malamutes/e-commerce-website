@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import ProductCard from "../Collections/components/ProductCard";
-import { Product } from "../ProducerDashboard/components/Products";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { clampFunc } from "./Carousel";
+import { ProductCardInterface } from "../DataInterfaces";
+import ProductCard from "../Collections/components/ProductCard";
 
 interface MainPageHeaderProps {
-    categoryArray: Product[],
+    categoryArray: ProductCardInterface[],
     categoryTitle: string,
     categories?: boolean
     numItemsDisplay: number
@@ -77,9 +77,9 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                             make it more general by passing in props too but that refractoring can come later when i need to adapt it*/}
                             {props.categories === true ? (
                                 <Link className="w-full aspect-square bg-gray-300 grid place-items-center" key={index}
-                                    href={product['product_producer'] ? "/" : `/Collections?clothingCategory=${product['product_type']}`}> {/* TBA To sort stuff out via brands*/}
+                                    href={product.product_producer ? "/" : `/Collections?clothingCategory=${product.product_type}`}> {/* TBA To sort stuff out via brands*/}
                                     <span>
-                                        {product['product_producer'] as string ?? product['product_type'] as string}
+                                        {product.product_producer ?? product.product_type}
                                     </span>
                                 </Link>
                             ) : (
@@ -102,7 +102,6 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
             rounded-full mx-auto 2xs:mt-[25px] mt-[5px] font-bold text-center"
                 href={urlNavLinkMap[props.categoryTitle]}>
                 SHOP {(props.categoryTitle).toUpperCase()}</Link>
-
         </div>
 
     </>

@@ -21,6 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     SELECT array_agg(wishlist_name) FROM wishlists WHERE user_id = ${session.user.user_id} GROUP BY user_id;
                     `
 
+                    if (data.length === 0) {
+                        return res.status(404).json({ message: "NO WISHLISTS FOUND FOR USER ID" })
+                    }
                     res.status(200).json(data);
 
                 }
@@ -90,14 +93,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // If the error is an instance of Error, you can access the message and stack
                 if (error instanceof Error) {
                     res.status(500).json({
-                        error: 'Failed to fetch data',
+                        error: 'FAILED TO GET WISHLIST',
                         message: error.message,
                         stack: error.stack,  // Stack trace will give you more details on where the error happened
                     });
                 } else {
                     // If the error is not an instance of Error, just log it as a generic object
                     res.status(500).json({
-                        error: 'Failed to fetch data',
+                        error: 'FAILED TO GET WISHLIST',
                         details: JSON.stringify(error),
                     });
                 }
@@ -124,7 +127,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         `;
                     }
 
-                    console.log(req.body);
+                    //console.log(req.body);
 
                     const queryStart = "INSERT INTO wishlists_table (user_id, product_id, wishlist_name) VALUES";
                     const queryEnd = (req.body.wishlistSelected as string[])
@@ -133,11 +136,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             `(${session.user.user_id}, ${req.body.itemID}, '${wishList}')`
                         ).join(', \n')
 
-                    console.log(queryStart + queryEnd);
+                    //console.log(queryStart + queryEnd);
 
                     if (req.body.wishlistSelected.length !== 0) {
                         await sql(queryStart + queryEnd);
-                        return res.status(200).json({ message: "WISHLIST API BACKEND, INSERT SUCCESSFUL " })
+                        return res.status(200).json({ message: "WISHLIST API BACKEND, INSERT SUCCESSFUL INTO WISHLIST TABLE" })
                     }
 
 
@@ -215,14 +218,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                         //console.log(deletedRows, insertedRows);
 
-                        return res.status(200).json({ message: "WISHLIST API BACKEND, INSERT SUCCESSFUL ", data: [deletedRows, insertedRows] })
+                        return res.status(200).json({ message: "WISHLIST API BACKEND, UPDATING ROWS WITH DELETE/INSERT SUCCESSFUL ", data: [deletedRows, insertedRows] })
                     }
                     else {
                         await sql` DELETE FROM wishlists_table
                             WHERE user_id = ${session.user.user_id} AND
-                            product_Id = ${req.body.itemID}`;
+                            product_id = ${req.body.itemID}`;
 
-                        return res.status(200).json({ message: "REMOVED ALL WISHLISTS FROM OBJECT" });
+                        return res.status(200).json({ message: "REMOVED PRODUCT FROM WISHLISTS" });
                     }
 
 

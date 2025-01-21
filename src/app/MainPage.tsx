@@ -6,17 +6,17 @@ import { useSession } from "next-auth/react";
 import Carousel from "./components/Carousel";
 import MainPageHeader from "./components/MainPageHeader";
 import { useEffect, useState } from "react";
-import { Product } from "./ProducerDashboard/components/Products";
 import { useMatchMediaQuery } from "./MatchMediaQuery";
 import WishlistBookmark from "./components/WishlistBookmark";
+import { ProductCardInterface } from "./DataInterfaces";
 
 interface MainProductPageDbData {
-    Best_Sellers: Product[];
-    Clothing: Product[];
-    Exclusive: Product[];
-    New_Arrivals: Product[];
-    Producer: Product[];
-    Sale: Product[];
+    Best_Sellers: ProductCardInterface[];
+    Clothing: ProductCardInterface[];
+    Exclusive: ProductCardInterface[];
+    New_Arrivals: ProductCardInterface[];
+    Producer: ProductCardInterface[];
+    Sale: ProductCardInterface[];
 }
 
 export default function MainPage() {

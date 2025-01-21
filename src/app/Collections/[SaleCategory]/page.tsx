@@ -4,7 +4,7 @@ import { FilterTabSmall } from "../components/FilterTab";
 import DisplayProducts from "../components/DisplayProducts";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Product } from "@/app/ProducerDashboard/components/Products";
+import { ProductCardInterface } from "@/app/DataInterfaces";
 
 export default function Collections() {
     const pathname = useRef(usePathname()).current;
@@ -12,7 +12,7 @@ export default function Collections() {
     const router = useRouter();
 
     const [currCat, setCurrCat] = useState(params?.get('clothingCategory'));
-    const [categoryProducts, setCategoryProducts] = useState<Product[]>([]);
+    const [categoryProducts, setCategoryProducts] = useState<ProductCardInterface[]>([]);
     const [sexFilter, setSexFilter] = useState<string[]>([]);
     const [colourFilter, setColourFilter] = useState<string[]>([]);
     const [sizeFilter, setSizeFilter] = useState<string[]>([]);

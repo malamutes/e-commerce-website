@@ -9,14 +9,12 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
-import { useState, useEffect, SetStateAction, useContext } from "react";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { useEffect, useContext } from "react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
-import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
+import { WebsiteHeaderInterface } from "./WebsiteHeader";
 
 export const HeadlineDropwdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
@@ -31,7 +29,6 @@ interface HeadlineDropdownProps {
     headlineDropdownItems: string[],
     numColumns: Number
 }
-
 
 function HeadlineDropdown(props: HeadlineDropdownProps) {
     return <>
@@ -71,69 +68,25 @@ function HeadlineDropdown(props: HeadlineDropdownProps) {
     </>
 }
 
-export default function WebsiteHeaderLarge() {
-    const iconSize = "25px";
-    const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
-    const dropDownMenuItemClass = "text-white pl-[50px] pt-[12.5px] pb-[12.5px] font-bold text-sm";
 
-    const [userIn, setUserIn] = useState(false);
-    const [displayUserDropdown, setDisplayUserDrowndown] = useState(false);
-
-    const [navDropdown, setNavDropdown] = useState(-1);
-    const [showShoppingCart, setShowShoppingCart] = useState(false);
+export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
 
     const { data: session, status } = useSession();
 
     const { cartState } = useContext(ShoppingCartContext);
 
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
-    const { setShowLoginPrompt, setMessage } = useContext(GlobalLoginPromptContext);
 
 
     useEffect(() => {
         if (status === "loading") {
         } else if (status === "authenticated") {
-            setUserIn(true)
+            props.setUserIn(true)
         } else if (status === "unauthenticated") {
-            setUserIn(false);
+            props.setUserIn(false);
         }
     }, [status]);
 
-    const router = useRouter();
-
-    const loginSubmit = async () => {
-        if (!userIn) {
-            router.push('/LoginPage');
-        }
-    }
-
-    const handleUserSignOut = async () => {
-        try {
-            const logoutResult = await signOut({ callbackUrl: '/' });
-        }
-        catch (error) {
-            console.error("Error signing out:", error);
-        }
-
-    }
-
-    const handleProducerDashboard = async () => {
-        router.push('/ProducerDashboard?tab=Overview');
-    }
-
-    const handleAccount = () => {
-        router.push('/Account');
-    }
-
-    const handleWishlistClick = () => {
-        if (status !== "authenticated") {
-            setMessage("You need to be logged in to wishlist items!");
-            setShowLoginPrompt(true);
-        }
-        else if (status === "authenticated") {
-            router.push('/Wishlist');
-        }
-    }
 
     return <>
         <div style={{ zIndex: 20 }}>
@@ -151,14 +104,14 @@ export default function WebsiteHeaderLarge() {
                             <div key={index}
                                 className="flex flex-row items-center xl:mx-4 lg:mx-3 font-bold"
                                 onClick={() => {
-                                    if (navDropdown === -1) {
-                                        setNavDropdown(index)
+                                    if (props.navDropdown === -1) {
+                                        props.setNavDropdown(index)
                                     }
-                                    else if (navDropdown === index) {
-                                        setNavDropdown(-1)
+                                    else if (props.navDropdown === index) {
+                                        props.setNavDropdown(-1)
                                     }
                                     else {
-                                        setNavDropdown(index)
+                                        props.setNavDropdown(index)
                                     }
                                 }}
                             >
@@ -168,12 +121,12 @@ export default function WebsiteHeaderLarge() {
                                     </span>
                                     <FontAwesomeIcon icon={faAngleDown}
                                         size="1x"
-                                        className={`${iconClass} ${navDropdown === index ? "rotate-180" : "rotate-0"}`} />
+                                        className={`${props.iconClass} ${props.navDropdown === index ? "rotate-180" : "rotate-0"}`} />
                                 </div>
 
                                 <HeadlineDropdown
                                     headline={headline}
-                                    show={navDropdown === index}
+                                    show={props.navDropdown === index}
                                     headlineDropdownItems={HeadlineDropwdownMap[headline]}
                                     numColumns={HeadlineDropwdownMap[headline].length < 6 ?
                                         HeadlineDropwdownMap[headline].length :
@@ -189,45 +142,45 @@ export default function WebsiteHeaderLarge() {
                         <div className="flex flex-row items-center">
                             <div
                                 onMouseEnter={() => {
-                                    if (userIn) {
-                                        setDisplayUserDrowndown(true);
+                                    if (props.userIn) {
+                                        props.setDisplayUserDrowndown(true);
                                     }
                                 }}
-                                onMouseLeave={() => setDisplayUserDrowndown(false)}>
+                                onMouseLeave={() => props.setDisplayUserDrowndown(false)}>
                                 <div className="border-2 border-black p-2 rounded-full cursor-pointer relative"
-                                    onClick={loginSubmit}
+                                    onClick={props.loginSubmit}
                                 >
-                                    <div className={userIn ? "hidden" : "block"}>
+                                    <div className={props.userIn ? "hidden" : "block"}>
                                         <span>
                                             SIGN IN
                                         </span>
                                     </div>
 
-                                    <div className={userIn ? "block" : "hidden"}>
+                                    <div className={props.userIn ? "block" : "hidden"}>
                                         <span>
                                             {session?.user.email}
 
                                         </span>
                                         <FontAwesomeIcon icon={faChevronDown}
-                                            className={`ml-2 ${displayUserDropdown ? "rotate-180" : "rotate-0"}`} />
+                                            className={`ml-2 ${props.displayUserDropdown ? "rotate-180" : "rotate-0"}`} />
 
                                         <div
-                                            className={`absolute ${displayUserDropdown ? "block" : "hidden"} 
+                                            className={`absolute ${props.displayUserDropdown ? "block" : "hidden"} 
                                         left-1/2 transform -translate-x-1/2 pt-[25px] w-full `}>
                                             <div className="bg-gray-500 flex flex-col text-gray-200 pt-[12.5px]">
-                                                <span className={`${dropDownMenuItemClass}`}
-                                                    onClick={handleAccount}>
+                                                <span className={`${props.dropDownMenuItemClass}`}
+                                                    onClick={props.handleAccount}>
                                                     Account
                                                 </span>
 
-                                                <span className={`${dropDownMenuItemClass} 
+                                                <span className={`${props.dropDownMenuItemClass} 
                                                 ${session?.user.isUserProducer === true ? "block" : "hidden"}`}
-                                                    onClick={handleProducerDashboard}>
+                                                    onClick={props.handleProducerDashboard}>
                                                     Producer Dashboard
                                                 </span>
 
-                                                <span className={`${dropDownMenuItemClass}`}
-                                                    onClick={handleUserSignOut}>
+                                                <span className={`${props.dropDownMenuItemClass}`}
+                                                    onClick={props.handleUserSignOut}>
                                                     Sign Out
                                                 </span>
                                             </div>
@@ -237,13 +190,13 @@ export default function WebsiteHeaderLarge() {
                             </div>
 
 
-                            <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: iconSize }}
-                                className={iconClass} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} style={{ fontSize: props.iconSize }}
+                                className={props.iconClass} />
 
-                            <div onClick={handleWishlistClick}
-                                className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
+                            <div onClick={props.handleWishlistClick}
+                                className={` ${props.iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
                                 <FontAwesomeIcon icon={faBookmark}
-                                    style={{ fontSize: iconSize }}
+                                    style={{ fontSize: props.iconSize }}
                                 />
 
                                 <div className="bg-black text-white w-[25px] aspect-square grid 
@@ -253,10 +206,10 @@ export default function WebsiteHeaderLarge() {
                             </div>
 
 
-                            <div className={` ${iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}
-                                onClick={() => setShowShoppingCart(true)}>
+                            <div className={` ${props.iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}
+                                onClick={() => props.setShowShoppingCart(true)}>
                                 <FontAwesomeIcon icon={faShoppingCart}
-                                    style={{ fontSize: iconSize }}
+                                    style={{ fontSize: props.iconSize }}
                                 />
                                 <div className="bg-black text-white w-[25px] aspect-square grid 
                                                             place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">
@@ -269,7 +222,7 @@ export default function WebsiteHeaderLarge() {
                 </div>
             </div>
 
-            <ShoppingCart show={showShoppingCart} setShow={setShowShoppingCart} />
+            <ShoppingCart show={props.showShoppingCart} setShow={props.setShowShoppingCart} />
         </div>
 
     </>

@@ -101,7 +101,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const data = await sql(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery);
 
                     if (data.length === 0) {
-                        return res.status(404).json({ message: 'No Items Found' });
+                        return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });
                     }
 
                     return res.status(200).json(data);

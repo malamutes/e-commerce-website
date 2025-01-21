@@ -75,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
                     // some issues where even it fails it still outputs 200 odd, need to find some error checking
-                    return res.status(200).json({ message: "Update Successful!" });
+                    return res.status(200).json({ message: "Updatibng user profile Successful!" });
                 } catch (error) {
                     console.error(error);
                     // Send error response back

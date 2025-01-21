@@ -35,13 +35,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     GROUP BY orders.orders_id;
                     `;
 
-                    console.log("ORDER DATA RETRIEVED FROM DB", orderReceiptData);
+                    console.log("ORDER DATA RETRIEVED FROM DB FOR CHECKOUT RECEIPT", orderReceiptData);
 
-                    return res.status(200).json({ message: "Order Data retrieved!", data: orderReceiptData })
+                    return res.status(200).json({ message: "ORDER DATA RECEIVED FOR CHECKOUT RECEIPT!", data: orderReceiptData })
                 }
                 catch (error) {
                     console.log("Error:", error);
-                    res.status(500).json({ error: 'Failed to upload order', details: error instanceof Error ? error.message : 'Unknown error' });
+                    res.status(500).json({ error: 'FAILED TO UPLOAD ORDER TO DB', details: error instanceof Error ? error.message : 'Unknown error' });
                 }
             }
         }
@@ -125,12 +125,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         `;
                     }
 
-                    console.log("YIPPIE API END POINT WORKS FOR CHECKOUT!", req.body);
-                    res.status(200).json({ message: 'Order updated successfully' });
+                    console.log("ORDER INFO TO CHECKOUT AND POST TO DB", req.body);
+                    res.status(200).json({ message: 'ORDER POSTED TO DB SUCCESSFULLY!' });
 
                 } catch (error) {
                     console.log("Error:", error);
-                    res.status(500).json({ error: 'Failed to upload order', details: error instanceof Error ? error.message : 'Unknown error' });
+                    res.status(500).json({ error: 'FAILED TO POST ORDER TO DB', details: error instanceof Error ? error.message : 'Unknown error' });
                 }
             }
         }

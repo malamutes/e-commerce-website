@@ -276,7 +276,6 @@ export default function WishlistDetailPage() {
                         </div>
                         <button className="bg-black p-3 text-white rounded-xl"
                             onClick={() => handleAddToCart()}>ADD TO CART</button>
-
                     </div>
 
                     <FontAwesomeIcon icon={faCircleXmark}
@@ -285,7 +284,6 @@ export default function WishlistDetailPage() {
                         style={{ filter: 'invert(1)' }}
                     />
                 </div>
-
             </div>
         </>
     );
