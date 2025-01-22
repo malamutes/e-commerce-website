@@ -5,13 +5,13 @@ import { DashboardTabSmall } from "./staticComponents/DashboardTab";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex flex-col sm:container mx-auto p-5 min-w-[300px]">
+        <div className="flex flex-col sm:container mx-auto p-5 min-w-[300px] mb-[50px]">
             <DashboardTopBar />
             <div className=" sm:hidden block flex flex-row justify-center">
                 <DashboardTabSmall />
             </div>
 
-            <div className={`flex flex-row overflow-hidden h-[750px]`}>
+            <div className={`flex flex-row overflow-hidden max-h-[750px]`}>
                 <div className="w-2/12 sm:block hidden">
                     <DashboardTab />
                 </div>
