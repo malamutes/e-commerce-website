@@ -1,5 +1,7 @@
 export default function Sales() {
     return <>
-        Sales
+        <div className="bg-gray-300 h-[750px] grid place-items-center">
+            <b>TO BE ADDED</b>
+        </div>
     </>
 }

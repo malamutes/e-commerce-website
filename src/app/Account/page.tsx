@@ -190,7 +190,7 @@ export default function AccountPage() {
                     </div>
 
                     <div className="flex flex-col lg:mt-[25px] lg:w-full sm:w-2/3 w-full 
-                    lg:max-h-fit lg:overflow-hidden overflow-y-scroll lg:max-h-fit max-h-[500px] 
+                    lg:max-h-fit lg:overflow-hidden overflow-y-auto lg:max-h-fit max-h-[500px] 
                     pb-[25px] sm:mt-[0px] mt-[50px]">
                         <div className="text-center bg-gray-200 pt-5 pb-5">
                             Addresses
@@ -201,7 +201,7 @@ export default function AccountPage() {
                         </div>
 
                         {/* probably make these input forms when im working on backend again */}
-                        <div className="flex flex-col items-center max-h-[400px] overflow-y-scroll pr-[5px]">
+                        <div className="flex flex-col items-center max-h-[400px] overflow-y-auto pr-[5px]">
                             <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5 mb-5`}
                                 onClick={() => router.push('/Account/Address')}
                             >MANAGE ADDRESS</button>
@@ -224,7 +224,7 @@ export default function AccountPage() {
                     </div>
 
                     <div className="flex flex-col gap-4 pt-[15px] max-h-[1050px] pr-3 pt-3 pb-3
-                    overflow-y-scroll">
+                    overflow-y-auto">
                         {userOrderHistory.map((orderItem) => (
                             <div key={orderItem.orders_id}>
                                 <OrderHistoryCard
