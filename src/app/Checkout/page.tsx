@@ -12,7 +12,7 @@ import { AddressInterface } from "../DataInterfaces";
 import { useState, useEffect, useContext } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { CheckoutShoppingCartItem } from "./components/CheckoutShoppingCartItem";
-import { ShoppingCartContext } from "../ShoppingCartContext";
+import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { useRouter } from "next/navigation";
 
 export const shippingMethods: { [key: string]: number } = {

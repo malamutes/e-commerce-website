@@ -125,6 +125,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         `;
                     }
 
+                    //need to check on negative values too
+                    for (const values of orderItemsValues) {
+                        await sql`
+                        UPDATE variant 
+                        SET variant_stock_count = variant_stock_count - ${values[6]}
+                        WHERE variant_sku =  ${values[2]};
+                        `;
+                    }
+
                     console.log("ORDER INFO TO CHECKOUT AND POST TO DB", req.body);
                     res.status(200).json({ message: 'ORDER POSTED TO DB SUCCESSFULLY!' });
 

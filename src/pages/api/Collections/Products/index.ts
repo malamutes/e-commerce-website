@@ -96,40 +96,69 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     productType,
                     productAudience,
                     productDescription,
-                    productColor,
                     productDetails,
-                    productSize
+                    productVariant,
+                    productID
                 } = req.body;
+
+                console.log("CHECKING ADDING PRODUCT", req.body)
 
                 const sql = neon(process.env.DATABASE_URL!);
 
-                const insertProduct = await sql`
+                await sql`
                     INSERT INTO products (
+                        product_id,
                         product_name, 
                         product_price, 
+                        product_description, 
                         product_type, 
                         product_audience, 
-                        product_description, 
-                        product_colour, 
                         product_details,
-                        product_producer,
-                        product_size,
+                        product_producer
                     ) 
                     VALUES (
-                    ${productName}, 
-                    ${productPrice}, 
-                    ${productType}, 
-                    ${productAudience}, 
-                    ${productDescription}, 
-                    ${JSON.stringify(productColor)}, 
-                    ${productDetails},
-                    ${session.user.business?.businessName},
-                    ${JSON.stringify(productSize)}
-                );
+                        ${productID},
+                        ${productName}, 
+                        ${Number(productPrice)}, 
+                        ${productDescription}, 
+                        ${productType}, 
+                        ${productAudience}, 
+                        ${productDetails},
+                        ${session.user.business?.businessName}
+                    );
                 `;
 
+                let variantDynamicQuery = "";
+
+                Object.keys(productVariant).forEach((size, index, sizes) => {
+                    Object.keys(productVariant[size]).forEach((colour, colourIndex, colours) => {
+                        // Add the values to the query array
+                        variantDynamicQuery += `(${productID}, '${colour}', '${size}', ${productVariant[size][colour]}, 'SKU-${productID}-${colour}-${size}')`;
+
+                        // If it's not the last item, add a comma
+                        if (!(index === sizes.length - 1 && colourIndex === colours.length - 1)) {
+                            variantDynamicQuery += ', ';
+                        }
+                    });
+                });
+
+
+                const variantQuery = `INSERT INTO variant (
+                    product_id, 
+                    variant_colour,
+                    variant_size,
+                    variant_stock_count,
+                    variant_sku
+                    )
+                    VALUES 
+                        ${variantDynamicQuery}
+                    ;`
+
+                //console.log("variantQuery:", variantQuery);
+
+                await sql(variantQuery);
                 // Respond with the data in JSON format
-                res.status(200).json({ message: 'Product updated successfully', insertProduct });
+                res.status(200).json({ message: 'Product updated successfully' });
             } catch (error) {
                 console.log(error)
                 res.status(500).json({ error: 'Failed to upload product', details: (error as Error).message });

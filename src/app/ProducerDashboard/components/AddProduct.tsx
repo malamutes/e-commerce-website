@@ -1,6 +1,15 @@
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { clothingCategory, clothingColours, clothingSizes, sexCategory } from '@/app/CollectionTypes';
+import AddProductVariantComponent from './AddProductVariantComponent';
+import { customAlphabet } from 'nanoid';
+
+
+export interface productVariantInterface {
+    [size: string]: {
+        [colour: string]: number
+    }
+}
 
 export default function AddProduct() {
 
@@ -11,18 +20,18 @@ export default function AddProduct() {
     const [productType, setProductType] = useState('');
     const [productAudience, setProductAudience] = useState('');
     const [productDescription, setProductDescription] = useState('');
-    const [productColor, setProductColor] = useState<string[]>([]);
-    const [productSize, setProductSize] = useState<string[]>([]);
     const [productDetails, setProductDetails] = useState('');
+    const [productVariant, setProductVariant] = useState<productVariantInterface>({});
 
-    const fieldLabelClass = "m-2";
+    const fieldLabelClass = "m-2 font-bold mt-5";
+    const inputFieldClass = "border-2 border-gray-500 p-3 rounded-xl"
 
-    const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
-
-    const [sizeDropdownOpen, setSizeDropdownOpen] = useState(false);
+    const [showVariantForm, setShowVariantForm] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const generateSerial = customAlphabet('0123456789', 6);
 
         const response = await fetch('/api/Collections/Products', {
             method: 'POST',
@@ -35,9 +44,9 @@ export default function AddProduct() {
                 productType: productType,
                 productAudience: productAudience,
                 productDescription: productDescription,
-                productColor: productColor,
                 productDetails: productDetails,
-                productSize: productSize
+                productVariant: productVariant,
+                productID: generateSerial()
             }),
         });
 
@@ -51,40 +60,21 @@ export default function AddProduct() {
         }
     };
 
-    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const justSelectedColor = e.target.value;
-        setProductColor((productColor) => {
-            // If the color is already selected, remove it
-            if (productColor.includes(justSelectedColor)) {
-                return productColor.filter(color => color !== justSelectedColor);  // Filter out the color
-            }
-            // If it's not selected, add it
-            return [...productColor, justSelectedColor];  // Add the new color to the array
-        });
-    };
-
-
-    const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const justSelectedSize = e.target.value;
-        setProductSize((productSize) => {
-            // If the Size is already selected, remove it
-            if (productSize.includes(justSelectedSize)) {
-                return productSize.filter(Size => Size !== justSelectedSize);  // Filter out the Size
-            }
-            // If it's not selected, add it
-            return [...productSize, justSelectedSize];  // Add the new color to the array
-        });
-    };
-
+    useEffect(() => {
+        console.log("ASHDUISAHIUHIUASIUDH", productVariant);
+    }, [productVariant])
 
     return (
         <div >
+            <span className="pl-4 text-xl font-bold pt-3 block">
+                Add Product Form
+            </span>
             <form onSubmit={handleSubmit}
-                className='flex flex-col p-5'
+                className='flex flex-col pl-5 pb-5 pr-5'
             >
                 <label htmlFor="name" className={fieldLabelClass}>Product Name:</label>
                 <input
-                    className='border-2 border-black'
+                    className={inputFieldClass}
                     id="name"
                     type="text"
                     value={productName}
@@ -93,7 +83,7 @@ export default function AddProduct() {
                 />
                 <label htmlFor="price" className={fieldLabelClass}>Product Price:</label>
                 <input
-                    className='border-2 border-black'
+                    className={inputFieldClass}
                     id="price"
                     type="number"
                     value={productPrice}
@@ -102,7 +92,7 @@ export default function AddProduct() {
                 />
                 <label htmlFor="description" className={fieldLabelClass}>Product Description:</label>
                 <textarea
-                    className='border-2 border-black'
+                    className={inputFieldClass}
                     id="description"
                     value={productDescription}
                     onChange={(e) => setProductDescription(e.target.value)}
@@ -113,7 +103,7 @@ export default function AddProduct() {
 
                 <label htmlFor="details" className={fieldLabelClass}>Product Details:</label>
                 <textarea
-                    className='border-2 border-black'
+                    className={inputFieldClass}
                     id="details"
                     value={productDetails}
                     onChange={(e) => setProductDetails(e.target.value)}
@@ -123,7 +113,7 @@ export default function AddProduct() {
                 />
 
                 <label htmlFor="productType" className={fieldLabelClass}>Select Product Type:</label>
-                <select id="productType" name="productType" className="border-2 border-black"
+                <select id="productType" name="productType" className="border-2 border-black p-3 rounded-xl"
                     value={productType}
                     onChange={(e) => setProductType(e.target.value)}>
                     <option value="" disabled>Select Product Type</option>
@@ -133,7 +123,7 @@ export default function AddProduct() {
                 </select>
 
                 <label htmlFor="productAudience" className={fieldLabelClass}>Select Product Audience:</label>
-                <select id="productAudience" name="productAudience" className="border-2 border-black"
+                <select id="productAudience" name="productAudience" className="border-2 border-black p-3 rounded-xl"
                     value={productAudience}
                     onChange={(e) => setProductAudience(e.target.value)}>
                     <option value="" disabled>Select Product Audience</option>
@@ -142,52 +132,43 @@ export default function AddProduct() {
                     ))}
                 </select>
 
-                <label htmlFor="productColor" className={fieldLabelClass}>Select Product Colour(s):</label>
-                <div>
-                    <div className='border-2 border-black p-1' onClick={() =>
-                        setColorDropdownOpen(colorDropdownOpen => !colorDropdownOpen)}>
-                        Select color(s):
-                    </div>
-                    <div className={`${colorDropdownOpen ? "block" : "hidden"} bg-gray-200 p-2 `}>
-                        {clothingColours.map((color) => (
-                            <div key={color} className='flex flex-row'>
-                                <input
-                                    type="checkbox"
-                                    id={color}
-                                    value={color}
-                                    checked={productColor.includes(color)}
-                                    onChange={handleColorChange}
-                                    className="mr-2"
-                                />
-                                <label htmlFor={color}>{color}</label>
+                <span className='font-bold italic text-gray-600 mt-5'>
+                    *ADDING IMAGES FEATURE TBA*
+                </span>
+                <div className='flex flex-col'>
+                    <span className={fieldLabelClass}>
+                        Variant Form
+                    </span>
+                    <span className={`w-fit rounded-xl font-bold p-3 text-md bg-black text-white cursor-pointer ${showVariantForm ? "hidden" : "block"}`}
+                        onClick={() => setShowVariantForm(true)}
+                    >SHOW FORM</span>
+                    <AddProductVariantComponent
+                        show={showVariantForm}
+                        setShow={setShowVariantForm}
+                        productVariant={productVariant}
+                        setProductVariant={setProductVariant}
+                    />
+
+                    <div className='mt-5'>
+                        <span className={fieldLabelClass}>
+                            Current Variants
+                        </span>
+                        {Object.keys(productVariant).map((size) => (
+                            <div key={size} className='pl-3 pt-1'>
+                                <p className='font-bold'>{size}</p>
+                                {Object.keys(productVariant[size]).map((variant, index) => (
+                                    <div key={index}>
+                                        <span className='italic'>{variant}, </span> <span className='text-gray-700'>QTY: {productVariant[size][variant]}</span>
+                                    </div>
+                                ))}
                             </div>
                         ))}
                     </div>
 
-                    <label htmlFor="productSize" className={fieldLabelClass}>Select Product Size(s):</label>
-                    <div className='border-2 border-black p-1' onClick={() =>
-                        setSizeDropdownOpen(sizeDropdownOpen => !sizeDropdownOpen)}>
-                        Select size(s):
-                    </div>
-
-                    <div className={`${sizeDropdownOpen ? "block" : "hidden"} bg-gray-200 p-2 `}>
-                        {clothingSizes.map((size) => (
-                            <div key={size} className='flex flex-row'>
-                                <input
-                                    type="checkbox"
-                                    id={size}
-                                    value={size}
-                                    checked={productSize.includes(size)}
-                                    onChange={handleSizeChange}
-                                    className="mr-2"
-                                />
-                                <label htmlFor={size}>{size}</label>
-                            </div>
-                        ))}
-                    </div>
                 </div>
 
-                <button type="submit" className='bg-blue-500 mt-5 p-2 w-fit'>Add Product</button>
+
+                <button type="submit" className='bg-blue-500 mt-5 p-4 w-full text-white text-lg font-bold rounded-xl'>Add Product</button>
             </form>
         </div>
     );

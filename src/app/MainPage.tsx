@@ -105,10 +105,7 @@ export default function MainPage() {
                         numItemsDisplay={numItemsDisplay}
                     />
                 </div>
-
             </div>
-
-
         </>
     );
 }

@@ -11,90 +11,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const sql = neon(process.env.DATABASE_URL!);
 
+                //REFRESH MATERIALIZED VIEW most_popular_products; 
+                //need to call this somewhere prolly as a cron job to refresh
                 const data = await sql`
-                WITH Exclusive_Category AS (
-                    SELECT product_id, 
-                        product_name, 
-                        product_images, 
-                        product_producer, 
-                        product_price, 
-                        product_sales_category,
-                        'Exclusive_Category' AS category_query
-                    FROM products
-                    WHERE product_sales_category @> '["Exclusive"]'
-                    LIMIT 10
-                ),
-                Sale_Category AS (
-                    SELECT product_id, 
-                        product_name, 
-                        product_images, 
-                        product_producer, 
-                        product_price, 
-                        product_sales_category,
-                        'Sale_Category' AS category_query
-                    FROM products
-                    WHERE product_sales_category @> '["Sale"]'
-                    LIMIT 10
-                ),
-                Best_Sellers_Category AS (
-                    SELECT product_id, 
-                        product_name, 
-                        product_images, 
-                        product_producer, 
-                        product_price, 
-                        product_sales_category,
-                        'Best_Sellers_Category' AS category_query
-                    FROM products
-                    WHERE product_sales_category @> '["Best Sellers"]'
-                    LIMIT 10
-                ),
-                New_Arrivals_Category AS (
-                    SELECT product_id, 
-                        product_name, 
-                        product_images, 
-                        product_producer, 
-                        product_price, 
-                        product_sales_category,
-                        'New_Arrivals_Category' AS category_query
-                    FROM products
-                    ORDER BY product_created_at DESC 
-                LIMIT 10
-                ),
-                Producer_Category AS (
-                    SELECT 
-                        0 AS product_id,
-                        NULL AS product_name,
-                        '[]'::JSONB AS product_images,
-                        product_producer AS product_producer,
-                        0 AS product_price,
-                        '[]'::JSONB AS product_sales_category,
-                        'Producer_Category' AS category_query
-                    FROM products  
-                    GROUP BY product_producer
-                ),
-                Clothing_Category AS (
-                    SELECT 
-                        0 AS product_id,
-                        NULL AS product_name,
-                        '[]'::JSONB AS product_images,
-                        product_type AS product_producer,
-                        0 AS product_price,
-                        '[]'::JSONB AS product_sales_category,
-                        'Clothing_Category' AS category_query
-                    FROM products  
-                    GROUP BY product_type
-                )
-                SELECT * FROM Exclusive_Category
-                UNION ALL
-                SELECT * FROM Sale_Category
-                UNION ALL 
-                SELECT * FROM Best_Sellers_Category
-                UNION ALL 
-                SELECT * FROM New_Arrivals_Category
-                UNION ALL 
-                SELECT * FROM Producer_Category
-                UNION ALL
-                SELECT * FROM Clothing_Category;
+                SELECT * FROM most_popular_products;
                 `;
 
                 if (data.length === 0) {
