@@ -112,11 +112,11 @@ export function FilterTabSmall(props: FilterTabProps) {
         <div className={`fixed h-screen w-screen bg-black 
             ${filterOffCanvas ? "opacity-60" : "hidden"} top-0 left-0`}
             onClick={() => setFilterOffCanvas(false)}
-            style={{ zIndex: 0 }}>
+            style={{ zIndex: 1 }}>
         </div>
 
         <div className={`${filterOffCanvas ? "fixed" : "hidden"}
-            w-5/6 bg-white flex flex-col h-screen top-0 left-0`}
+            w-5/6 bg-white flex flex-col h-screen top-0 left-0 p-3`}
             style={{ zIndex: 50 }}
         >
             <div className="flex justify-between">
@@ -125,8 +125,8 @@ export function FilterTabSmall(props: FilterTabProps) {
                 </span>
 
                 <FontAwesomeIcon icon={faX}
-                    className="cursor-pointer"
-                    onClick={() => setFilterOffCanvas(false)} size="2x" />
+                    className="cursor-pointer text-[25px]"
+                    onClick={() => setFilterOffCanvas(false)} />
             </div>
 
             <div className="flex flex-col mr-5">

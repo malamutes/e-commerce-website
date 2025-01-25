@@ -22,6 +22,9 @@ export default function Collections() {
     const [clothingFilter, setClothingFilter] = useState<string>(params?.get('clothingCategory') ?? "");
     const [queryUrl, setQueryUrl] = useState<string>("");
 
+    const [totalQueryCount, setTotalQueryCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
     useEffect(() => {
         console.log(params?.getAll("size"));
         if (params?.get("saleCheck")) {
@@ -45,7 +48,7 @@ export default function Collections() {
         const sexQuery = sexFilter.map((sex) => `&sex=${sex}`).join("");
         const colQuery = colourFilter.map((colour) => `&colour=${colour}`).join("");
         const sizeQuery = sizeFilter.map((size) => `&size=${size}`).join("");
-        const clothingQuery = `${clothingFilter}`;
+        const clothingQuery = `${clothingFilter !== "" ? clothingFilter : "All"}`;
         const saleQuery = `${onSale !== "" ? "&saleCheck=" : ""}${onSale}`
         const sortQuery = `${sortingFilter !== "" ? "&sortBy=" : ""}${sortingFilter}`
 
@@ -58,7 +61,7 @@ export default function Collections() {
 
     const getFilterResults = async () => {
         const response = await fetch(`
-            /api/${queryUrl}`, {
+            /api/${queryUrl}&pageFetch=${currentPage}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
@@ -70,6 +73,7 @@ export default function Collections() {
         if (response.ok) {
             console.log("Items retrieved successfully!");
             setCategoryProducts(reply);
+            setTotalQueryCount(reply[0].total_count ?? 0);
             console.log(reply);
         }
         else if (response.status === 404) {
@@ -95,50 +99,69 @@ export default function Collections() {
             getFilterResults();
         }
 
-    }, [queryUrl, currCat]);
+    }, [queryUrl, currCat, currentPage]);
 
     return (
-        <div className="flex md:flex-row flex-col mt-[50px] lg:container mx-auto p-5">
-            <div className="w-1/5 mr-[30px] md:block hidden">
-                <FilterTabLarge
-                    sexFilter={sexFilter}
-                    setSexFilter={setSexFilter}
-                    colourFilter={colourFilter}
-                    setColourFilter={setColourFilter}
-                    sizeFilter={sizeFilter}
-                    setSizeFilter={setSizeFilter}
-                    sortingFilter={sortingFilter}
-                    setSortingFilter={setSortingFilter}
-                    onSale={onSale}
-                    setOnSale={setOnSale}
-                    clothingFilter={clothingFilter}
-                    setClothingFilter={setClothingFilter}
-                />
+        <div className="flex flex-col gap-3 items-center  min-w-[250px]">
+            <div className="flex md:flex-row flex-col mt-[50px] lg:container mx-auto p-5">
+                <div className="w-1/5 mr-[30px] md:block hidden">
+                    <FilterTabLarge
+                        sexFilter={sexFilter}
+                        setSexFilter={setSexFilter}
+                        colourFilter={colourFilter}
+                        setColourFilter={setColourFilter}
+                        sizeFilter={sizeFilter}
+                        setSizeFilter={setSizeFilter}
+                        sortingFilter={sortingFilter}
+                        setSortingFilter={setSortingFilter}
+                        onSale={onSale}
+                        setOnSale={setOnSale}
+                        clothingFilter={clothingFilter}
+                        setClothingFilter={setClothingFilter}
+                    />
+                </div>
+
+                <div className="w-full mr-[30px] md:hidden block">
+                    <FilterTabSmall
+                        sexFilter={sexFilter}
+                        setSexFilter={setSexFilter}
+                        colourFilter={colourFilter}
+                        setColourFilter={setColourFilter}
+                        sizeFilter={sizeFilter}
+                        setSizeFilter={setSizeFilter}
+                        sortingFilter={sortingFilter}
+                        setSortingFilter={setSortingFilter}
+                        onSale={onSale}
+                        setOnSale={setOnSale}
+                        clothingFilter={clothingFilter}
+                        setClothingFilter={setClothingFilter}
+                    />
+                </div>
+
+                <div className="md:w-4/5">
+                    <DisplayProducts
+                        categoryProducts={categoryProducts}
+                    />
+                </div>
+
+
             </div>
 
-            <div className="w-full mr-[30px] md:hidden block">
-                <FilterTabSmall
-                    sexFilter={sexFilter}
-                    setSexFilter={setSexFilter}
-                    colourFilter={colourFilter}
-                    setColourFilter={setColourFilter}
-                    sizeFilter={sizeFilter}
-                    setSizeFilter={setSizeFilter}
-                    sortingFilter={sortingFilter}
-                    setSortingFilter={setSortingFilter}
-                    onSale={onSale}
-                    setOnSale={setOnSale}
-                    clothingFilter={clothingFilter}
-                    setClothingFilter={setClothingFilter}
-                />
+            <div className="flex justify-center items-center lg:w-[650px] md:w-2/3 w-5/6 mt-3 mb-10">
+                <div className="flex flex-wrap justify-center gap-3">
+                    {Array(Math.ceil(totalQueryCount / 10)).fill(totalQueryCount).map((numOfPage, index) => (
+                        <div
+                            key={index}
+                            className={`p-3 text-center rounded-full border-2 
+                            border-black cursor-pointer w-[50px] h-[50px] 
+                            ${currentPage === (index + 1) ? "bg-black text-white font-bold" : "hover:bg-gray-300"}`}
+                            onClick={() => setCurrentPage(index + 1)}
+                        >
+                            {index + 1}
+                        </div>
+                    ))}
+                </div>
             </div>
-
-            <div className="md:w-4/5">
-                <DisplayProducts
-                    categoryProducts={categoryProducts}
-                />
-            </div>
-
         </div>
     );
 }

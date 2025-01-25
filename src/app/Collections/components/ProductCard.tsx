@@ -30,7 +30,7 @@ const productSalesIconMap: { [key: string]: IconDefinition } = {
 export default function ProductCard(props: ProductCard) {
 
     return <>
-        <div className="relative">
+        {props.product['product_id'] ? (<div className="relative">
             <Link
                 className="w-fit"
                 href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
@@ -58,7 +58,7 @@ export default function ProductCard(props: ProductCard) {
                         </span>
 
                         <div className={`flex sm:flex-row flex-col mx-auto ${props.showTags === false ? "hidden" : ""}`}>
-                            {(props.product.product_sales_category)
+                            {(props.product.product_sales_category ?? [])
                                 .filter(cat => cat !== 'Regular')
                                 .map((category, index) => (
                                     <div key={index}
@@ -94,7 +94,8 @@ export default function ProductCard(props: ProductCard) {
                 />
             </div>
 
-        </div>
+        </div>) : (null)}
+
 
     </>
 }

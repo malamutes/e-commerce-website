@@ -43,7 +43,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         categoryQuery = "1 = 1";
                     }
 
-                    const baseQuery = `SELECT products.*
+                    const baseQuery = `SELECT products.*,
+                        COUNT(*) OVER() as total_count
                         FROM products
                         INNER JOIN 
                         variant
@@ -97,8 +98,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         sizeColQuery = ' HAVING' + sizeQuery;
                     }
 
-                    console.log(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery);
-                    const data = await sql(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery);
+                    const queryLimit = ` LIMIT 10 OFFSET ${(Number(req.query.pageFetch) - 1) * 10};`
+
+                    console.log(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                    const data = await sql(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
 
                     if (data.length === 0) {
                         return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });
