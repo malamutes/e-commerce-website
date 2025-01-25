@@ -74,10 +74,10 @@ export function DropdownMenu(props: DropdownMenu) {
                 {props.dropdownItems.map((item, index) => {
                     let dynamicUrl: string = "";
                     if (props.dropdownTitle === 'Products') {
-                        dynamicUrl = `/Collections?clothingCategory=${item}`
+                        dynamicUrl = `/Collections?featuredCategory=All&clothingCategory=${item}`
                     }
                     else if (props.dropdownTitle === 'Featured') {
-                        dynamicUrl = `/Collections/${item}?clothingCategory=All`
+                        dynamicUrl = `/Collections/?featuredCategory=${item}&clothingCategory=All`
                     }
                     else {
                         dynamicUrl = ""

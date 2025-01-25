@@ -43,10 +43,10 @@ function HeadlineDropdown(props: HeadlineDropdownProps) {
             {props.headlineDropdownItems.map((item, index) => {
                 let dynamicUrl: string = "";
                 if (props.headline === 'Products') {
-                    dynamicUrl = `/Collections?clothingCategory=${item}`
+                    dynamicUrl = `/Collections?featuredCategory=All&clothingCategory=${item}`
                 }
                 else if (props.headline === 'Featured') {
-                    dynamicUrl = `/Collections/${item}?clothingCategory=All`
+                    dynamicUrl = `/Collections?featuredCategory=${item}&clothingCategory=All`
                 }
                 else {
                     dynamicUrl = ""

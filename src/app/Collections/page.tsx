@@ -12,6 +12,7 @@ export default function Collections() {
     const router = useRouter();
 
     const [currCat, setCurrCat] = useState(params?.get('clothingCategory'));
+    const [currFeatured, setCurrFeatured] = useState(params?.get('featuredCategory'));
     const [categoryProducts, setCategoryProducts] = useState<ProductCardInterface[]>([]);
     const [sexFilter, setSexFilter] = useState<string[]>([]);
     const [colourFilter, setColourFilter] = useState<string[]>([]);
@@ -51,13 +52,15 @@ export default function Collections() {
         const clothingQuery = `${clothingFilter !== "" ? clothingFilter : "All"}`;
         const saleQuery = `${onSale !== "" ? "&saleCheck=" : ""}${onSale}`
         const sortQuery = `${sortingFilter !== "" ? "&sortBy=" : ""}${sortingFilter}`
+        const featuredQuery = `${currFeatured ? `?featuredCategory=${currFeatured}&` : "?"}`
 
-        router.replace(`?clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
+        router.replace(`?${currFeatured ? `featuredCategory=${currFeatured}&` : ""}clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
 
         //console.log(pathname + "?" + sexQuery);
-        setQueryUrl(pathname + "?clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
+        setQueryUrl(pathname + featuredQuery + "clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
+        setCurrentPage(1);
 
-    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter]);
+    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter, currFeatured]);
 
     const getFilterResults = async () => {
         const response = await fetch(`
@@ -79,6 +82,7 @@ export default function Collections() {
         else if (response.status === 404) {
             setCategoryProducts([]);
             console.log("NO ITEMS FOUND FOR COLLECTION QUERY!");
+            setTotalQueryCount(0);
         }
         else {
             console.log(response.status, response.statusText)
@@ -88,8 +92,12 @@ export default function Collections() {
 
     useEffect(() => {
         const clothingCategory = params?.get('clothingCategory');
+        const featuredCategory = params?.get('featuredCategory');
         if (clothingCategory) {
             setClothingFilter(clothingCategory);
+        }
+        if (featuredCategory) {
+            setCurrFeatured(featuredCategory)
         }
     }, [params]);
 

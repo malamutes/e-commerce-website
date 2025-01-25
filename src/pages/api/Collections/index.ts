@@ -9,8 +9,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         case 'GET': {
             if (req.query) {
                 try {
-                    console.log(req.query);
-                    //sex filter array will either be empty array or filled array
+
+                    // #region
+                    /***************************************************************************************
+                    *                            COMMON DYNAMIC QUERIES STUFF
+                    ***************************************************************************************/
+                    // This is the start of a collapsible block
+                    const sql = neon(process.env.DATABASE_URL!);
+
                     let sexArray: string[] = [];
                     let colourArray: string[] = [];
                     let sizeArray: string[] = [];
@@ -21,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     let saleQuery: string = "";
                     let sortQuery: string = "";
                     let categoryQuery: string = "";
+                    let featuredQuery: string = "";
 
                     if (req.query.sex) {
                         sexArray = Array.isArray(req.query.sex) ? req.query.sex : [req.query.sex];
@@ -34,8 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         sizeArray = Array.isArray(req.query.size) ? req.query.size : [req.query.size];
                     }
 
-                    const sql = neon(process.env.DATABASE_URL!);
-
                     if (req.query.clothingCategory !== 'All') {
                         categoryQuery = `products.product_type = '${req.query.clothingCategory}'`
                     }
@@ -44,12 +49,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     const baseQuery = `SELECT products.*,
-                        COUNT(*) OVER() as total_count
-                        FROM products
-                        INNER JOIN 
-                        variant
-                        ON products.product_id = variant.product_id
-                        WHERE ${categoryQuery}`
+                    COUNT(*) OVER() as total_count
+                    FROM products
+                    INNER JOIN 
+                    variant
+                    ON products.product_id = variant.product_id
+                    WHERE ${categoryQuery}`
+
+                    if (req.query.sortBy === 'price_desc') {
+                        sortQuery = ` ORDER BY product_price DESC;`
+                    }
+                    else if (req.query.sortBy === 'price_asc') {
+                        sortQuery = ` ORDER BY product_price ASC;`
+                    }
+                    else if (req.body.sortBy === 'date_desc') {
+                        sortQuery = ` ORDER BY product_created_at DESC;`
+                    }
 
                     if (sexArray.length > 0) {
                         sexQuery = ` AND (product_audience = '${sexArray.join("' OR product_audience = '")}')`;
@@ -71,20 +86,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         }
                     }
 
-                    if (req.query.saleCheck === 'On Sale') {
-                        saleQuery = ` AND (product_sales_category @> '["Sale"]')`
-                    }
-
-                    if (req.query.sortBy === 'price_desc') {
-                        sortQuery = ` ORDER BY product_price DESC;`
-                    }
-                    else if (req.query.sortBy === 'price_asc') {
-                        sortQuery = ` ORDER BY product_price ASC;`
-                    }
-                    else if (req.body.sortBy === 'date_desc') {
-                        sortQuery = ` ORDER BY product_created_at DESC;`
-                    }
-
                     const groupByQuery = ' GROUP BY products.product_id';
                     let sizeColQuery = ``;
 
@@ -99,15 +100,66 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                     const queryLimit = ` LIMIT 10 OFFSET ${(Number(req.query.pageFetch) - 1) * 10};`
+                    // #endregion
 
-                    console.log(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
-                    const data = await sql(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                    /***************************************************************************************
+                    *                            REGULAR COLLECTION QUERY
+                    *
+                    * This handles the collection query when navigating from the PRODUCTS tab in the top 
+                    * navigation bar. It involves multiple `if` conditions to filter products based on 
+                    * the selected collection type and other dynamic parameters.
+                    *
+                    * Ensure the logic below handles all possible cases correctly for the query to return 
+                    * the right set of products.
+                    ***************************************************************************************/
+                    if (req.query.featuredCategory === "All") {
+                        console.log(req.query);
 
-                    if (data.length === 0) {
-                        return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });
+                        if (req.query.saleCheck === 'On Sale') {
+                            saleQuery = ` AND (product_sales_category @> '["Sale"]')`
+                        }
+
+                        console.log(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                        const data = await sql(baseQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+
+                        if (data.length === 0) {
+                            return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });
+                        }
+
+                        return res.status(200).json(data);
                     }
 
-                    return res.status(200).json(data);
+                    /***************************************************************************************
+                    *                            FEATURED COLLECTION QUERY
+                    *
+                    * This handles the collection query when navigating from the FEATUED tab in the top 
+                    * navigation bar. It involves multiple `if` conditions to filter products based on 
+                    * the selected collection type and other dynamic parameters.
+                    *
+                    * Ensure the logic below handles all possible cases correctly for the query to return 
+                    * the right set of products.
+                    ***************************************************************************************/
+                    else {
+                        console.log(req.query, "adsaddasd");
+
+                        if (req.query.saleCheck === 'On Sale') {
+                            saleQuery = ', "Sale"'
+                        }
+
+                        if (req.query.featuredCategory) {
+                            featuredQuery = ` AND product_sales_category @> '["${req.query.featuredCategory}"${saleQuery}]'`
+                        }
+
+                        console.log(baseQuery + featuredQuery + sexQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                        const data = await sql(baseQuery + featuredQuery + sexQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+
+                        if (data.length === 0) {
+                            return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });
+                        }
+
+                        return res.status(200).json(data);
+                    }
+
                 } catch (error) {
                     // Enhance error response
                     const errorDetails = error instanceof Error
