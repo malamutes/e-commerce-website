@@ -10,29 +10,19 @@ import { useMatchMediaQuery } from "./MatchMediaQuery";
 import WishlistBookmark from "./components/WishlistBookmark";
 import { ProductCardInterface } from "./DataInterfaces";
 
-interface MainProductPageDbData {
-    Best_Sellers: ProductCardInterface[];
-    Clothing: ProductCardInterface[];
-    Exclusive: ProductCardInterface[];
-    New_Arrivals: ProductCardInterface[];
-    Producer: ProductCardInterface[];
-    Sale: ProductCardInterface[];
-}
 
 export default function MainPage() {
     const { data: session, status } = useSession();
 
     console.log(session?.user.user_id, session?.user.email, status);
 
-    const [mainPageProducts, setMainPageProducts] = useState<MainProductPageDbData>({
-        Exclusive: [],
-        Best_Sellers: [],
-        Sale: [],
-        New_Arrivals: [],
-        Clothing: [],
-        Producer: [],
+    const [exclusiveProducts, setExclusiveProducts] = useState<ProductCardInterface[]>([]);
+    const [bestSellersProducts, setBestSellersProducts] = useState<ProductCardInterface[]>([]);
+    const [saleProducts, setSaleProducts] = useState<ProductCardInterface[]>([]);
+    const [newArrivalsProducts, setNewArrivalsProducts] = useState<ProductCardInterface[]>([]);
+    const [clothingProducts, setClothingProducts] = useState<ProductCardInterface[]>([]);
+    const [producerProducts, setProducerProducts] = useState<ProductCardInterface[]>([]);
 
-    });
     const [numItemsDisplay, setNumItemsDisplay] = useState(5);
 
     //3 cases, large screen more than 1024 pixels, then from 768 to 1024 and then finally anythting below
@@ -40,28 +30,54 @@ export default function MainPage() {
     const more1024px = useMatchMediaQuery({ size: 1024 });
     const more640px = useMatchMediaQuery({ size: 640 });
 
-    useEffect(() => {
-        const getMainPageProducts = async () => {
-            const response = await fetch('/api/', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'Application/json'
-                }
-            })
+    const getCategoryData = async (category: string) => {
+        const response = await fetch(`/api?category=${category}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
 
-            const reply = await response.json()
+        const reply = await response.json();
 
-            if (response.ok) {
-                console.log(reply)
-                setMainPageProducts(reply);
+        if (response.ok) {
+            if (category === 'Exclusive') {
+                setExclusiveProducts(reply as ProductCardInterface[]);
+            } else if (category === 'Best Sellers') {
+                setBestSellersProducts(reply as ProductCardInterface[]);
+            } else if (category === 'Sale') {
+                setSaleProducts(reply as ProductCardInterface[]);
+            } else if (category === 'New Arrivals') {
+                setNewArrivalsProducts(reply as ProductCardInterface[]);
+            } else if (category === 'Clothing') {
+                setClothingProducts(reply as ProductCardInterface[]);
+            } else if (category === 'Producer') {
+                setProducerProducts(reply as ProductCardInterface[]);
             }
-            else {
-                console.log(response.status, response.statusText)
-            }
+            console.log(reply);
+        } else {
+            console.log(response.status, response.statusText);
+            return [];  // Return an empty array in case of error
         }
+    };
 
-        getMainPageProducts();
+    const getAllCategories = async () => {
+        try {
+            // Call getCategoryData for each category
+            getCategoryData('Exclusive');
+            getCategoryData('Best Sellers');
+            getCategoryData('Sale');
+            getCategoryData('New Arrivals');
+            getCategoryData('Clothing');
+            getCategoryData('Producer');
+        } catch (error) {
+            console.error('Error fetching category data:', error);
+        }
+    };
 
+
+    useEffect(() => {
+        getAllCategories();
     }, []);
 
 
@@ -80,30 +96,67 @@ export default function MainPage() {
         <>
             <div className="container mx-auto" >
                 <div className="w-11/12 xl:w-5/6 mx-auto flex flex-col ">
-                    <MainPageHeader categoryArray={mainPageProducts?.Best_Sellers ?? []}
-                        categoryTitle="New Arrivals"
-                        numItemsDisplay={numItemsDisplay}
-                    />
-                    <MainPageHeader categoryArray={mainPageProducts?.Producer ?? []}
-                        categoryTitle="Popular Brands" categories={true}
-                        numItemsDisplay={numItemsDisplay}
-                    />
-                    <MainPageHeader categoryArray={mainPageProducts?.Exclusive ?? []}
-                        categoryTitle="Exclusive"
-                        numItemsDisplay={numItemsDisplay}
-                    />
-                    <MainPageHeader categoryArray={mainPageProducts?.Best_Sellers ?? []}
-                        categoryTitle="Best Sellers"
-                        numItemsDisplay={numItemsDisplay}
-                    />
-                    <MainPageHeader categoryArray={mainPageProducts?.Sale ?? []}
-                        categoryTitle="On Sale"
-                        numItemsDisplay={numItemsDisplay}
-                    />
-                    <MainPageHeader categoryArray={mainPageProducts?.Clothing ?? []}
-                        categoryTitle="Categories" categories={true}
-                        numItemsDisplay={numItemsDisplay}
-                    />
+                    {exclusiveProducts.length === 0 ? (
+                        <div>Loading Exclusive...</div>
+                    ) : (
+                        <MainPageHeader
+                            categoryArray={exclusiveProducts}
+                            categoryTitle="Exclusive"
+                            numItemsDisplay={numItemsDisplay}
+                        />
+                    )}
+
+                    {bestSellersProducts.length === 0 ? (
+                        <div>Loading Best Sellers...</div>
+                    ) : (
+                        <MainPageHeader
+                            categoryArray={bestSellersProducts}
+                            categoryTitle="Best Sellers"
+                            numItemsDisplay={numItemsDisplay}
+                        />
+                    )}
+
+                    {saleProducts.length === 0 ? (
+                        <div>Loading Sale...</div>
+                    ) : (
+                        <MainPageHeader
+                            categoryArray={saleProducts}
+                            categoryTitle="On Sale"
+                            numItemsDisplay={numItemsDisplay}
+                        />
+                    )}
+
+                    {newArrivalsProducts.length === 0 ? (
+                        <div>Loading New Arrivals...</div>
+                    ) : (
+                        <MainPageHeader
+                            categoryArray={newArrivalsProducts}
+                            categoryTitle="New Arrivals"
+                            numItemsDisplay={numItemsDisplay}
+                        />
+                    )}
+
+                    {clothingProducts.length === 0 ? (
+                        <div>Loading Categories...</div>
+                    ) : (
+                        <MainPageHeader
+                            categoryArray={clothingProducts}
+                            categoryTitle="Categories"
+                            categories={true}
+                            numItemsDisplay={numItemsDisplay}
+                        />
+                    )}
+
+                    {producerProducts.length === 0 ? (
+                        <div>Loading Popular Brands...</div>
+                    ) : (
+                        <MainPageHeader
+                            categoryArray={producerProducts}
+                            categoryTitle="Popular Brands"
+                            categories={true}
+                            numItemsDisplay={numItemsDisplay}
+                        />
+                    )}
                 </div>
             </div>
         </>

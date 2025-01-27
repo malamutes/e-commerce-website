@@ -16,31 +16,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
                 try {
-
                     const sql = neon(process.env.DATABASE_URL!);
-
-                    //need to revisit this query, i was kinda close 
-                    const data = await sql`
-                        SELECT products.*,
-                        jsonb_object_agg(variant_colours.variant_size, variant_colours.variant_combination) AS variant_combination
-                        FROM products
-                        INNER JOIN (
-                        SELECT variant.product_id,
-                        variant.variant_size,
-                        array_agg(DISTINCT variant.variant_colour) AS variant_combination
-                        FROM variant
-                        GROUP BY variant.product_id, variant.variant_size
-                        ) variant_colours
-                        ON products.product_id = variant_colours.product_id
-                        WHERE products.product_id = ${productID}
-                        GROUP BY products.product_id;
+                    if (req.query.relatedProducts === 'true') {
+                        const relatedProducts = await sql`
+                            SELECT product_id FROM products 
+                            WHERE product_producer = (
+                                SELECT product_producer FROM products WHERE product_id = ${productID}
+                            ) 
+                            AND product_id != ${productID} LIMIT 10;
                         `;
 
-                    if (data.length === 0) {
-                        return res.status(400).json({ error: 'No Item Found' });
+                        console.log(relatedProducts);
+                        if (relatedProducts.length === 0) {
+                            return res.status(400).json({ error: 'No Related Items Found' });
+                        }
+
+                        res.status(200).json(relatedProducts);
                     }
 
-                    res.status(200).json(data);
+                    else {
+                        //need to revisit this query, i was kinda close 
+                        const data = await sql`
+                            SELECT products.*,
+                            jsonb_object_agg(variant_colours.variant_size, variant_colours.variant_combination) AS variant_combination
+                            FROM products
+                            INNER JOIN (
+                            SELECT variant.product_id,
+                            variant.variant_size,
+                            array_agg(DISTINCT variant.variant_colour) AS variant_combination
+                            FROM variant
+                            GROUP BY variant.product_id, variant.variant_size
+                            ) variant_colours
+                            ON products.product_id = variant_colours.product_id
+                            WHERE products.product_id = ${productID}
+                            GROUP BY products.product_id;
+                        `;
+
+                        if (data.length === 0) {
+                            return res.status(400).json({ error: 'No Item Found' });
+                        }
+
+                        res.status(200).json(data);
+                    }
+
+
+
                 } catch (error) {
                     res.status(500).json({ error: 'Failed to fetch data' });
                 }

@@ -23,6 +23,9 @@ export default function ProductPage() {
 
     const [currentProduct, setCurrentProduct] = useState<ProductCardDetailsInterface[]>([]);
     const [variantCombination, setVariantCombination] = useState<VariantCombination>({});
+
+    const [relatedProducts, setRelatedProducts] = useState<{ [key: string]: string }[]>([]);
+
     const [currentColours, setCurrentColours] = useState<string[]>([]);
     const searchParams = useSearchParams();
 
@@ -33,6 +36,24 @@ export default function ProductPage() {
 
     const shoppingCartContext = useContext(ShoppingCartContext);
 
+    const getRelatedProducts = async (pId: string) => {
+        const relatedResponse = await fetch(`/api/Collections/Products?relatedProducts=true&productID=${pId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (relatedResponse.ok) {
+            const reply = await relatedResponse.json();
+            console.log(reply);
+            setRelatedProducts(reply);
+        }
+        else {
+            alert("NO related items found!")
+            console.log(relatedResponse.status, relatedResponse.statusText);
+        }
+    }
 
     useEffect(() => {
         const productID = searchParams?.get("productID") ?? "";
@@ -51,6 +72,7 @@ export default function ProductPage() {
                 console.log(reply);
                 setCurrentProduct(reply);
                 setVariantCombination(reply[0]['variant_combination']);
+                getRelatedProducts(productID);
             }
             else {
                 alert("NO item found!")
@@ -59,8 +81,6 @@ export default function ProductPage() {
         };
 
         getProduct();
-
-
     }, [searchParams]);
 
     const addToCartSubmit = (cartItem: ShoppingCartItem) => {
@@ -210,6 +230,15 @@ export default function ProductPage() {
 
                 </div>
             ) : (null)}
+
+            {relatedProducts.length !== 0 ? (
+                <div className="flex flex-row gap-5 bg-red-900">
+                    {relatedProducts.map((ID, index) => (
+                        <div key={ID.product_id as string ?? index}>
+                            {ID.product_id}
+                        </div>
+                    ))}
+                </div>) : (null)}
         </div>
 
     </>
