@@ -19,11 +19,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const sql = neon(process.env.DATABASE_URL!);
                     if (req.query.relatedProducts === 'true') {
                         const relatedProducts = await sql`
-                            SELECT product_id FROM products 
+                            SELECT product_id, product_name, product_images, product_sales_category, product_price, product_producer, product_type FROM products 
                             WHERE product_producer = (
                                 SELECT product_producer FROM products WHERE product_id = ${productID}
                             ) 
-                            AND product_id != ${productID} LIMIT 10;
+                            AND product_id != ${productID} LIMIT 20;
                         `;
 
                         console.log(relatedProducts);

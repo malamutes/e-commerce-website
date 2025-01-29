@@ -16,6 +16,7 @@ import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTracke
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import { DropdownMenu } from "./WebsiteHeader";
 import { SearchbarSmall } from "./Searchbar";
+import { ProductCardInterface } from "../DataInterfaces";
 
 const iconSize = "25px";
 const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
@@ -31,6 +32,7 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
     const { cartState } = useContext(ShoppingCartContext);
 
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
+
 
     useEffect(() => {
         if (status === "loading") {
@@ -54,11 +56,19 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
                         Navigation
                     </span>
                     <FontAwesomeIcon icon={faX} size="2x"
-                        onClick={() => setMenuOffCanvas(false)}
+                        onClick={() => { setMenuOffCanvas(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}
                         className="cursor-pointer p-5" />
                 </div>
 
-                <SearchbarSmall />
+                <SearchbarSmall
+                    searchQuery={props.searchQuery}
+                    setSearchQuery={props.setSearchQuery}
+                    setNoResultMessage={props.setNoResultMessage}
+                    noResultMessage={props.noResultMessage}
+                    setSearchQueryProducts={props.setSearchQueryProducts}
+                    searchQueryProducts={props.searchQueryProducts}
+                    setMenuOffCanvas={setMenuOffCanvas}
+                />
 
                 <div className="flex flex-col">
                     {props.headers.map((headline, index) => (
@@ -71,7 +81,7 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
 
             <div className={`fixed h-screen w-screen bg-black 
             ${menuOffCanvas ? "opacity-60" : "hidden"} top-0 left-0`}
-                onClick={() => setMenuOffCanvas(false)}
+                onClick={() => { setMenuOffCanvas(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}
                 style={{ zIndex: 0 }}>
             </div>
 

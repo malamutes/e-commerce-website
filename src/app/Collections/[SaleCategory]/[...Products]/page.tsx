@@ -8,6 +8,8 @@ import { ShoppingCartContext, ShoppingCartItem } from "@/app/(Contexts)/Shopping
 import ShoppingCart from "@/app/components/ShoppingCart";
 import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";
+import ProductCard from "../../components/ProductCard";
+import MainPageHeader from "@/app/components/MainPageHeader";
 
 export type VariantCombination = {
     [key: string]: string[];
@@ -24,7 +26,7 @@ export default function ProductPage() {
     const [currentProduct, setCurrentProduct] = useState<ProductCardDetailsInterface[]>([]);
     const [variantCombination, setVariantCombination] = useState<VariantCombination>({});
 
-    const [relatedProducts, setRelatedProducts] = useState<{ [key: string]: string }[]>([]);
+    const [relatedProducts, setRelatedProducts] = useState<ProductCardInterface[]>([]);
 
     const [currentColours, setCurrentColours] = useState<string[]>([]);
     const searchParams = useSearchParams();
@@ -102,7 +104,7 @@ export default function ProductPage() {
 
     return <>
         <ShoppingCart show={showCart} setShow={setShowCart} />
-        <div className="lg:container mx-auto mt-[25px]">
+        <div className="lg:container mx-auto mt-[25px] min-w-[275px]">
             {currentProduct[0] ? (
                 <div className=" flex md:flex-row flex-col justify-between xl:w-11/12 w-full mx-auto pl-[25px] pr-[25px]">
                     <div className="w-1/12 flex flex-col lg:block hidden">
@@ -137,7 +139,7 @@ export default function ProductPage() {
                     </div>
 
                     <div className="lg:w-3/12 md:w-4/12 w-full flex flex-col md:mt-[0px] 
-                    mt-[25px] ">
+                    mt-[25px] md:text-start text-center">
                         <span className="text-2xl italic mb-3">
                             {currentProduct[0].product_producer}
                         </span>
@@ -148,7 +150,7 @@ export default function ProductPage() {
 
                         <span className="mb-3">
                             Sizes available In:
-                            <div className="flex flex">
+                            <div className="flex flex-row md:justify-start justify-center">
                                 {Object.keys((currentProduct[0].variant_combination)).map((size, sizeIndex) => (
                                     <div key={sizeIndex} className={`w-[50px] 
                                           h-[50px] bg-transparent border-2 ${selectedSize === size ? "border-black" : "border-gray-400 "} m-2
@@ -162,7 +164,7 @@ export default function ProductPage() {
 
                         <span className="mb-3">
                             Colours available In:
-                            <div className="flex flex-row">
+                            <div className="flex flex-row md:justify-start justify-center">
                                 {(currentColours ?? []).map((colour, colourIndex) => (
                                     <div key={colourIndex} className={`rounded-full m-1 border-2 
                                     ${selectedColour === colour ? "border-black" : "border-gray-400 "} cursor-pointer`}
@@ -179,7 +181,7 @@ export default function ProductPage() {
                         </span>
 
 
-                        <div className="mb-3 md:text-start md:w-full w-3/4">
+                        <div className="mb-3 md:text-start md:w-full w-5/6 md:mx-0 mx-auto">
                             <span>
                                 {currentProduct[0].product_description}
                             </span>
@@ -195,7 +197,7 @@ export default function ProductPage() {
                         </span>
 
                         <button className="bg-green-700 p-4 text-white
-                        w-5/6 mb-3
+                        w-5/6 mb-3 md:mx-0 mx-auto
                         font-bold rounded-full"
                             onClick={() => addToCartSubmit(
                                 {
@@ -214,7 +216,7 @@ export default function ProductPage() {
                             ADD TO CART
                         </button>
 
-                        <div className="w-fit mb-3 ">
+                        <div className="w-fit mb-3 md:mx-0 mx-auto">
                             <WishlistBookmark
                                 currentItemBrand={currentProduct[0].product_producer}
                                 currentItemID={currentProduct[0].product_id}
@@ -231,14 +233,17 @@ export default function ProductPage() {
                 </div>
             ) : (null)}
 
-            {relatedProducts.length !== 0 ? (
-                <div className="flex flex-row gap-5 bg-red-900">
-                    {relatedProducts.map((ID, index) => (
-                        <div key={ID.product_id as string ?? index}>
-                            {ID.product_id}
-                        </div>
-                    ))}
-                </div>) : (null)}
+            <div className="w-5/6 mx-auto mb-[25px]">
+                <MainPageHeader
+                    showButton={false}
+                    categoryTitle="Related Products"
+                    categoryArray={relatedProducts}
+                    categories={false}
+                    headerStyle={"shadow-none"}
+                />
+            </div>
+
+
         </div>
 
     </>

@@ -7,12 +7,14 @@ import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-r
 import { clampFunc } from "./Carousel";
 import { ProductCardInterface } from "../DataInterfaces";
 import ProductCard from "../Collections/components/ProductCard";
+import { useMatchMediaQuery } from "../MatchMediaQuery";
 
 interface MainPageHeaderProps {
     categoryArray: ProductCardInterface[],
     categoryTitle: string,
-    categories?: boolean
-    numItemsDisplay: number
+    categories?: boolean,
+    showButton?: boolean,
+    headerStyle?: string
 }
 
 const urlNavLinkMap: { [key: string]: string } = {
@@ -29,8 +31,25 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
     const [distance, setDistance] = useState(0);
     const totalNumItems = props.categoryArray.length;
 
+
+    const [numItemsDisplay, setNumItemsDisplay] = useState(5);
+    const more1024px = useMatchMediaQuery({ size: 1024 });
+    const more640px = useMatchMediaQuery({ size: 640 });
+
+    // NEED TO COME BACK TO THIS SINCE IT IS A CUSTOM HOOK
+    useEffect(() => {
+        if (more1024px) {
+            setNumItemsDisplay(5);
+        } else if (more640px) {
+            setNumItemsDisplay(3);
+        } else {
+            setNumItemsDisplay(1);
+        }
+    }, [more640px, more1024px]);
+
+
     return <>
-        <div className="flex flex-col mt-[50px] shadow-xl p-[25px] rounded-[25px]">
+        <div className={`flex flex-col mt-[50px] shadow-xl p-[25px] rounded-[25px] ${props.headerStyle} min-w-[250px]`}>
             <div className="flex 2xs:flex-row flex-col items-center justify-between">
                 <div className="w-full p-[25px] sm:block hidden">
                     <hr className="border-t-2 border-gray-300" />
@@ -47,15 +66,15 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                         className={`2xs:pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === 0 ? "text-gray-400" : "cursor-pointer"}
                             md:text-4xl text-3xl`}
                         onClick={() => setDistance(
-                            distance => clampFunc(distance + 100, -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100, 0)
+                            distance => clampFunc(distance + 100, -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100, 0)
                         )} />
                     {/* the 10 here is because i hardcoded backend to take 10 items can be dynamic if needed*/}
 
                     <FontAwesomeIcon icon={faArrowAltCircleRight}
-                        className={`pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100 ? "text-gray-400" : "cursor-pointer"}
+                        className={`pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100 ? "text-gray-400" : "cursor-pointer"}
                             md:text-4xl text-3xl`}
                         onClick={() => setDistance(
-                            distance => clampFunc(distance - 100, -((1 / (props.numItemsDisplay / totalNumItems)) - 1) * 100, 0)
+                            distance => clampFunc(distance - 100, -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100, 0)
                         )} />
 
                 </div>
@@ -70,7 +89,7 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                     {props.categoryArray.map((product, index) => (
                         <div key={index} className="pl-2 pr-2 pt-0 pb-4"
                             style={{
-                                minWidth: `${100 / props.numItemsDisplay}%`,
+                                minWidth: `${100 / numItemsDisplay}%`,
                             }}
                         >
                             {/* we are setting it to 5 items at a time so it will always shift via 50 % we can obv 
@@ -98,10 +117,13 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                 </div>
             </div>
 
-            <Link className="bg-black text-white w-fit p-5 
+            {props.showButton === false ? (null) : (
+                <Link className="bg-black text-white w-fit p-5 
             rounded-full mx-auto 2xs:mt-[25px] mt-[5px] font-bold text-center"
-                href={urlNavLinkMap[props.categoryTitle]}>
-                SHOP {(props.categoryTitle).toUpperCase()}</Link>
+                    href={urlNavLinkMap[props.categoryTitle]}>
+                    SHOP {(props.categoryTitle).toUpperCase()}</Link>
+            )}
+
         </div>
 
     </>

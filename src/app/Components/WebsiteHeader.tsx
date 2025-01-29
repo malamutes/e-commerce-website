@@ -20,6 +20,7 @@ import WebsiteHeaderLarge from "./WebsiteHeaderLarge";
 import { Session } from "next-auth";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
+import { ProductCardInterface } from "../DataInterfaces";
 
 export interface WebsiteHeaderInterface {
     iconSize: string,
@@ -44,7 +45,13 @@ export interface WebsiteHeaderInterface {
     handleAccount: () => void,
     handleWishlistClick: () => void,
 
-    headers: string[]
+    headers: string[];
+    searchQuery: string;
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+    searchQueryProducts: ProductCardInterface[];
+    setSearchQueryProducts: React.Dispatch<React.SetStateAction<ProductCardInterface[]>>;
+    noResultMessage: string;
+    setNoResultMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface DropdownMenu {
@@ -116,6 +123,11 @@ export default function WebsiteHeader() {
 
     const router = useRouter();
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQueryProducts, setSearchQueryProducts] = useState<ProductCardInterface[]>([]);
+    const [noResultMessage, setNoResultMessage] = useState("");
+
+
     const loginSubmit = async () => {
         if (!userIn) {
             router.push('/LoginPage');
@@ -174,6 +186,12 @@ export default function WebsiteHeader() {
                 handleAccount={handleAccount}
                 handleWishlistClick={handleWishlistClick}
                 headers={headers}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setNoResultMessage={setNoResultMessage}
+                noResultMessage={noResultMessage}
+                setSearchQueryProducts={setSearchQueryProducts}
+                searchQueryProducts={searchQueryProducts}
             />
 
             <WebsiteHeaderSmall
@@ -194,9 +212,13 @@ export default function WebsiteHeader() {
                 handleAccount={handleAccount}
                 handleWishlistClick={handleWishlistClick}
                 headers={headers}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setNoResultMessage={setNoResultMessage}
+                noResultMessage={noResultMessage}
+                setSearchQueryProducts={setSearchQueryProducts}
+                searchQueryProducts={searchQueryProducts}
             />
-
         </div>
-
     </>
 }

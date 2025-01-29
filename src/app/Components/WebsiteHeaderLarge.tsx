@@ -227,6 +227,15 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
             <ShoppingCart show={props.showShoppingCart} setShow={props.setShowShoppingCart} />
         </div>
 
-        <Searchbar show={showSearchbar} setShow={setShowSearchbar} />
+        <Searchbar
+            show={showSearchbar}
+            setShow={setShowSearchbar}
+            searchQuery={props.searchQuery}
+            setSearchQuery={props.setSearchQuery}
+            setNoResultMessage={props.setNoResultMessage}
+            noResultMessage={props.noResultMessage}
+            setSearchQueryProducts={props.setSearchQueryProducts}
+            searchQueryProducts={props.searchQueryProducts}
+        />
     </>
 }

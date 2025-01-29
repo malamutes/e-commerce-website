@@ -23,12 +23,8 @@ export default function MainPage() {
     const [clothingProducts, setClothingProducts] = useState<ProductCardInterface[]>([]);
     const [producerProducts, setProducerProducts] = useState<ProductCardInterface[]>([]);
 
-    const [numItemsDisplay, setNumItemsDisplay] = useState(5);
-
     //3 cases, large screen more than 1024 pixels, then from 768 to 1024 and then finally anythting below
     // NEED TO COME BACK TO THIS SINCE IT IS A CUSTOM HOOK
-    const more1024px = useMatchMediaQuery({ size: 1024 });
-    const more640px = useMatchMediaQuery({ size: 640 });
 
     const getCategoryData = async (category: string) => {
         const response = await fetch(`/api?category=${category}`, {
@@ -80,18 +76,6 @@ export default function MainPage() {
         getAllCategories();
     }, []);
 
-
-    // NEED TO COME BACK TO THIS SINCE IT IS A CUSTOM HOOK
-    useEffect(() => {
-        if (more1024px) {
-            setNumItemsDisplay(5);
-        } else if (more640px) {
-            setNumItemsDisplay(3);
-        } else {
-            setNumItemsDisplay(1);
-        }
-    }, [more640px, more1024px]);
-
     return (
         <>
             <div className="container mx-auto" >
@@ -102,7 +86,6 @@ export default function MainPage() {
                         <MainPageHeader
                             categoryArray={exclusiveProducts}
                             categoryTitle="Exclusive"
-                            numItemsDisplay={numItemsDisplay}
                         />
                     )}
 
@@ -112,7 +95,6 @@ export default function MainPage() {
                         <MainPageHeader
                             categoryArray={bestSellersProducts}
                             categoryTitle="Best Sellers"
-                            numItemsDisplay={numItemsDisplay}
                         />
                     )}
 
@@ -122,7 +104,6 @@ export default function MainPage() {
                         <MainPageHeader
                             categoryArray={saleProducts}
                             categoryTitle="On Sale"
-                            numItemsDisplay={numItemsDisplay}
                         />
                     )}
 
@@ -132,7 +113,6 @@ export default function MainPage() {
                         <MainPageHeader
                             categoryArray={newArrivalsProducts}
                             categoryTitle="New Arrivals"
-                            numItemsDisplay={numItemsDisplay}
                         />
                     )}
 
@@ -143,7 +123,6 @@ export default function MainPage() {
                             categoryArray={clothingProducts}
                             categoryTitle="Categories"
                             categories={true}
-                            numItemsDisplay={numItemsDisplay}
                         />
                     )}
 
@@ -154,7 +133,6 @@ export default function MainPage() {
                             categoryArray={producerProducts}
                             categoryTitle="Popular Brands"
                             categories={true}
-                            numItemsDisplay={numItemsDisplay}
                         />
                     )}
                 </div>

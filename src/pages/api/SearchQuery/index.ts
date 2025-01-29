@@ -12,13 +12,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const sql = neon(process.env.DATABASE_URL!);
 
                 const queryData = await sql`
-                    SELECT product_name 
+                    SELECT product_name, product_id, product_images, product_sales_category, product_price, product_producer, product_type
                     FROM products 
-                    WHERE product_name ILIKE ${`%${req.query.searchBarQuery}%`};
+                    WHERE product_name ILIKE ${`%${req.query.searchBarQuery}%`} LIMIT 5;
                 `
 
                 console.log("SEARCH BAR QUERY OUTPUT", queryData)
-                res.status(200).json({ message: "THIS IS THE SEARCHING QUERY BACKEND POINT", data: queryData });
+                res.status(200).json(queryData);
 
             } catch (error) {
                 console.error("Error details:", error);

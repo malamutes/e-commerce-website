@@ -5,11 +5,14 @@ import { faTrophy, faCrown, faTags, IconDefinition, faBoxOpen } from "@fortaweso
 import Link from "next/link";
 import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";
+import { SetStateAction } from "react";
 
 interface ProductCard {
     product: ProductCardInterface,
     style?: React.CSSProperties,
     showTags?: boolean,
+    seachBarSetShow?: React.Dispatch<SetStateAction<boolean>>;
+    seachBarQuery?: React.Dispatch<SetStateAction<string>>
 }
 
 //for now just assume the image aspect ratio is 4:3 and in db it is 800:600px
@@ -34,7 +37,14 @@ export default function ProductCard(props: ProductCard) {
             <Link
                 className="w-fit"
                 href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
-                style={props.style}>
+                style={props.style}
+                onClick={() => {
+                    if (props.seachBarSetShow && props.seachBarQuery) {
+                        props.seachBarSetShow(false);
+                        props.seachBarQuery("")
+                    }
+                }}
+            >
 
                 <div className="flex flex-col text-center w-fit mx-auto
                 max-w-[6000px] shadow-lg cursor-pointer bg-gray-300">
