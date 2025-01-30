@@ -236,6 +236,8 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
             noResultMessage={props.noResultMessage}
             setSearchQueryProducts={props.setSearchQueryProducts}
             searchQueryProducts={props.searchQueryProducts}
+            searchQueryTotalCount={props.searchQueryTotalCount}
+            setSearchQueryTotalCount={props.setSearchQueryTotalCount}
         />
     </>
 }

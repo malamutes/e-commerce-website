@@ -14,11 +14,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const queryData = await sql`
                     SELECT product_name, product_id, product_images, product_sales_category, product_price, product_producer, product_type
                     FROM products 
-                    WHERE product_name ILIKE ${`%${req.query.searchBarQuery}%`} LIMIT 5;
+                    WHERE product_name ILIKE ${`%${req.query.searchBarQuery}%`} 
+                    OR product_producer ILIKE ${`%${req.query.searchBarQuery}%`} LIMIT 5;
+                `
+                const totalCountQuery = await sql`
+                    SELECT COUNT(*)
+                    FROM products 
+                    WHERE product_name ILIKE ${`%${req.query.searchBarQuery}%`} 
+                    OR product_producer ILIKE ${`%${req.query.searchBarQuery}%`};
                 `
 
-                console.log("SEARCH BAR QUERY OUTPUT", queryData)
-                res.status(200).json(queryData);
+                const totalCount = totalCountQuery[0]?.count || 0;
+                console.log("SEARCH BAR QUERY OUTPUT", queryData, totalCount)
+                res.status(200).json({ queryData, totalCount, });
 
             } catch (error) {
                 console.error("Error details:", error);

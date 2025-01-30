@@ -17,11 +17,14 @@ interface SearchbarProps {
     setSearchQueryProducts: React.Dispatch<React.SetStateAction<ProductCardInterface[]>>;
     noResultMessage: string;
     setNoResultMessage: React.Dispatch<React.SetStateAction<string>>;
+    searchQueryTotalCount: number;
+    setSearchQueryTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const handleSearch = async (searchQuery: string,
     setSearchBarQueryProducts: React.Dispatch<SetStateAction<ProductCardInterface[]>>,
-    setNoResultMessage: React.Dispatch<SetStateAction<string>>) => {
+    setNoResultMessage: React.Dispatch<SetStateAction<string>>,
+    setSearchQueryTotalCount: React.Dispatch<SetStateAction<number>>) => {
     const response = await fetch(`/api/SearchQuery?searchBarQuery=${searchQuery}`, {
         method: "GET",
         headers: {
@@ -31,8 +34,10 @@ const handleSearch = async (searchQuery: string,
 
     if (response.ok) {
         const reply = await response.json();
-        setSearchBarQueryProducts(reply);
-        if (reply.length === 0) {
+        setSearchBarQueryProducts(reply.queryData);
+        setSearchQueryTotalCount(reply.totalCount);
+        console.log(reply);
+        if (reply.queryData.length === 0) {
             setNoResultMessage("No search results found!");
         }
         else {
@@ -47,10 +52,11 @@ const handleSearch = async (searchQuery: string,
 
 const handleEnterSearch = (event: React.KeyboardEvent, searchQuery: string,
     setSearchBarQueryProducts: React.Dispatch<SetStateAction<ProductCardInterface[]>>,
-    setNoResultMessage: React.Dispatch<SetStateAction<string>>) => {
+    setNoResultMessage: React.Dispatch<SetStateAction<string>>,
+    setSearchQueryTotalCount: React.Dispatch<SetStateAction<number>>) => {
     if (event.key === "Enter") {
         event.preventDefault()
-        handleSearch(searchQuery, setSearchBarQueryProducts, setNoResultMessage);
+        handleSearch(searchQuery, setSearchBarQueryProducts, setNoResultMessage, setSearchQueryTotalCount);
     }
 }
 
@@ -59,7 +65,7 @@ export default function Searchbar(props: SearchbarProps) {
         <div className={`w-screen fixed h-screen top-0 left-0 bg-black bg-opacity-50
             ${props.show ? "lg:block hidden" : "hidden"} `}
             onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
-            <div className="h-[50vh] bg-white flex flex-col"
+            <div className="h-[51vh] bg-white flex flex-col"
                 onClick={(event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()}>
                 <div className="bg-gray-200 w-full">
                     <div className="w-1/2 flex flex-row mx-auto p-5 gap-5 justify-center items-center">
@@ -71,23 +77,23 @@ export default function Searchbar(props: SearchbarProps) {
                                 value={props.searchQuery}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setSearchQuery(event.target.value)}
                                 style={{ boxShadow: "2.5px 2.5px 5px rgba(0,0,0,0.1)" }}
-                                onKeyDown={(event: React.KeyboardEvent) => handleEnterSearch(event, props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage)}
+                                onKeyDown={(event: React.KeyboardEvent) => handleEnterSearch(event, props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage, props.setSearchQueryTotalCount)}
                             />
                             <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 className="absolute right-5 top-1/2 transform -translate-y-1/2 text-[18px]
                             text-gray-500 cursor-pointer hover:scale-125 ease-in-out duration-500"
-                                onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage)}
+                                onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage, props.setSearchQueryTotalCount)}
                             />
                         </div>
                         <FontAwesomeIcon icon={faSquareXmark} className="text-[40px] cursor-pointer"
                             onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }} />
                     </div>
                 </div>
-                <div className="font-bold text-xl mx-auto xl:w-[1000px] w-[850px] mt-[15px] pl-2">
+                <div className="font-bold text-xl mx-auto xl:w-[1000px] w-[900px] mt-[15px] pl-2">
                     {props.noResultMessage === "FOUND" ? "TOP SEARCH RESULTS" : ""}
                 </div>
-                <div className="xl:w-[1000px] w-[850px] p-2 flex flex-row gap-10 justify-center mx-auto">
+                <div className="xl:w-[1000px] w-[900px] p-2 flex flex-row gap-10 justify-center mx-auto">
                     {(props.searchQueryProducts && props.searchQueryProducts.length !== 0) ? props.searchQueryProducts.map((product) => (
                         <ProductCard
                             key={product.product_id}
@@ -103,6 +109,15 @@ export default function Searchbar(props: SearchbarProps) {
                         </div>
                     )}
                 </div>
+                {(props.searchQueryProducts && props.searchQueryProducts.length !== 0) ? (
+                    <div className="mt-3 text-center">
+                        <Link className="font-bold text-lg hover:underline"
+                            href={`/Collections?searchBarQuery=${props.searchQuery}`}
+                            onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
+                            VIEW ALL SEARCH RESULTS ({props.searchQueryTotalCount})
+                        </Link>
+                    </div>
+                ) : (null)}
             </div>
         </div>
     </>
@@ -115,7 +130,9 @@ interface SearchBarSmallProps {
     setSearchQueryProducts: React.Dispatch<React.SetStateAction<ProductCardInterface[]>>;
     noResultMessage: string;
     setNoResultMessage: React.Dispatch<React.SetStateAction<string>>;
-    setMenuOffCanvas: React.Dispatch<React.SetStateAction<boolean>>
+    setMenuOffCanvas: React.Dispatch<React.SetStateAction<boolean>>;
+    searchQueryTotalCount: number;
+    setSearchQueryTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function SearchbarSmall(props: SearchBarSmallProps) {
@@ -135,13 +152,13 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
                                 value={props.searchQuery}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setSearchQuery(event.target.value)}
                                 style={{ boxShadow: "2.5px 2.5px 5px rgba(0,0,0,0.1)" }}
-                                onKeyDown={(event: React.KeyboardEvent) => handleEnterSearch(event, props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage)}
+                                onKeyDown={(event: React.KeyboardEvent) => handleEnterSearch(event, props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage, props.setSearchQueryTotalCount)}
                             />
                             <FontAwesomeIcon
                                 icon={faMagnifyingGlass}
                                 className="absolute right-5 top-1/2 transform -translate-y-1/2 text-[18px]
                             text-gray-500 cursor-pointer hover:scale-125 ease-in-out duration-500"
-                                onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage)}
+                                onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage, props.setSearchQueryTotalCount)}
                             />
                         </div>
                     </div>
@@ -174,7 +191,15 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
                                 {(props.noResultMessage === "" || props.noResultMessage === "FOUND") ? "Make a search now!" : props.noResultMessage}
                             </div>
                         )}
+                        {(props.searchQueryProducts && props.searchQueryProducts.length !== 0) ? (
+                            <Link className="font-bold text-lg hover:underline"
+                                href={`/Collections?searchBarQuery=${props.searchQuery}`}
+                                onClick={() => { props.setMenuOffCanvas(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
+                                VIEW ALL SEARCH RESULTS ({props.searchQueryTotalCount})
+                            </Link>
+                        ) : (null)}
                     </div>
+
                 </div>
 
             </div>

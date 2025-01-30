@@ -13,6 +13,7 @@ export default function Collections() {
 
     const [currCat, setCurrCat] = useState(params?.get('clothingCategory'));
     const [currFeatured, setCurrFeatured] = useState(params?.get('featuredCategory'));
+    const [searchBarQuery, setSearchBarQuery] = useState(params?.get('searchBarQuery'));
     const [categoryProducts, setCategoryProducts] = useState<ProductCardInterface[]>([]);
     const [sexFilter, setSexFilter] = useState<string[]>([]);
     const [colourFilter, setColourFilter] = useState<string[]>([]);
@@ -52,15 +53,16 @@ export default function Collections() {
         const clothingQuery = `${clothingFilter !== "" ? clothingFilter : "All"}`;
         const saleQuery = `${onSale !== "" ? "&saleCheck=" : ""}${onSale}`
         const sortQuery = `${sortingFilter !== "" ? "&sortBy=" : ""}${sortingFilter}`
-        const featuredQuery = `${currFeatured ? `?featuredCategory=${currFeatured}&` : "?"}`
+        const featuredQuery = `${currFeatured ? `featuredCategory=${currFeatured}&` : ""}`
+        const searchQuery = `${searchBarQuery ? `?searchBarQuery=${searchBarQuery}&` : "?"}`
 
-        router.replace(`?${currFeatured ? `featuredCategory=${currFeatured}&` : ""}clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
+        router.replace(`?${searchBarQuery ? `searchBarQuery=${searchBarQuery}&` : ""}${currFeatured ? `featuredCategory=${currFeatured}&` : ""}clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
 
         //console.log(pathname + "?" + sexQuery);
-        setQueryUrl(pathname + featuredQuery + "clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
+        setQueryUrl(pathname + searchQuery + featuredQuery + "clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
         setCurrentPage(1);
 
-    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter, currFeatured]);
+    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter, currFeatured, searchBarQuery]);
 
     const getFilterResults = async () => {
         const response = await fetch(`

@@ -52,6 +52,8 @@ export interface WebsiteHeaderInterface {
     setSearchQueryProducts: React.Dispatch<React.SetStateAction<ProductCardInterface[]>>;
     noResultMessage: string;
     setNoResultMessage: React.Dispatch<React.SetStateAction<string>>;
+    searchQueryTotalCount: number,
+    setSearchQueryTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface DropdownMenu {
@@ -126,7 +128,7 @@ export default function WebsiteHeader() {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchQueryProducts, setSearchQueryProducts] = useState<ProductCardInterface[]>([]);
     const [noResultMessage, setNoResultMessage] = useState("");
-
+    const [searchQueryTotalCount, setSearchQueryTotalCount] = useState(0);
 
     const loginSubmit = async () => {
         if (!userIn) {
@@ -192,6 +194,8 @@ export default function WebsiteHeader() {
                 noResultMessage={noResultMessage}
                 setSearchQueryProducts={setSearchQueryProducts}
                 searchQueryProducts={searchQueryProducts}
+                searchQueryTotalCount={searchQueryTotalCount}
+                setSearchQueryTotalCount={setSearchQueryTotalCount}
             />
 
             <WebsiteHeaderSmall
@@ -218,6 +222,8 @@ export default function WebsiteHeader() {
                 noResultMessage={noResultMessage}
                 setSearchQueryProducts={setSearchQueryProducts}
                 searchQueryProducts={searchQueryProducts}
+                searchQueryTotalCount={searchQueryTotalCount}
+                setSearchQueryTotalCount={setSearchQueryTotalCount}
             />
         </div>
     </>
