@@ -5,6 +5,9 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ProductCardInterface } from "../DataInterfaces";
 import LoadingComponent from "../components/LoadingComponent";
+import PaginationComponent from "./components/PaginationComponent";
+
+const NUM_ITEMS_PER_PAGE = 12;
 
 export default function Collections() {
     const pathname = useRef(usePathname()).current;
@@ -24,7 +27,7 @@ export default function Collections() {
     const [clothingFilter, setClothingFilter] = useState<string>(params?.get('clothingCategory') ?? "");
     const [queryUrl, setQueryUrl] = useState<string>("");
 
-    const [totalQueryCount, setTotalQueryCount] = useState(0);
+    const [numOfPages, setNumOfPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
     const [showLoadingUI, setShowLoadingUI] = useState(true);
@@ -81,13 +84,13 @@ export default function Collections() {
         if (response.ok) {
             console.log("Items retrieved successfully!");
             setCategoryProducts(reply);
-            setTotalQueryCount(reply[0].total_count ?? 0);
+            setNumOfPages(Math.ceil(reply[0].total_count / NUM_ITEMS_PER_PAGE) ?? 0);
             console.log(reply);
         }
         else if (response.status === 404) {
             setCategoryProducts([]);
             console.log("NO ITEMS FOUND FOR COLLECTION QUERY!");
-            setTotalQueryCount(0);
+            setNumOfPages(0);
         }
         else {
             console.log(response.status, response.statusText)
@@ -166,21 +169,11 @@ export default function Collections() {
                                 <DisplayProducts
                                     categoryProducts={categoryProducts}
                                 />
-                                <div className="flex justify-center items-center w-full mb-10 mt-10">
-                                    <div className="flex flex-wrap justify-center gap-3">
-                                        {Array(Math.ceil(totalQueryCount / 10)).fill(totalQueryCount).map((numOfPage, index) => (
-                                            <div
-                                                key={index}
-                                                className={`p-3 text-center rounded-full border-2 
-                                        border-black cursor-pointer w-[50px] h-[50px] 
-                                        ${currentPage === (index + 1) ? "bg-black text-white font-bold" : "hover:bg-gray-300"}`}
-                                                onClick={() => setCurrentPage(index + 1)}
-                                            >
-                                                {index + 1}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                <PaginationComponent
+                                    numOfPages={numOfPages}
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                />
                             </>
 
                         )}

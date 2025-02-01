@@ -105,7 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         sizeColQuery = ' HAVING' + sizeQuery;
                     }
 
-                    const queryLimit = ` LIMIT 10 OFFSET ${(Number(req.query.pageFetch) - 1) * 10};`
+                    const queryLimit = ` LIMIT 12 OFFSET ${(Number(req.query.pageFetch) - 1) * 12};`
                     // #endregion
 
                     /***************************************************************************************
