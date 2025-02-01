@@ -10,6 +10,7 @@ import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";
 import ProductCard from "../../components/ProductCard";
 import MainPageHeader from "@/app/components/MainPageHeader";
+import LoadingComponent from "@/app/components/LoadingComponent";
 
 export type VariantCombination = {
     [key: string]: string[];
@@ -231,9 +232,16 @@ export default function ProductPage() {
                     </div>
 
                 </div>
-            ) : (null)}
+            ) : (
 
-            <div className="w-5/6 mx-auto mb-[25px]">
+                <LoadingComponent
+                    width="100"
+                    height="100"
+                    minHeight="min-h-[1000px]"
+                />
+            )}
+
+            <div className="w-5/6 mx-auto mb-[50px]">
                 <MainPageHeader
                     showButton={false}
                     categoryTitle="Related Products"
@@ -242,8 +250,6 @@ export default function ProductPage() {
                     headerStyle={"shadow-none"}
                 />
             </div>
-
-
         </div>
 
     </>

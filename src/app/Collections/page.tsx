@@ -3,8 +3,8 @@ import FilterTabLarge, { FilterTabSmall } from "./components/FilterTab";
 import DisplayProducts from "./components/DisplayProducts";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Product } from "../ProducerDashboard/components/Products";
 import { ProductCardInterface } from "../DataInterfaces";
+import LoadingComponent from "../components/LoadingComponent";
 
 export default function Collections() {
     const pathname = useRef(usePathname()).current;
@@ -26,6 +26,8 @@ export default function Collections() {
 
     const [totalQueryCount, setTotalQueryCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [showLoadingUI, setShowLoadingUI] = useState(true);
 
     useEffect(() => {
         console.log(params?.getAll("size"));
@@ -65,6 +67,7 @@ export default function Collections() {
     }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter, currFeatured, searchBarQuery]);
 
     const getFilterResults = async () => {
+        setShowLoadingUI(true);
         const response = await fetch(`
             /api/${queryUrl}&pageFetch=${currentPage}`, {
             method: 'GET',
@@ -89,6 +92,7 @@ export default function Collections() {
         else {
             console.log(response.status, response.statusText)
         }
+        setShowLoadingUI(false);
     }
 
 
@@ -149,27 +153,38 @@ export default function Collections() {
                 </div>
 
                 <div className="md:w-4/5">
-                    <DisplayProducts
-                        categoryProducts={categoryProducts}
-                    />
-                </div>
+                    {showLoadingUI ?
+                        (
+                            <LoadingComponent
+                                width="100"
+                                height="100"
+                                minHeight="min-h-[1000px]"
+                            />
+                        ) :
+                        (
+                            <>
+                                <DisplayProducts
+                                    categoryProducts={categoryProducts}
+                                />
+                                <div className="flex justify-center items-center w-full mb-10 mt-10">
+                                    <div className="flex flex-wrap justify-center gap-3">
+                                        {Array(Math.ceil(totalQueryCount / 10)).fill(totalQueryCount).map((numOfPage, index) => (
+                                            <div
+                                                key={index}
+                                                className={`p-3 text-center rounded-full border-2 
+                                        border-black cursor-pointer w-[50px] h-[50px] 
+                                        ${currentPage === (index + 1) ? "bg-black text-white font-bold" : "hover:bg-gray-300"}`}
+                                                onClick={() => setCurrentPage(index + 1)}
+                                            >
+                                                {index + 1}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
 
+                        )}
 
-            </div>
-
-            <div className="flex justify-center items-center lg:w-[650px] md:w-2/3 w-5/6 mt-3 mb-10">
-                <div className="flex flex-wrap justify-center gap-3">
-                    {Array(Math.ceil(totalQueryCount / 10)).fill(totalQueryCount).map((numOfPage, index) => (
-                        <div
-                            key={index}
-                            className={`p-3 text-center rounded-full border-2 
-                            border-black cursor-pointer w-[50px] h-[50px] 
-                            ${currentPage === (index + 1) ? "bg-black text-white font-bold" : "hover:bg-gray-300"}`}
-                            onClick={() => setCurrentPage(index + 1)}
-                        >
-                            {index + 1}
-                        </div>
-                    ))}
                 </div>
             </div>
         </div>

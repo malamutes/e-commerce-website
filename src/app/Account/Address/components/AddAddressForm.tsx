@@ -1,36 +1,42 @@
 
 "use client";
-import { SetStateAction } from "react";
+import { SetStateAction, useState } from "react";
 import { AddressInterface } from "@/app/DataInterfaces";
+import { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
 
 interface AddAddressFormProps {
     show: boolean,
     setShow: React.Dispatch<SetStateAction<boolean>>,
     address: AddressInterface,
     setAddress: React.Dispatch<SetStateAction<AddressInterface>>,
-    handleAddAddress: (address: AddressInterface) => void,
-    handleEditAddress?: (address: AddressInterface, addressKey: string) => void,
-    addressKey?: string
+    handleAddAddress: (address: AddressInterface) => Promise<void>,
+    handleEditAddress?: (address: AddressInterface, addressKey: string) => Promise<void>,
+    addressKey?: string,
 }
 
 export default function AddAddressForm(props: AddAddressFormProps) {
     const inputFieldClass = "bg-gray-300 rounded-lg p-2 w-full";
     const inputFieldLabelClass = "font-bold mb-1 text-sm";
     const inputFieldWrapperClass = "flex flex-col mb-2";
-
+    const [showFullLoading, setShowFullLoading] = useState(false);
 
     return <>
-        <form className={`${props.show ? "block" : "hidden"}`} onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        <form className={`${props.show ? "block" : "hidden"}`} onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             if (props.handleEditAddress && props.addressKey) {
                 //both must be available at once anyway to run 
-                props.handleEditAddress(props.address, props.addressKey);
+
+                setShowFullLoading(true)
+                await props.handleEditAddress(props.address, props.addressKey);
+                setShowFullLoading(false);
             } else {
-                props.handleAddAddress(props.address);
+                setShowFullLoading(true);
+                await props.handleAddAddress(props.address);
+                setShowFullLoading(false);
             }
             props.setShow(false);
         }}>
-            <div className="text-lg font-bold mb-5">
+            <div className="text-lg font-bold mb-5 text-start">
                 <span >
                     {props.handleEditAddress ? "Update" : "Add New"} Address
                 </span>
@@ -213,9 +219,14 @@ export default function AddAddressForm(props: AddAddressFormProps) {
                     type="submit">{props.handleEditAddress ? "UPDATE" : "ADD"} ADDRESS</button>
                 <button className=" w-fit text-sm hover:underline" onClick={(e) => {
                     e.preventDefault();
-                    props.setShow(false)
+                    props.setShow(false);
                 }}>Cancel</button>
             </div>
         </form>
+
+        <FullScreenLoadingComponent
+            show={showFullLoading}
+            setShow={setShowFullLoading}
+        />
     </>
 }

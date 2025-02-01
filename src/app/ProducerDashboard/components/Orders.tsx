@@ -8,6 +8,7 @@ import { orderStatusMap } from "@/app/Account/components/OrderHistoryCard";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle, faCheckCircle, faHourglassHalf, faTruck, faUndo, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import LoadingComponent from "@/app/components/LoadingComponent";
 
 export const orderStatusIconMap: { [key: string]: IconDefinition } = {
     'COMPLETED': faCheckCircle,
@@ -21,9 +22,11 @@ export default function Orders() {
     const { data: session } = useSession();
     const [producerOrderHistory, setProducerOrderHistory] = useState<ProducerOrderHistoryItem[]>([]);
     const [currentTab, setCurrentTab] = useState("COMPLETED");
+    const [showLoadingUI, setShowLoadingUI] = useState(true);
 
     useEffect(() => {
         const getProducerOrders = async (producerName: string) => {
+            setShowLoadingUI(true);
             if (producerName !== "") {
                 const response = await fetch('/api/Users/Producers?producerQuery=producerOrders', {
                     method: "GET",
@@ -39,6 +42,7 @@ export default function Orders() {
                 else {
                     console.log("PRODUCER ORDERS RETRIEVAL FAILED!", response.statusText)
                 }
+                setShowLoadingUI(false);
             }
         }
 
@@ -100,7 +104,19 @@ export default function Orders() {
                 </div>
                 {
                     producerOrderHistory.filter(orderedItem => orderedItem.orders_items_status === currentTab).length === 0 ? (
-                        <div className="text-center text-gray-500">No orders here</div>
+                        (
+                            showLoadingUI ?
+                                (
+                                    <LoadingComponent
+                                        width="100"
+                                        height="100"
+                                        minHeight="min-h-[500px]" />)
+                                :
+                                (
+                                    <div className="text-center text-gray-500">No orders here
+                                    </div>
+                                )
+                        )
                     ) : (
                         producerOrderHistory
                             .filter(orderedItem => orderedItem.orders_items_status === currentTab)

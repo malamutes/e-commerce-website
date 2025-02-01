@@ -1,13 +1,13 @@
 "use client";
 
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AddressInterface, DBAddressInterface } from "@/app/DataInterfaces";
 import AddAddressForm from "./components/AddAddressForm";
 import AddressFormatEdit from "./components/AddressFormat";
-import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/navigation";
+import LoadingComponent, { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
 
 export default function EditAddressBook() {
     const [showAddAddressForm, setShowAddAddressForm] = useState(false);
@@ -28,9 +28,13 @@ export default function EditAddressBook() {
     const [userAddress, setUserAddress] = useState<DBAddressInterface>({});
     const router = useRouter();
 
+    const [showFullLoading, setShowFullLoading] = useState(false);
+    const [showLoadingUI, setShowLoadingUI] = useState(true);
+
     useEffect(() => {
         if (session?.user.address) {
             setUserAddress(session.user.address);
+            setShowLoadingUI(false);
         }
     }, [session])
 
@@ -111,10 +115,10 @@ export default function EditAddressBook() {
         else {
             console.log(response.status, response.statusText)
         }
-
     }
 
     const handleDeleteAddress = async (addressKey: string) => {
+        setShowFullLoading(true);
         if (session?.user.address) {
             const { [addressKey]: removedAddress, ...newAddress } = session.user.address;
 
@@ -145,12 +149,13 @@ export default function EditAddressBook() {
             else {
                 console.log(response.status, response.statusText)
             }
+            setShowFullLoading(false);
         }
 
     }
 
     return <>
-        <div className="lg:container mx-auto 2xs:pr-[50px] 2xs:pl-[50px] pr-[20px] pl-[20px]">
+        <div className="lg:container mx-auto 2xs:pr-[50px] 2xs:pl-[50px] pr-[20px] pl-[20px] min-h-[500px]">
             <div className="flex flex-col ">
                 <div className="text-center bg-gray-300 xl:w-1/3 lg:w-1/2 md:w-7/12 sm:w-3/4 w-full mx-auto pt-5 
                             pb-5 2xs:pl-[100px] 2xs:pr-[100px] mt-[50px] ">
@@ -170,24 +175,51 @@ export default function EditAddressBook() {
 
 
                 <div className="xl:w-1/3 lg:w-1/2 md:w-7/12 sm:w-3/4 w-full mx-auto">
-                    <AddAddressForm show={showAddAddressForm}
+                    <AddAddressForm
+                        show={showAddAddressForm}
                         setShow={setShowAddAddressForm}
                         address={currentAddress}
                         setAddress={setCurrentAddress}
-                        handleAddAddress={handleAddAddress} />
+                        handleAddAddress={handleAddAddress}
+                    />
                 </div>
 
-                <div className="xl:w-1/3 lg:w-1/2 md:w-7/12 sm:w-3/4 w-full mx-auto">
-                    {Object.keys(userAddress).map((addressKey, index) => {
-                        return <div key={index} className="mb-5">
-                            <AddressFormatEdit address={userAddress[addressKey]}
-                                addressKey={addressKey}
-                                handleDeleteAddress={handleDeleteAddress}
-                                handleEditAddress={handleEditAddress} />
-                        </div>
-                    })}
+                <div className="xl:w-1/3 lg:w-1/2 md:w-7/12 sm:w-3/4 w-full mx-auto text-center">
+                    {Object.keys(userAddress).length > 0 ?
+                        (
+                            Object.keys(userAddress).map((addressKey, index) => {
+                                return <div key={index} className="mb-5">
+                                    <AddressFormatEdit address={userAddress[addressKey]}
+                                        addressKey={addressKey}
+                                        handleDeleteAddress={handleDeleteAddress}
+                                        handleEditAddress={handleEditAddress} />
+                                </div>
+                            })
+                        )
+                        :
+                        (
+                            showLoadingUI ?
+                                (<LoadingComponent
+                                    width="100"
+                                    height="100"
+                                    minHeight="min-h-[100px]"
+                                />)
+
+                                :
+                                (
+                                    <span>
+                                        Add an address now!
+                                    </span>
+                                )
+                        )}
                 </div>
             </div>
         </div>
+
+
+        <FullScreenLoadingComponent
+            show={showFullLoading}
+            setShow={setShowFullLoading}
+        />
     </>
 }

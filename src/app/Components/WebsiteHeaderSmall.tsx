@@ -70,6 +70,8 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
                     setMenuOffCanvas={setMenuOffCanvas}
                     searchQueryTotalCount={props.searchQueryTotalCount}
                     setSearchQueryTotalCount={props.setSearchQueryTotalCount}
+                    showLoadingUI={props.showLoadingUI}
+                    setShowLoadingUI={props.setShowLoadingUI}
                 />
 
                 <div className="flex flex-col">

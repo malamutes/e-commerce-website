@@ -1,14 +1,10 @@
 "use client";
 
-import { clothingCategory, salesCategories } from "./CollectionTypes";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Carousel from "./components/Carousel";
 import MainPageHeader from "./components/MainPageHeader";
 import { useEffect, useState } from "react";
-import { useMatchMediaQuery } from "./MatchMediaQuery";
-import WishlistBookmark from "./components/WishlistBookmark";
 import { ProductCardInterface } from "./DataInterfaces";
+import LoadingComponent from "./components/LoadingComponent";
 
 
 export default function MainPage() {
@@ -78,63 +74,40 @@ export default function MainPage() {
 
     return (
         <>
-            <div className="container mx-auto" >
+            <div className="container mx-auto mb-[100px]" >
                 <div className="w-11/12 xl:w-5/6 mx-auto flex flex-col ">
-                    {exclusiveProducts.length === 0 ? (
-                        <div>Loading Exclusive...</div>
-                    ) : (
-                        <MainPageHeader
-                            categoryArray={exclusiveProducts}
-                            categoryTitle="Exclusive"
-                        />
-                    )}
 
-                    {bestSellersProducts.length === 0 ? (
-                        <div>Loading Best Sellers...</div>
-                    ) : (
-                        <MainPageHeader
-                            categoryArray={bestSellersProducts}
-                            categoryTitle="Best Sellers"
-                        />
-                    )}
+                    <MainPageHeader
+                        categoryArray={exclusiveProducts}
+                        categoryTitle="Exclusive"
+                    />
 
-                    {saleProducts.length === 0 ? (
-                        <div>Loading Sale...</div>
-                    ) : (
-                        <MainPageHeader
-                            categoryArray={saleProducts}
-                            categoryTitle="On Sale"
-                        />
-                    )}
+                    <MainPageHeader
+                        categoryArray={bestSellersProducts}
+                        categoryTitle="Best Sellers"
+                    />
 
-                    {newArrivalsProducts.length === 0 ? (
-                        <div>Loading New Arrivals...</div>
-                    ) : (
-                        <MainPageHeader
-                            categoryArray={newArrivalsProducts}
-                            categoryTitle="New Arrivals"
-                        />
-                    )}
+                    <MainPageHeader
+                        categoryArray={saleProducts}
+                        categoryTitle="On Sale"
+                    />
 
-                    {clothingProducts.length === 0 ? (
-                        <div>Loading Categories...</div>
-                    ) : (
-                        <MainPageHeader
-                            categoryArray={clothingProducts}
-                            categoryTitle="Categories"
-                            categories={true}
-                        />
-                    )}
+                    <MainPageHeader
+                        categoryArray={newArrivalsProducts}
+                        categoryTitle="New Arrivals"
+                    />
 
-                    {producerProducts.length === 0 ? (
-                        <div>Loading Popular Brands...</div>
-                    ) : (
-                        <MainPageHeader
-                            categoryArray={producerProducts}
-                            categoryTitle="Popular Brands"
-                            categories={true}
-                        />
-                    )}
+                    <MainPageHeader
+                        categoryArray={clothingProducts}
+                        categoryTitle="Categories"
+                        categories={true}
+                    />
+
+                    <MainPageHeader
+                        categoryArray={producerProducts}
+                        categoryTitle="Popular Brands"
+                        categories={true}
+                    />
                 </div>
             </div>
         </>

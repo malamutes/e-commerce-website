@@ -29,7 +29,7 @@ export default function Carousel(props: CarouselProps) {
                 onClick={() => setCurrentIndex(currentIndex => clampFunc(currentIndex + 1, 0, numItems - 1))}
             />
 
-            <div className="absolute bottom-0">
+            <div className="absolute bottom-0" style={{ zIndex: 1 }}>
                 {Array(numItems).fill("CircleNav").map((item, index) => (
                     <FontAwesomeIcon
                         className={`m-1 cursor-pointer ${currentIndex === index ? "bg-black" : "bg-transparent"}
@@ -41,12 +41,22 @@ export default function Carousel(props: CarouselProps) {
                 ))}
             </div>
 
-            <div className="left-0 top-0 w-full h-full">
-                <Image src={props.itemsArray[currentIndex] || "https://placehold.co/600x600?text=CannotFindImage"}
-                    width={1000}
-                    height={1000}
-                    alt={`ProductCarouselImage-${currentIndex}`} />
+            <div className="w-full overflow-hidden">
+                <div className={`flex flex-row transition-all duration-500 ease-in-out
+                -translate-x-[${currentIndex * 100}%]`}>
+                    {props.itemsArray.map((image, index) => (
+                        <Image
+                            style={{ minWidth: '100%' }}
+                            key={index}
+                            width={1000}
+                            height={1000}
+                            alt={image}
+                            src={image}
+                        />
+                    ))}
+                </div>
             </div>
+
         </div>
     </>
 }

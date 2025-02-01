@@ -238,6 +238,8 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
             searchQueryProducts={props.searchQueryProducts}
             searchQueryTotalCount={props.searchQueryTotalCount}
             setSearchQueryTotalCount={props.setSearchQueryTotalCount}
+            showLoadingUI={props.showLoadingUI}
+            setShowLoadingUI={props.setShowLoadingUI}
         />
     </>
 }

@@ -59,7 +59,7 @@ export default function ProductCard(props: ProductCard) {
                             {props.product.product_producer}
                         </span>
 
-                        <span className="font-bold text-sm">
+                        <span className="font-bold text-sm ">
                             {props.product.product_name}
                         </span>
 

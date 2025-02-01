@@ -1,6 +1,5 @@
 "use client";
 
-import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +9,7 @@ import { AddressFormat } from "./Address/components/AddressFormat";
 import { DBAddressInterface } from "../DataInterfaces";
 import { UserOrderHistory } from "../DataInterfaces";
 import OrderHistoryCard from "./components/OrderHistoryCard";
+import LoadingComponent from "../components/LoadingComponent";
 
 export default function AccountPage() {
     const { data: session, update } = useSession();
@@ -26,6 +26,9 @@ export default function AccountPage() {
 
     const [userOrderHistory, setUserOrderHistory] = useState<UserOrderHistory[]>([]);
 
+    const [showFullLoading, setShowFullLoading] = useState(false);
+    const [showLoadingUI, setShowLoadingUI] = useState(true);
+
     useEffect(() => {
         if (session?.user) {
             setFirstName(session.user.firstName ?? "UserFirstName");
@@ -34,12 +37,14 @@ export default function AccountPage() {
             setEmail(session.user.email ?? "UserEmail");
             if (session.user.address) {
                 setUserAddress(session.user.address);
+                setShowLoadingUI(false);
             }
         }
     }, [session]);
 
     useEffect(() => {
         const retrieveOrderHistory = async (userID: number) => {
+            setShowLoadingUI(true);
             const response = await fetch(`/api/Users?userID=${userID}`, {
                 method: "GET",
                 headers: {
@@ -56,6 +61,7 @@ export default function AccountPage() {
             else {
                 console.log(response.status, response.statusText);
             }
+            setShowLoadingUI(false);
         }
 
         if (session?.user.user_id) {
@@ -102,9 +108,10 @@ export default function AccountPage() {
     }
 
     const handleEditProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+        setShowFullLoading(true);
         e.preventDefault();
         await changeUserProfile();
-        alert("Profile Updated Successfully.")
+        setShowFullLoading(false);
     };
 
     return <>
@@ -201,17 +208,36 @@ export default function AccountPage() {
                         </div>
 
                         {/* probably make these input forms when im working on backend again */}
-                        <div className="flex flex-col items-center max-h-[400px] overflow-y-auto pr-[5px]">
-                            <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mr-5 mb-5`}
+                        <div className="flex flex-col items-center max-h-[515px] overflow-y-auto pr-[5px]">
+                            <button className={`bg-black text-white w-fit p-3 rounded-full text-sm mt-[15px] mb-5`}
                                 onClick={() => router.push('/Account/Address')}
                             >MANAGE ADDRESS</button>
 
                             <div className="max-w-full flex flex-col gap-5">
-                                {Object.keys(userAddress ?? {}).map((addressKey, index) => {
-                                    return <div key={index}>
-                                        <AddressFormat address={userAddress[addressKey]} />
-                                    </div>
-                                })}
+                                {Object.keys(userAddress).length > 0 ?
+                                    (
+                                        Object.keys(userAddress ?? {}).map((addressKey, index) => {
+                                            return <div key={index}>
+                                                <AddressFormat address={userAddress[addressKey]} />
+                                            </div>
+                                        })
+                                    )
+                                    :
+                                    (
+                                        showLoadingUI ?
+                                            (<LoadingComponent
+                                                width="100"
+                                                height="100"
+                                                minHeight="min-h-[100px]"
+                                            />)
+
+                                            :
+                                            (
+                                                <span>
+                                                    Add an address now!
+                                                </span>
+                                            )
+                                    )}
                             </div>
                         </div>
 
@@ -223,24 +249,50 @@ export default function AccountPage() {
                         Order history
                     </div>
 
-                    <div className="flex flex-col gap-4 pt-[15px] max-h-[1050px] pr-3 pt-3 pb-3
-                    overflow-y-auto">
-                        {userOrderHistory.map((orderItem) => (
-                            <div key={orderItem.orders_id}>
-                                <OrderHistoryCard
-                                    orders_id={orderItem.orders_id}
-                                    orders_image={orderItem.orders_image}
-                                    orders_order_status={orderItem.orders_order_status}
-                                    orders_order_time={new Date(orderItem.orders_order_time)}
-                                    orders_total_price={orderItem.orders_total_price}
-                                    user_id={orderItem.user_id}
-                                />
-                            </div>
-                        ))}
+                    <div className="flex flex-col gap-4 pt-[15px] max-h-[1000px] pr-3 pt-3 pb-3
+                    overflow-y-auto text-center">
+                        {userOrderHistory.length === 0 ?
+                            (
+                                showLoadingUI ?
+                                    (
+                                        <LoadingComponent
+                                            width="100"
+                                            height="100"
+                                            minHeight="min-h-[100px]"
+                                        />
+                                    )
+                                    :
+                                    (
+                                        <span>
+                                            You have no past orders!
+                                        </span>
+                                    )
+                            )
+                            :
+                            (
+                                userOrderHistory.map((orderItem) => (
+                                    <div key={orderItem.orders_id}>
+                                        <OrderHistoryCard
+                                            orders_id={orderItem.orders_id}
+                                            orders_image={orderItem.orders_image}
+                                            orders_order_status={orderItem.orders_order_status}
+                                            orders_order_time={new Date(orderItem.orders_order_time)}
+                                            orders_total_price={orderItem.orders_total_price}
+                                            user_id={orderItem.user_id}
+                                        />
+                                    </div>
+                                )))}
                     </div>
                 </div>
-
             </div>
+        </div>
+
+        <div className={`w-screen h-screen fixed top-0 left-0 bg-white bg-opacity-75 ${showFullLoading ? "block" : "hidden"}`}>
+            <LoadingComponent
+                width="100"
+                height="100"
+                minHeight="min-h-screen"
+            />
         </div>
     </>
 }

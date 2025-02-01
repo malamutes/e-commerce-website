@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         INNER JOIN products
                     ON
                         orders_items.orders_items_product_id = products.product_id
-                    WHERE users.user_id = 40
+                    WHERE users.user_id = ${req.query.userID}
                     GROUP BY users.user_id, orders.orders_id;
                     `;
 

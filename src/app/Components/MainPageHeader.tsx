@@ -8,6 +8,7 @@ import { clampFunc } from "./Carousel";
 import { ProductCardInterface } from "../DataInterfaces";
 import ProductCard from "../Collections/components/ProductCard";
 import { useMatchMediaQuery } from "../MatchMediaQuery";
+import LoadingComponent from "./LoadingComponent";
 
 interface MainPageHeaderProps {
     categoryArray: ProductCardInterface[],
@@ -86,46 +87,55 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                         transition: 'transform 1s ease-in-out',
                         transform: `translateX(${distance}%)`
                     }}>
-                    {props.categoryArray.map((product, index) => (
-                        <div key={index} className="pl-2 pr-2 pt-0 pb-4"
-                            style={{
-                                minWidth: `${100 / numItemsDisplay}%`,
-                            }}
-                        >
-                            {/* we are setting it to 5 items at a time so it will always shift via 50 % we can obv 
-                            make it more general by passing in props too but that refractoring can come later when i need to adapt it*/}
-                            {props.categories === true ? (
-                                <Link className="w-full aspect-square bg-gray-300 grid place-items-center" key={index}
-                                    href={product.product_producer ? "/" : `/Collections?clothingCategory=${product.product_type}`}> {/* TBA To sort stuff out via brands*/}
-                                    <span>
-                                        {product.product_producer ?? product.product_type}
-                                    </span>
-                                </Link>
-                            ) : (
-                                <ProductCard
-                                    key={index}
-                                    product={product}
-                                    style={{ boxShadow: 'none' }}
-                                    showTags={false}
-                                />
-                            )}
+                    {props.categoryArray.length !== 0 ? (
+                        props.categoryArray.map((product, index) =>
+                        (
+                            <div key={index} className="pl-2 pr-2 pt-0 pb-4"
+                                style={{
+                                    minWidth: `${100 / numItemsDisplay}%`,
+                                }}
+                            >
+                                {/* we are setting it to 5 items at a time so it will always shift via 50 % we can obv 
+                                make it more general by passing in props too but that refractoring can come later when i need to adapt it*/}
+                                {props.categories === true ? (
+                                    <Link className="w-full aspect-square bg-gray-300 grid place-items-center" key={index}
+                                        href={product.product_producer ? "/" : `/Collections?clothingCategory=${product.product_type}`}> {/* TBA To sort stuff out via brands*/}
+                                        <span>
+                                            {product.product_producer ?? product.product_type}
+                                        </span>
+                                    </Link>
+                                ) : (
+                                    <ProductCard
+                                        key={index}
+                                        product={product}
+                                        style={{ boxShadow: 'none' }}
+                                        showTags={false}
+                                    />
+                                )}
 
-                        </div>
+                            </div>
 
 
-                    ))}
+                        ))
+                    ) :
+                        (
+                            <LoadingComponent
+                                width="100"
+                                height="200"
+                                minHeight="min-h-[275px]"
+                            />
+                        )}
                 </div>
             </div>
 
             {props.showButton === false ? (null) : (
                 <Link className="bg-black text-white w-fit p-5 
-            rounded-full mx-auto 2xs:mt-[25px] mt-[5px] font-bold text-center"
+            rounded-full mx-auto mt-[5px] font-bold text-center"
                     href={urlNavLinkMap[props.categoryTitle]}>
                     SHOP {(props.categoryTitle).toUpperCase()}</Link>
             )}
 
         </div>
-
     </>
 }
 

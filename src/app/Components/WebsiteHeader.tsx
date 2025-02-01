@@ -54,6 +54,8 @@ export interface WebsiteHeaderInterface {
     setNoResultMessage: React.Dispatch<React.SetStateAction<string>>;
     searchQueryTotalCount: number,
     setSearchQueryTotalCount: React.Dispatch<React.SetStateAction<number>>;
+    showLoadingUI: boolean,
+    setShowLoadingUI: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface DropdownMenu {
@@ -130,6 +132,8 @@ export default function WebsiteHeader() {
     const [noResultMessage, setNoResultMessage] = useState("");
     const [searchQueryTotalCount, setSearchQueryTotalCount] = useState(0);
 
+    const [showLoadingUI, setShowLoadingUI] = useState(false);
+
     const loginSubmit = async () => {
         if (!userIn) {
             router.push('/LoginPage');
@@ -196,6 +200,8 @@ export default function WebsiteHeader() {
                 searchQueryProducts={searchQueryProducts}
                 searchQueryTotalCount={searchQueryTotalCount}
                 setSearchQueryTotalCount={setSearchQueryTotalCount}
+                showLoadingUI={showLoadingUI}
+                setShowLoadingUI={setShowLoadingUI}
             />
 
             <WebsiteHeaderSmall
@@ -224,6 +230,8 @@ export default function WebsiteHeader() {
                 searchQueryProducts={searchQueryProducts}
                 searchQueryTotalCount={searchQueryTotalCount}
                 setSearchQueryTotalCount={setSearchQueryTotalCount}
+                showLoadingUI={showLoadingUI}
+                setShowLoadingUI={setShowLoadingUI}
             />
         </div>
     </>
