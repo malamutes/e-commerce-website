@@ -27,15 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         VALUES (${session.user.user_id}, ${req.body.businessName}, ${req.body.businessType}, ${req.body.businessRegistrationNumber}, ${req.body.businessLocation});
         `;
 
-
-        const getUserLogin = await sql`SELECT user_email, user_password FROM users 
-        WHERE user_id = ${session.user.user_id};`;
-
-        if (getUserLogin.length === 0) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        res.status(200).json({ message: 'Producer registered successfully!', data: getUserLogin });
+        res.status(200).json({ message: 'Producer registered successfully!' });
 
     } catch (error: unknown) {
         if (error instanceof Error) {

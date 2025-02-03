@@ -7,6 +7,7 @@ import { faCircleCheck, faCircleXmark, faSave } from "@fortawesome/free-solid-sv
 import Image from "next/image";
 import { GlobalWishlistTrackerContext } from "./GlobalWishlistTrackerContext";
 import { faCircle } from "@fortawesome/free-regular-svg-icons/faCircle";
+import { FullScreenLoadingComponent } from "../components/LoadingComponent";
 
 interface WishlistModalProps {
     showModal: boolean,
@@ -26,6 +27,7 @@ function WishlistModal(props: WishlistModalProps) {
     const [currentlySelectedWishlists, setCurrentlySelectedWishlists] = useState<Set<string>>(new Set());
     const [newListSelected, setNewListSelected] = useState(false);
     const { addToWishlistedItems, updateWishlistedItem, allWishlistedItems, removeFromWishlistedItems } = useContext(GlobalWishlistTrackerContext);
+    const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
 
     //console.log(allWishlistedItems, props.currentItemID);
     useEffect(() => {
@@ -38,6 +40,7 @@ function WishlistModal(props: WishlistModalProps) {
     }, [props.showModal])
 
     const handleAddToWishlists = async () => {
+        setShowFullScreenLoading(true);
         let newSet = new Set(currentlySelectedWishlists);
         let sendNewListName = "";
         if (newListSelected === true) {
@@ -69,6 +72,7 @@ function WishlistModal(props: WishlistModalProps) {
         else {
             console.log(response.statusText);
         }
+        setShowFullScreenLoading(false);
     }
 
     const handleCloseModal = () => {
@@ -78,6 +82,7 @@ function WishlistModal(props: WishlistModalProps) {
 
 
     const handleUpdateWishlists = async () => {
+        setShowFullScreenLoading(true);
         let newSet = new Set(currentlySelectedWishlists);
         let sendNewListName = "";
         if (newListSelected === true) {
@@ -116,6 +121,7 @@ function WishlistModal(props: WishlistModalProps) {
         else {
             console.log(response.statusText);
         }
+        setShowFullScreenLoading(false);
     }
 
     return <>
@@ -249,6 +255,11 @@ function WishlistModal(props: WishlistModalProps) {
                 </div>
             </div>
         </div>
+        <FullScreenLoadingComponent
+            show={showFullScreenLoading}
+            setShow={setShowFullScreenLoading}
+            zIndex={50}
+        />
     </>
 }
 

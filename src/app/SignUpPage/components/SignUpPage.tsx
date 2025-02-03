@@ -1,13 +1,21 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import Form from "next/form";
 import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { businessLocations, businessTypes } from "@/app/CollectionTypes";
 import Link from "next/link";
+import { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
 
+//NEED TO REFRACTOR THIS PART SO WE DONT NEED TO GET USER PASSWORD AND INSTEAD PROMPT USER FOR PW
+
+
+//NEED TO REFRACTOR THIS PART SO WE DONT NEED TO GET USER PASSWORD AND INSTEAD PROMPT USER FOR PW
+
+//NEED TO REFRACTOR THIS PART SO WE DONT NEED TO GET USER PASSWORD AND INSTEAD PROMPT USER FOR PW
+
+//NEED TO REFRACTOR THIS PART SO WE DONT NEED TO GET USER PASSWORD AND INSTEAD PROMPT USER FOR PW  
 export default function SignUpPage() {
     const router = useRouter();
 
@@ -20,6 +28,8 @@ export default function SignUpPage() {
 
     const userTypeSelectClass = "3xs:w-[180px] 3xs:h-[180px] w-full h-[100px] border-2 border-black flex justify-center items-center mx-[25px] cursor-pointer hover:bg-gray-300";
 
+    const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
+
     const { data: session, status, update } = useSession();
 
     console.log(session?.user.user_id, session?.user.email, status);
@@ -28,6 +38,9 @@ export default function SignUpPage() {
     const handleProducerSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        setShowFullScreenLoading(true);
+
+        //code block here to verify user password
         const producerRegister = await fetch('/api/producerSignUp', {
             method: "POST",
             headers: {
@@ -44,30 +57,14 @@ export default function SignUpPage() {
         const registerOutcome = await producerRegister.json();
 
         if (producerRegister.ok) {
-            //instead of signing in again with user pw and username
-            //we can do what most websites do and prompt user to enter pw
-            //again after submitting company info
-            //and then trigger a re sign-in using that pw which will be hashed ofc
-            const loginResult = await signIn('credentials', {
-                redirect: true,
-                userEmail: registerOutcome.data[0].user_email,
-                userPassword: registerOutcome.data[0].user_password,
-                callbackUrl: '/'
-            });
-
-            if (loginResult?.ok) {
-                console.log("Sign in successful!");
-                console.log("CallbackURL", loginResult?.url);
-            }
-            else {
-                console.log("Status Code", loginResult?.status);
-                console.log("Error:", loginResult?.error);
-            }
-
+            console.log(registerOutcome.message);
+            router.push("/");
         }
         else {
             console.log(producerRegister.status, registerOutcome);
         }
+
+        setShowFullScreenLoading(false);
     }
 
     return <>
@@ -102,7 +99,7 @@ export default function SignUpPage() {
                 <span className="text-lg font-bold pr-5 pl-5">
                     COMPANY/ RETAIL DETAILS
                 </span>
-                <Form action="text" className='flex lg:flex-col flex-col justify-between w-10/12'
+                <form className='flex lg:flex-col flex-col justify-between w-10/12'
                     onSubmit={handleProducerSubmit}
                 >
                     <div className='flex flex-col w-auto'>
@@ -163,7 +160,7 @@ export default function SignUpPage() {
                                                     w-fit ml-auto mr-auto'
                         type='submit'
                     >START PRODUCING!</button>
-                </Form>
+                </form>
 
                 <button className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full mt-7 
                                                     w-fit ml-auto mr-auto'
@@ -189,5 +186,11 @@ export default function SignUpPage() {
                 >Go Back</button>
             </div>
         </div>
+
+
+        <FullScreenLoadingComponent
+            show={showFullScreenLoading}
+            setShow={setShowFullScreenLoading}
+        />
     </>
 }

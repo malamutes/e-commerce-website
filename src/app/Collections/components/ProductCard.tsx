@@ -54,7 +54,7 @@ export default function ProductCard(props: ProductCard) {
                         height={600}
                     />
 
-                    <div className="flex flex-col bg-gray-300 pb-5 ">
+                    <div className="flex flex-col bg-gray-400 pb-5 ">
                         <span className="mt-2 italic text-sm">
                             {props.product.product_producer}
                         </span>

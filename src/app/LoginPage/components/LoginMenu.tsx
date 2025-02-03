@@ -11,6 +11,7 @@ import { signIn } from 'next-auth/react';
 import { GlobalLoginTypeContext } from '@/app/(Contexts)/GlobalLoginPromptContext';
 import LoginError from './LoginSignupError';
 import { PasswordValidator } from './PasswordValidator';
+import { FullScreenLoadingComponent } from '@/app/components/LoadingComponent';
 
 export default function LoginMenu() {
     const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)
@@ -30,6 +31,8 @@ export default function LoginMenu() {
     const [uppercaseValid, setUppercaseValid] = useState(false);
     const [numberValid, setNumberValid] = useState(false);
     const [specialCharValid, setSpecialCharValid] = useState(false);
+
+    const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
 
     //regex stuff done using chat
     const finalPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,24}$/;
@@ -54,11 +57,14 @@ export default function LoginMenu() {
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        setShowFullScreenLoading(true);
+
         const loginResult = await signIn('credentials', {
             redirect: false,
             userEmail: email,
             userPassword: password,
         });
+
 
         if (loginResult?.ok) {
             router.push('/');
@@ -68,12 +74,17 @@ export default function LoginMenu() {
             setPassword("");
             setShowErrorSignIn(true);
         }
+        setShowFullScreenLoading(false);
     }
 
     const handleSignUpSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             if (finalPasswordRegex.test(password)) {
+
+                setShowFullScreenLoading(true);
+
+                console.log("ASDSADSADA");
                 const response = await fetch('/api/userSignUp', {
                     method: 'POST',
                     headers: {
@@ -103,7 +114,7 @@ export default function LoginMenu() {
                     else {
                         console.log("Status Code", loginResult?.status);
                         console.log("Error:", loginResult?.error);
-                        alert("Could not sign in!")
+                        //alert("Could not sign in!")
                     }
 
                 }
@@ -118,6 +129,7 @@ export default function LoginMenu() {
                 setLName("");
                 setEmail("");
                 setPassword("");
+                setShowFullScreenLoading(false);
             }
         }
         catch (error) {
@@ -163,7 +175,7 @@ export default function LoginMenu() {
                                     ... with Email
                                 </h1>
 
-                                <Form action="text" className='w-10/12'
+                                <form className='w-10/12'
                                     onSubmit={handleLoginSubmit}>
 
                                     <LoginError
@@ -196,7 +208,7 @@ export default function LoginMenu() {
                                 mt-7 w-fit block mx-auto'
                                         type='submit'
                                     >SIGN IN</button>
-                                </Form>
+                                </form>
 
 
                             </div>
@@ -258,7 +270,7 @@ export default function LoginMenu() {
                                 <h1 className="text-2xl font-bold mt-1 ml-auto mr-auto">
                                     ... with Email
                                 </h1>
-                                <Form action="text" className='flex lg:flex-col flex-col justify-between w-10/12'
+                                <form className='flex lg:flex-col flex-col justify-between w-10/12'
                                     onSubmit={handleSignUpSubmit}>
                                     <div className='flex lg:flex-row flex-col'>
                                         <div className='flex flex-col w-auto'>
@@ -331,7 +343,7 @@ export default function LoginMenu() {
                                         type='submit'
                                     >REGISTER</button>
 
-                                </Form>
+                                </form>
 
                             </div>
 
@@ -383,5 +395,10 @@ export default function LoginMenu() {
                 </div>
             </div>
         </div>
+
+        <FullScreenLoadingComponent
+            show={showFullScreenLoading}
+            setShow={setShowFullScreenLoading}
+        />
     </>
 }

@@ -58,12 +58,13 @@ export default function LoadingComponent(props: LoadingComponentProps) {
 
 interface FullScreenLoadingComponentProps {
     show: boolean,
-    setShow: React.Dispatch<SetStateAction<boolean>>
+    setShow: React.Dispatch<SetStateAction<boolean>>,
+    zIndex?: number
 }
 
 export function FullScreenLoadingComponent(props: FullScreenLoadingComponentProps) {
     return (
-        <div className={`w-screen h-screen fixed top-0 left-0 bg-white bg-opacity-75 ${props.show ? "block" : "hidden"}`}>
+        <div className={`w-screen h-screen fixed top-0 left-0 bg-white bg-opacity-75 ${props.show ? "block" : "hidden"}`} style={{ zIndex: props.zIndex }}>
             <LoadingComponent
                 width="100"
                 height="100"

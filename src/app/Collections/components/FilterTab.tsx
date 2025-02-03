@@ -39,7 +39,8 @@ export default function FilterTabLarge(props: FilterTabProps) {
     } = props;
 
     return <>
-        <div className="flex flex-col ">
+        <div className="flex flex-col sticky top-[11vh] 2xl:w-[300px] xl:w-[250px] 
+        lg:w-[200px] w-[19vw] min-w-[150px] max-h-[1000px] overflow-auto custom-scrollbar pr-[5px]">
             <FilterTabMenuSingle
                 title="Categories"
                 categoryArray={clothingCategory}
@@ -112,7 +113,7 @@ export function FilterTabSmall(props: FilterTabProps) {
         <div className={`fixed h-screen w-screen bg-black 
             ${filterOffCanvas ? "opacity-60" : "hidden"} top-0 left-0`}
             onClick={() => setFilterOffCanvas(false)}
-            style={{ zIndex: 1 }}>
+            style={{ zIndex: 40 }}>
         </div>
 
         <div className={`${filterOffCanvas ? "fixed" : "hidden"}

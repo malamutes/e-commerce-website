@@ -28,6 +28,7 @@ export default function Collections() {
     const [queryUrl, setQueryUrl] = useState<string>("");
 
     const [numOfPages, setNumOfPages] = useState(0);
+    const [totalItems, setTotalItems] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
     const [showLoadingUI, setShowLoadingUI] = useState(true);
@@ -85,6 +86,7 @@ export default function Collections() {
             console.log("Items retrieved successfully!");
             setCategoryProducts(reply);
             setNumOfPages(Math.ceil(reply[0].total_count / NUM_ITEMS_PER_PAGE) ?? 0);
+            setTotalItems(reply[0].total_count);
             console.log(reply);
         }
         else if (response.status === 404) {
@@ -119,8 +121,19 @@ export default function Collections() {
     }, [queryUrl, currCat, currentPage]);
 
     return (
-        <div className="flex flex-col gap-3 items-center  min-w-[250px]">
-            <div className="flex md:flex-row flex-col mt-[50px] lg:container mx-auto p-5">
+        <div className="flex flex-col gap-5 items-center min-w-[250px] mt-[50px]">
+            <div className="flex flex-row justify-center items-center lg:container mx-auto pl-5 pr-5">
+                <span className="text-[30px] font-bold text-center">
+                    {searchBarQuery ? `Search results for '${searchBarQuery}'` : ((currFeatured &&
+                        currFeatured !== 'All') ? currFeatured : clothingFilter)} {showLoadingUI ? "..." : `(${totalItems})`}
+                </span>
+            </div>
+            <div className="w-full min-w-[290px] lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] 
+            mx-auto pl-5 pr-5 -mt-[10px]">
+                <hr className="border-[0.25px] border-gray-400 bg-gray-400 w-full"></hr>
+            </div>
+
+            <div className="flex md:flex-row flex-col lg:container mx-auto pr-5 md:pl-0 pl-5">
                 <div className="w-1/5 mr-[30px] md:block hidden">
                     <FilterTabLarge
                         sexFilter={sexFilter}

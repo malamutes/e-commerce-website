@@ -10,6 +10,7 @@ import ProductCard from "@/app/Collections/components/ProductCard";
 import { ShoppingCartContext } from "@/app/(Contexts)/ShoppingCartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircleXmark, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import LoadingComponent, { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
 
 interface generalItemInfoType {
     itemTitle: string,
@@ -38,8 +39,12 @@ export default function WishlistDetailPage() {
 
     const { addItemToCart } = useContext(ShoppingCartContext);
 
+    const [showLoadingUI, setShowLoadingUI] = useState(true);
+    const [showFullLoadingUI, setShowFullLoadingUI] = useState(false);
+
     useEffect(() => {
         const getWishlistItems = async () => {
+            setShowLoadingUI(true);
             const response = await fetch(`/api/Wishlist?requestType=getWishlistDetails&wishlistDetails=${params?.wishlistDetails}`, {
                 method: "GET",
                 headers: {
@@ -55,15 +60,16 @@ export default function WishlistDetailPage() {
             else {
                 alert(response.statusText + "NO PRODUCTS IN THIS WISHLIST")
             }
+            setShowLoadingUI(false);
         }
 
         getWishlistItems();
-
     }, [params?.wishlistDetails, allWishlistedItems])
 
     const router = useRouter();
 
     const handleRemoveWishlist = async (wishlistToDel: string) => {
+        setShowFullLoadingUI(true);
         const response = await fetch(`/api/Wishlist?wishlistToDelete=${wishlistToDel}`, {
             method: "DELETE",
             headers: {
@@ -80,12 +86,13 @@ export default function WishlistDetailPage() {
             router.push('/Wishlist');
         }
         else {
-            alert(response.statusText)
+            //alert(response.statusText)
         }
-
+        setShowFullLoadingUI(false);
     }
 
     const handleAddToCart = () => {
+        setShowFullLoadingUI(true);
         for (const [productID, itemInfo] of addToCartMap.entries()) {
             (Object.keys(itemInfo.specificItemInfo)).map((size) => {
                 itemInfo.specificItemInfo[size].map((colour) => {
@@ -106,7 +113,7 @@ export default function WishlistDetailPage() {
 
         setShowAddToCartModal(false);
         setAddToCartMap(new Map());
-        alert("ITEMS ADDED TO CART!");
+        setShowFullLoadingUI(false);
     }
 
     useEffect(() => {
@@ -123,16 +130,26 @@ export default function WishlistDetailPage() {
 
 
                 <div className="container mx-auto">
-                    <div className="xl:w-4/5 md:w-10/12 w-full grid xl:grid-cols-4 md:grid-cols-3 3xs:grid-cols-2 grid-cols-1 gap-5 mx-auto">
-                        {wishlists.map((wishlistItem) => (
-                            <div key={wishlistItem['product_id'] as string}>
-                                <ProductCard
-                                    product={wishlistItem}
-                                />
-
+                    {showLoadingUI
+                        ?
+                        (
+                            <LoadingComponent
+                                width="100"
+                                height="100"
+                                minHeight="min-h-[250px]"
+                            />
+                        )
+                        :
+                        (
+                            <div className="xl:w-4/5 md:w-10/12 w-full grid xl:grid-cols-4 md:grid-cols-3 3xs:grid-cols-2 grid-cols-1 gap-5 mx-auto">
+                                {wishlists.map((wishlistItem) => (
+                                    <div key={wishlistItem['product_id'] as string}>
+                                        <ProductCard product={wishlistItem} />
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        )}
+
                 </div>
 
                 <div className="flex 3xs:flex-row flex-col gap-10 mt-[25px] max-w-[4/5]">
@@ -209,18 +226,18 @@ export default function WishlistDetailPage() {
                                         // Define local state or other logic here
                                         return (
                                             <div key={index} className={`
-                                        ${addToCartMap.has(product['product_id'] as string) ?
+                                                ${addToCartMap.has(product['product_id'] as string) ?
                                                     "text-gray-800 pointer-events-auto " :
                                                     "text-gray-400 pointer-events-none"}
-                                        `}
+                                                `}
                                             >
                                                 {(combination['colours'] as string[]).map((colour) => {
                                                     return (
                                                         <p
                                                             key={colour}
                                                             className={`cursor-pointer w-fit mb-1 pr-2 pl-2 pt-1 pb-1 rounded-full 
-                                                                border-2 border-black border-opacity-0 hover:border-opacity-100
-                                                        ${Object.keys((addToCartMap.get(product['product_id'] as string) ?? {}).specificItemInfo ?? {}).includes(combination['size'])
+                                                                        border-2 border-black border-opacity-0 hover:border-opacity-100
+                                                                ${Object.keys((addToCartMap.get(product['product_id'] as string) ?? {}).specificItemInfo ?? {}).includes(combination['size'])
                                                                     && (addToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']].includes(colour) ?? false)
                                                                     ? "text-black font-bold border-2 border-black border-opacity-100 bg-gray-300"
                                                                     : ""}`}
@@ -285,6 +302,11 @@ export default function WishlistDetailPage() {
                     />
                 </div>
             </div>
+
+            <FullScreenLoadingComponent
+                show={showFullLoadingUI}
+                setShow={setShowFullLoadingUI}
+            />
         </>
     );
 }

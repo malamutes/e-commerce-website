@@ -19,11 +19,11 @@ interface MainPageHeaderProps {
 }
 
 const urlNavLinkMap: { [key: string]: string } = {
-    'New Arrivals': `/Collections/New Arrivals?clothingCategory=All`,
-    'Popular Brands': '/Collections/Brands?clothingCategory=All',
-    'Exclusive': `/Collections/Exclusive?clothingCategory=All`,
-    'Best Sellers': `/Collections/Best Sellers?clothingCategory=All`,
-    'On Sale': `/Collections/Sale?clothingCategory=All`,
+    'New Arrivals': `/Collections?featuredCategory=New%20Arrivals&clothingCategory=All`,
+    'Popular Brands': '/Collections/TBA FEATURE',
+    'Exclusive': `/Collections?featuredCategory=Exclusive&clothingCategory=All`,
+    'Best Sellers': `/Collections?featuredCategory=Best%20Sellers&clothingCategory=All`,
+    'On Sale': `/Collections?featuredCategory=Sale&clothingCategory=All`,
     'Categories': `/Collections/?clothingCategory=All`,
 }
 

@@ -21,6 +21,7 @@ import { Session } from "next-auth";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
 import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
 import { ProductCardInterface } from "../DataInterfaces";
+import { FullScreenLoadingComponent } from "./LoadingComponent";
 
 export interface WebsiteHeaderInterface {
     iconSize: string,
@@ -134,6 +135,8 @@ export default function WebsiteHeader() {
 
     const [showLoadingUI, setShowLoadingUI] = useState(false);
 
+    const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
+
     const loginSubmit = async () => {
         if (!userIn) {
             router.push('/LoginPage');
@@ -142,7 +145,9 @@ export default function WebsiteHeader() {
 
     const handleUserSignOut = async () => {
         try {
+            setShowFullScreenLoading(true);
             const logoutResult = await signOut({ callbackUrl: '/' });
+            setShowFullScreenLoading(false);
         }
         catch (error) {
             console.error("Error signing out:", error);
@@ -234,5 +239,11 @@ export default function WebsiteHeader() {
                 setShowLoadingUI={setShowLoadingUI}
             />
         </div>
+
+
+        <FullScreenLoadingComponent
+            show={showFullScreenLoading}
+            setShow={setShowFullScreenLoading}
+        />
     </>
 }
