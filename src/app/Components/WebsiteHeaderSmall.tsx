@@ -9,7 +9,7 @@ import Link from "next/link";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { HeadlineDropwdownMap } from "./WebsiteHeaderLarge";
+import { HeadlineDropdownMap } from "./WebsiteHeaderLarge";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
@@ -77,7 +77,7 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
                 <div className="flex flex-col">
                     {props.headers.map((headline, index) => (
                         <DropdownMenu dropdownTitle={headline} key={index}
-                            dropdownItems={HeadlineDropwdownMap[headline]} />
+                            dropdownItems={HeadlineDropdownMap[headline]} />
                     ))}
 
                 </div>

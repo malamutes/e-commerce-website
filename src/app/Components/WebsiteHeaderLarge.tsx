@@ -17,11 +17,10 @@ import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTracke
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import Searchbar from "./Searchbar";
 
-export const HeadlineDropwdownMap: { [key: string]: string[] } = {
+export const HeadlineDropdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
     'Featured': salesCategories.filter(cat => cat !== 'Regular'),
-    'Upcoming': ["null", "null", "null"],
-    'Gifting': ["null", "null", "null"],
+    'Upcoming': ["null", "null", "null"]
 }
 
 interface HeadlineDropdownProps {
@@ -93,8 +92,8 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
     return <>
         <div style={{ zIndex: 20 }}>
             <div className="hidden lg:block max-w-[2000px] mx-auto h-full" >
-                <div className=" flex flex-row justify-between xl:w-4/5 w-full xl:pr-[0px] xl:pl-[0px]
-                pr-[20px] pl-[20px] mx-auto h-full">
+                <div className=" flex flex-row justify-between xl:w-4/5 w-11/12 xl:pr-[0px] xl:pl-[0px]
+                 mx-auto h-full">
                     <Link href={"/"} >
                         <Image src={"/Logo.png"} alt="WebsiteLogo"
                             width={100} height={100} className="mt-[2.5px] ml-5" />
@@ -129,10 +128,8 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                                 <HeadlineDropdown
                                     headline={headline}
                                     show={props.navDropdown === index}
-                                    headlineDropdownItems={HeadlineDropwdownMap[headline]}
-                                    numColumns={HeadlineDropwdownMap[headline].length < 6 ?
-                                        HeadlineDropwdownMap[headline].length :
-                                        Math.floor(HeadlineDropwdownMap[headline].length / 2)} />
+                                    headlineDropdownItems={HeadlineDropdownMap[headline]}
+                                    numColumns={3} />
 
                             </div>
                         ))}

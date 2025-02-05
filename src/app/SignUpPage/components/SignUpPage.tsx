@@ -7,6 +7,8 @@ import { signIn } from "next-auth/react";
 import { businessLocations, businessTypes } from "@/app/CollectionTypes";
 import Link from "next/link";
 import { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 //NEED TO REFRACTOR THIS PART SO WE DONT NEED TO GET USER PASSWORD AND INSTEAD PROMPT USER FOR PW
 
@@ -166,6 +168,15 @@ export default function SignUpPage() {
                                                     w-fit ml-auto mr-auto'
                     onClick={() => setUserProducer(null)}
                 >Go Back</button>
+
+                <div className="text-gray-700 text-sm mt-2 flex items-center gap-2 italic p-5">
+                    <span className="text-lg">※</span>
+                    <span>
+                        <strong>Note:</strong> Your producer dashboard will be available on the next login,
+                        and it will be accessible under the
+                        <FontAwesomeIcon icon={faUser} className="ml-1 text-gray-900" /> (profile icon) OR "Producer Dashboard" dropdown.
+                    </span>
+                </div>
 
             </div>
 

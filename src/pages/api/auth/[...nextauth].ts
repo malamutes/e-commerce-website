@@ -16,7 +16,7 @@ export const authOptions = {
                 const userPassword = credentials?.userPassword;
 
                 const sql = neon(process.env.DATABASE_URL!);
-                const userLoginQuery = await sql`SELECT user_id, user_email, user_password, user_first_name, user_last_name, user_address FROM 
+                const userLoginQuery = await sql`SELECT user_id, user_email, user_first_name, user_last_name, user_address FROM 
                 users WHERE user_email = ${userEmail} AND user_password = ${userPassword}`;
 
                 if (userLoginQuery.length === 0) {
