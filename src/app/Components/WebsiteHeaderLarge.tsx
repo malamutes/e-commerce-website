@@ -129,7 +129,7 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                                     headline={headline}
                                     show={props.navDropdown === index}
                                     headlineDropdownItems={HeadlineDropdownMap[headline]}
-                                    numColumns={3} />
+                                    numColumns={4} />
 
                             </div>
                         ))}

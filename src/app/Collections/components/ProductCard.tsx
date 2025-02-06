@@ -98,11 +98,11 @@ export default function ProductCard(props: ProductCard) {
                     />
 
                     <div className="flex flex-col bg-gray-400 pb-5 ">
-                        <span className="mt-2 italic text-sm  break-all">
+                        <span className="mt-2 italic text-sm  break-word">
                             {props.product.product_producer}
                         </span>
 
-                        <span className="font-bold text-sm break-all">
+                        <span className="font-bold text-sm break-word">
                             {props.product.product_name}
                         </span>
 

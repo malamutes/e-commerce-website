@@ -106,7 +106,7 @@ export default function MainPage() {
                     <MainPageHeader
                         categoryArray={producerProducts}
                         categoryTitle="Popular Brands"
-                        categories={true}
+                        brand={true}
                     />
                 </div>
             </div>

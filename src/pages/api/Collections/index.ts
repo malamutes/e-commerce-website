@@ -29,6 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     let categoryQuery: string = "";
                     let featuredQuery: string = "";
                     let searchBarQuery: string = "";
+                    let brandQuery: string = "";
 
                     if (req.query.sex) {
                         sexArray = Array.isArray(req.query.sex) ? req.query.sex : [req.query.sex];
@@ -62,14 +63,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ON products.product_id = variant.product_id
                     WHERE ${categoryQuery}`
 
+                    if (req.query.brand) {
+                        brandQuery = ` AND products.product_producer = '${req.query.brand}'`
+                    }
+
                     if (req.query.sortBy === 'price_desc') {
-                        sortQuery = ` ORDER BY product_price DESC;`
+                        sortQuery = ` ORDER BY product_price DESC`
                     }
                     else if (req.query.sortBy === 'price_asc') {
-                        sortQuery = ` ORDER BY product_price ASC;`
+                        sortQuery = ` ORDER BY product_price ASC`
                     }
                     else if (req.body.sortBy === 'date_desc') {
-                        sortQuery = ` ORDER BY product_created_at DESC;`
+                        sortQuery = ` ORDER BY product_created_at DESC`
                     }
 
                     if (sexArray.length > 0) {
@@ -124,8 +129,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         if (req.query.saleCheck === 'On Sale') {
                             saleQuery = ` AND (products.product_sales_category @> '["Sale"]')`
                         }
-                        console.log(baseQuery + searchBarQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
-                        const data = await sql(baseQuery + searchBarQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                        console.log(baseQuery + searchBarQuery + brandQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                        const data = await sql(baseQuery + searchBarQuery + brandQuery + sexQuery + saleQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
 
                         if (data.length === 0) {
                             return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });
@@ -154,11 +159,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             featuredQuery = ` AND product_sales_category @> '["${req.query.featuredCategory}"${saleQuery}]'`
                         }
                         else {
-                            featuredQuery = ` AND (products.product_sales_category @> '["Sale"]')`
+                            featuredQuery = ""
                         }
 
-                        console.log(baseQuery + featuredQuery + searchBarQuery + sexQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
-                        const data = await sql(baseQuery + featuredQuery + searchBarQuery + sexQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                        console.log(baseQuery + featuredQuery + searchBarQuery + brandQuery + sexQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
+                        const data = await sql(baseQuery + featuredQuery + searchBarQuery + brandQuery + sexQuery + groupByQuery + sizeColQuery + sortQuery + queryLimit);
 
                         if (data.length === 0) {
                             return res.status(404).json({ message: 'NO ITEMS FOUND FOR COLLECTION QUERY(IES)' });

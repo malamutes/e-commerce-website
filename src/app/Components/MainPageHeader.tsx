@@ -15,12 +15,13 @@ interface MainPageHeaderProps {
     categoryTitle: string,
     categories?: boolean,
     showButton?: boolean,
-    headerStyle?: string
+    headerStyle?: string,
+    brand?: boolean
 }
 
 const urlNavLinkMap: { [key: string]: string } = {
     'New Arrivals': `/Collections?featuredCategory=New%20Arrivals&clothingCategory=All`,
-    'Popular Brands': '/Collections/TBA FEATURE',
+    'Popular Brands': `/Brands`,
     'Exclusive': `/Collections?featuredCategory=Exclusive&clothingCategory=All`,
     'Best Sellers': `/Collections?featuredCategory=Best%20Sellers&clothingCategory=All`,
     'On Sale': `/Collections?featuredCategory=Sale&clothingCategory=All`,
@@ -99,19 +100,33 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                                 make it more general by passing in props too but that refractoring can come later when i need to adapt it*/}
                                 {props.categories === true ? (
                                     <Link className="w-full aspect-square bg-gray-300 grid place-items-center" key={index}
-                                        href={product.product_producer ? "/" : `/Collections?clothingCategory=${product.product_type}`}> {/* TBA To sort stuff out via brands*/}
+                                        href={`/Collections?clothingCategory=${product.product_producer}`}> {/* TBA To sort stuff out via brands*/}
                                         <span>
-                                            {product.product_producer ?? product.product_type}
+                                            {product.product_producer}
                                         </span>
                                     </Link>
-                                ) : (
-                                    <ProductCard
-                                        key={index}
-                                        product={product}
-                                        style={{ boxShadow: 'none' }}
-                                        showTags={false}
-                                    />
-                                )}
+                                )
+                                    :
+                                    (
+                                        props.brand ? (
+                                            <Link className="w-full aspect-square bg-gray-300 grid place-items-center" key={index}
+                                                href={`/Collections?brand=${product.product_producer}`}> {/* TBA To sort stuff out via brands*/}
+                                                <span>
+                                                    {product.product_producer}
+                                                </span>
+                                            </Link>
+                                        )
+                                            :
+                                            (
+                                                <ProductCard
+                                                    key={index}
+                                                    product={product}
+                                                    style={{ boxShadow: 'none' }}
+                                                    showTags={false}
+                                                />
+                                            )
+
+                                    )}
 
                             </div>
 

@@ -16,7 +16,8 @@ export default function Collections() {
 
     const [currCat, setCurrCat] = useState(params?.get('clothingCategory'));
     const [currFeatured, setCurrFeatured] = useState(params?.get('featuredCategory'));
-    const [searchBarQuery, setSearchBarQuery] = useState(params?.get('searchBarQuery'));
+    const [searchBarQuery, setSearchBarQuery] = useState(params?.get('searchBarQuery') ?? "");
+    const [brandQuery, setBrandQuery] = useState(params?.get('brand') ?? "");
     const [categoryProducts, setCategoryProducts] = useState<ProductCardInterface[]>([]);
     const [sexFilter, setSexFilter] = useState<string[]>([]);
     const [colourFilter, setColourFilter] = useState<string[]>([]);
@@ -60,15 +61,20 @@ export default function Collections() {
         const saleQuery = `${onSale !== "" ? "&saleCheck=" : ""}${onSale}`
         const sortQuery = `${sortingFilter !== "" ? "&sortBy=" : ""}${sortingFilter}`
         const featuredQuery = `${currFeatured ? `featuredCategory=${currFeatured}&` : ""}`
-        const searchQuery = `${searchBarQuery ? `?searchBarQuery=${searchBarQuery}&` : "?"}`
+        const searchQuery = `${searchBarQuery ? `searchBarQuery=${searchBarQuery}&` : ""}`
+        let urlBrandQuery = "?";
+        if (searchBarQuery === "") {
+            urlBrandQuery = `${brandQuery ? `?brand=${brandQuery}&` : "?"}`
+        };
 
-        router.replace(`?${searchBarQuery ? `searchBarQuery=${searchBarQuery}&` : ""}${currFeatured ? `featuredCategory=${currFeatured}&` : ""}clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
+        router.replace(`?${brandQuery ? `brand=${brandQuery}&` : ""}${searchBarQuery ? `searchBarQuery=${searchBarQuery}&` : ""}${currFeatured ? `featuredCategory=${currFeatured}&` : ""}clothingCategory=${clothingQuery}${sexQuery}${colQuery}${sizeQuery}${saleQuery}${sortQuery}`);
 
         //console.log(pathname + "?" + sexQuery);
-        setQueryUrl(pathname + searchQuery + featuredQuery + "clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
+        setQueryUrl(pathname + urlBrandQuery + searchQuery + featuredQuery + "clothingCategory=" + clothingQuery + sexQuery + colQuery + sizeQuery + saleQuery + sortQuery);
         setCurrentPage(1);
 
-    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter, currFeatured, searchBarQuery]);
+    }, [sexFilter, colourFilter, sizeFilter, clothingFilter, onSale, sortingFilter,
+        currFeatured, searchBarQuery, brandQuery]);
 
     const getFilterResults = async () => {
         setShowLoadingUI(true);
@@ -92,6 +98,7 @@ export default function Collections() {
         else if (response.status === 404) {
             setCategoryProducts([]);
             console.log("NO ITEMS FOUND FOR COLLECTION QUERY!");
+            setTotalItems(0);
             setNumOfPages(0);
         }
         else {
@@ -104,14 +111,23 @@ export default function Collections() {
     useEffect(() => {
         const clothingCategory = params?.get('clothingCategory');
         const featuredCategory = params?.get('featuredCategory');
+        const searchBar = params?.get('searchBarQuery');
         if (clothingCategory) {
             setClothingFilter(clothingCategory);
         }
         if (featuredCategory) {
             setCurrFeatured(featuredCategory)
         }
+        if (searchBar) {
+            setSearchBarQuery(searchBar);
+        }
     }, [params]);
 
+    useEffect(() => {
+        if (searchBarQuery !== "") {
+            setBrandQuery("");
+        }
+    }, [searchBarQuery])
 
     useEffect(() => {
         if (queryUrl !== "") {
@@ -120,12 +136,20 @@ export default function Collections() {
 
     }, [queryUrl, currCat, currentPage]);
 
+
     return (
         <div className="flex flex-col gap-5 items-center min-w-[250px] mt-[50px]">
             <div className="flex flex-row justify-center items-center lg:container mx-auto pl-5 pr-5">
                 <span className="text-[30px] font-bold text-center">
-                    {searchBarQuery ? `Search results for '${searchBarQuery}'` : ((currFeatured &&
-                        currFeatured !== 'All') ? currFeatured : clothingFilter)} {showLoadingUI ? "..." : `(${totalItems})`}
+                    {
+                        searchBarQuery
+                            ? `Search results for '${searchBarQuery}'`
+                            : brandQuery
+                                ? `${brandQuery}`
+                                : (currFeatured && currFeatured !== 'All')
+                                    ? currFeatured
+                                    : clothingFilter
+                    } {showLoadingUI ? "..." : `(${totalItems})`}
                 </span>
             </div>
             <div className="w-full min-w-[290px] lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] 
@@ -133,7 +157,7 @@ export default function Collections() {
                 <hr className="border-[0.25px] border-gray-400 bg-gray-400 w-full"></hr>
             </div>
 
-            <div className="flex md:flex-row flex-col lg:container mx-auto pr-5 md:pl-0 pl-5">
+            <div className="flex md:flex-row flex-col lg:container w-full mx-auto pr-5 md:pl-0 pl-5">
                 <div className="w-1/5 mr-[30px] md:block hidden">
                     <FilterTabLarge
                         sexFilter={sexFilter}
@@ -188,9 +212,7 @@ export default function Collections() {
                                     setCurrentPage={setCurrentPage}
                                 />
                             </>
-
                         )}
-
                 </div>
             </div>
         </div>
