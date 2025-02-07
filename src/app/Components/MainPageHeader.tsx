@@ -91,7 +91,7 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                     {props.categoryArray.length !== 0 ? (
                         props.categoryArray.map((product, index) =>
                         (
-                            <div key={index} className="pl-2 pr-2 pt-0 pb-4"
+                            <div key={index} className="pl-2 pr-2 pt-0 pb-4 flex flex-grow"
                                 style={{
                                     minWidth: `${100 / numItemsDisplay}%`,
                                 }}

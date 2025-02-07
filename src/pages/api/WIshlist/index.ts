@@ -51,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             products.product_name, products.product_images, products.product_price, 
                             products.product_producer,
                             products.product_sales_category,
+                            products.product_sale_price,
                             (
                             SELECT
                             array_agg(jsonb_build_object('size', variant_size, 'colours', colours)) AS variant_combination

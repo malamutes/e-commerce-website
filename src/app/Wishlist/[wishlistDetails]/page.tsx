@@ -11,6 +11,7 @@ import { ShoppingCartContext } from "@/app/(Contexts)/ShoppingCartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircleXmark, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import LoadingComponent, { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
+import { ProductCardInterface } from "@/app/DataInterfaces";
 
 interface generalItemInfoType {
     itemTitle: string,
@@ -26,10 +27,14 @@ interface addToCartMapType {
     specificItemInfo: { [key: string]: string[] }
 }
 
+interface ProductCardVariantInterface extends ProductCardInterface {
+    variant_combination: {}
+}
+
 export default function WishlistDetailPage() {
     const params = useParams();
 
-    const [wishlists, setWishlists] = useState<Product[]>([]);
+    const [wishlists, setWishlists] = useState<ProductCardVariantInterface[]>([]);
 
     const { removeWishlist, allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
     const { setWishListArray } = useContext(WishlistContext);
@@ -141,9 +146,10 @@ export default function WishlistDetailPage() {
                         )
                         :
                         (
-                            <div className="xl:w-4/5 md:w-10/12 w-full grid xl:grid-cols-4 md:grid-cols-3 3xs:grid-cols-2 grid-cols-1 gap-5 mx-auto">
+                            <div className="xl:w-4/5 md:w-10/12 w-full grid xl:grid-cols-4 
+                            md:grid-cols-3 3xs:grid-cols-2 grid-cols-1 gap-5 mx-auto auto-rows-fr">
                                 {wishlists.map((wishlistItem) => (
-                                    <div key={wishlistItem['product_id'] as string}>
+                                    <div key={wishlistItem.product_id as string} className="h-full self-stretch">
                                         <ProductCard product={wishlistItem} />
                                     </div>
                                 ))}
@@ -183,10 +189,10 @@ export default function WishlistDetailPage() {
 
                         <div className="grid md:grid-cols-2 grid-cols-1 gap-y-5 gap-x-10 p-2">
                             {wishlists.map((product) => (
-                                <div key={product['product_id'] as string} className="flex flex-col gap-1 bg-gray-300 p-3 rounded-xl">
+                                <div key={product.product_id as string} className="flex flex-col gap-1 bg-gray-300 p-3 rounded-xl">
                                     <div className="flex flex-col gap-1">
                                         <div>
-                                            <span className="font-bold text-lg">{product['product_name'] as string} </span><br />
+                                            <span className="font-bold text-lg">{product.product_name as string} </span><br />
                                             <span className="text-gray-700 italic text-lg">- {product['product_producer'] as string}</span>
                                         </div>
 
@@ -194,18 +200,18 @@ export default function WishlistDetailPage() {
                                         <div className="w-fit"
                                             onClick={(() => {
                                                 const newAddToCartMap = new Map(addToCartMap);
-                                                if (newAddToCartMap.has(product['product_id'] as string)) {
-                                                    newAddToCartMap.delete(product['product_id'] as string)
+                                                if (newAddToCartMap.has(product.product_id as string)) {
+                                                    newAddToCartMap.delete(product.product_id as string)
                                                 }
                                                 else {
-                                                    newAddToCartMap.set(product['product_id'] as string, {
+                                                    newAddToCartMap.set(product.product_id as string, {
                                                         generalItemInfo: {
                                                             itemBrand: product['product_producer'] as string,
                                                             itemCount: 0 as number,
-                                                            itemID: product['product_id'] as string,
-                                                            itemImage: (product['product_images'] as string[])[0] as string,
-                                                            itemPrice: product['product_price'] as number,
-                                                            itemTitle: product['product_name'] as string
+                                                            itemID: product.product_id as string,
+                                                            itemImage: (product.product_images as string[])[0] as string,
+                                                            itemPrice: product.product_sale_price > 0 ? product.product_sale_price : product.product_price as number,
+                                                            itemTitle: product.product_name as string
                                                         },
                                                         specificItemInfo: {}
                                                     })
@@ -215,7 +221,7 @@ export default function WishlistDetailPage() {
                                             })}
                                         >
 
-                                            {addToCartMap.has(product['product_id'] as string)
+                                            {addToCartMap.has(product.product_id as string)
                                                 ? <FontAwesomeIcon icon={faCheckCircle} className="text-[25px] cursor-pointer" />
                                                 : <FontAwesomeIcon icon={faPlusCircle} className="text-[25px] cursor-pointer" />}
 
@@ -226,7 +232,7 @@ export default function WishlistDetailPage() {
                                         // Define local state or other logic here
                                         return (
                                             <div key={index} className={`
-                                                ${addToCartMap.has(product['product_id'] as string) ?
+                                                ${addToCartMap.has(product.product_id as string) ?
                                                     "text-gray-800 pointer-events-auto " :
                                                     "text-gray-400 pointer-events-none"}
                                                 `}
@@ -237,28 +243,28 @@ export default function WishlistDetailPage() {
                                                             key={colour}
                                                             className={`cursor-pointer w-fit mb-1 pr-2 pl-2 pt-1 pb-1 rounded-full 
                                                                         border-2 border-black border-opacity-0 hover:border-opacity-100
-                                                                ${Object.keys((addToCartMap.get(product['product_id'] as string) ?? {}).specificItemInfo ?? {}).includes(combination['size'])
-                                                                    && (addToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']].includes(colour) ?? false)
+                                                                ${Object.keys((addToCartMap.get(product.product_id as string) ?? {}).specificItemInfo ?? {}).includes(combination['size'])
+                                                                    && (addToCartMap.get(product.product_id as string)?.specificItemInfo?.[combination['size']].includes(colour) ?? false)
                                                                     ? "text-black font-bold border-2 border-black border-opacity-100 bg-gray-300"
                                                                     : ""}`}
 
                                                             onClick={() => {
                                                                 const newAddToCartMap = new Map(addToCartMap);
 
-                                                                const currentProductInfo = newAddToCartMap.get(product['product_id'] as string);
+                                                                const currentProductInfo = newAddToCartMap.get(product.product_id as string);
                                                                 const currentProductVariantCombination = currentProductInfo?.specificItemInfo;
 
                                                                 const generalItemInfo = currentProductInfo?.generalItemInfo ?? {
                                                                     itemBrand: product['product_producer'] as string,
                                                                     itemCount: 0 as number,
-                                                                    itemID: product['product_id'] as string,
-                                                                    itemImage: (product['product_images'] as string[])[0] as string,
-                                                                    itemPrice: product['product_price'] as number,
-                                                                    itemTitle: product['product_name'] as string
+                                                                    itemID: product.product_id as string,
+                                                                    itemImage: (product.product_images as string[])[0] as string,
+                                                                    itemPrice: product.product_sale_price > 0 ? product.product_sale_price : product.product_price as number,
+                                                                    itemTitle: product.product_name as string
                                                                 }
 
-                                                                if ((newAddToCartMap.get(product['product_id'] as string)?.specificItemInfo?.[combination['size']] ?? []).includes(colour) ?? false) {
-                                                                    newAddToCartMap.set(product['product_id'] as string,
+                                                                if ((newAddToCartMap.get(product.product_id as string)?.specificItemInfo?.[combination['size']] ?? []).includes(colour) ?? false) {
+                                                                    newAddToCartMap.set(product.product_id as string,
                                                                         {
                                                                             generalItemInfo: generalItemInfo,
                                                                             specificItemInfo: {
@@ -268,7 +274,7 @@ export default function WishlistDetailPage() {
                                                                         })
                                                                 }
                                                                 else {
-                                                                    newAddToCartMap.set(product['product_id'] as string,
+                                                                    newAddToCartMap.set(product.product_id as string,
                                                                         {
                                                                             generalItemInfo: generalItemInfo,
                                                                             specificItemInfo: {

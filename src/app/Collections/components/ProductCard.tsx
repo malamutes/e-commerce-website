@@ -76,7 +76,7 @@ function ProductCardSalesCategory(props: ProductCardSalesCategory) {
 export default function ProductCard(props: ProductCard) {
 
     return <>
-        {props.product['product_id'] ? (<div className="relative">
+        {props.product['product_id'] ? (<div className="relative h-full">
             <Link
                 className="w-fit"
                 href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
@@ -90,14 +90,14 @@ export default function ProductCard(props: ProductCard) {
             >
 
                 <div className="flex flex-col text-center w-fit mx-auto
-                max-w-[6000px] shadow-lg cursor-pointer bg-gray-300">
+                max-w-[600px] shadow-lg cursor-pointer h-full">
                     <Image src={(props.product['product_images'])[0]}
                         alt={(props.product['product_images'])[0]}
                         width={600}
                         height={600}
                     />
 
-                    <div className="flex flex-col bg-gray-400 pb-5 ">
+                    <div className="flex flex-col bg-gray-400 pb-5 gap-1 p-1 flex-grow justify-center">
                         <span className="mt-2 italic text-sm  break-word">
                             {props.product.product_producer}
                         </span>
@@ -107,7 +107,23 @@ export default function ProductCard(props: ProductCard) {
                         </span>
 
                         <span className="mb-2 text-sm">
-                            ${props.product.product_price}
+                            {props.product.product_sale_price > 0
+                                ?
+                                (
+                                    <div className="flex flex-col gap-3">
+                                        <span>
+                                            <span className="text-red-600 font-bold mr-[2.5px]"> SALE ${props.product.product_sale_price}</span> <span className="line-through"> ${props.product.product_price}</span>
+                                        </span>
+                                    </div>
+
+                                )
+                                :
+                                (
+                                    <span>
+                                        ${props.product.product_price}
+                                    </span>
+                                )}
+
                         </span>
 
                         <div className={`2xs:w-full 2xs:flex 2xs:flex-row 2xs:justify-center grid grid-cols-2 justify-items-center

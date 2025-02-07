@@ -64,7 +64,8 @@ interface ProductCardInterface {
     product_sales_category: string[],
     product_price: number,
     product_producer: string,
-    product_type: string
+    product_type: string,
+    product_sale_price: number
 }
 
 export type {

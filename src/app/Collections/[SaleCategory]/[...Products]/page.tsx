@@ -194,7 +194,27 @@ export default function ProductPage() {
                         </div>
 
                         <span className="mb-3 text-xl text-gray-700">
-                            ${currentProduct[0].product_price}
+                            {currentProduct[0].product_sale_price > 0
+                                ?
+                                (
+                                    <div className="flex flex-col gap-3">
+                                        <span>
+                                            <span className="text-red-600 font-bold mr-[2.5px]"> SALE ${currentProduct[0].product_sale_price}</span> <span className="line-through"> ${currentProduct[0].product_price}</span>
+                                        </span>
+                                        <div className="p-2 bg-red-600 text-white">
+                                            {((currentProduct[0].product_price -
+                                                currentProduct[0].product_sale_price) / currentProduct[0].product_price * 100).toFixed(0)}% OFF
+
+                                        </div>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <span>
+                                        ${currentProduct[0].product_price}
+                                    </span>
+                                )}
+
                         </span>
 
                         <button className="bg-green-700 p-4 text-white
@@ -210,7 +230,7 @@ export default function ProductPage() {
                                     itemCount: 0 /*...cartItem, itemCount: 1 makes it so its overriden to be 1 no matter what
                                         in shopping cart logic*/,
                                     itemImage: ((currentProduct[0].product_images)[0]),
-                                    itemPrice: Number(currentProduct[0].product_price ?? 0.00),
+                                    itemPrice: Number(currentProduct[0].product_sale_price > 0 ? currentProduct[0].product_sale_price : currentProduct[0].product_price),
                                     itemCartKey: ""
                                 })
                             }>

@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 if (req.query.category === 'Exclusive') {
                     const exclusiveProducts = await sql`
-                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category
+                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category, product_sale_price
                         FROM products
                         WHERE products.product_sales_category @> '["Exclusive"]'::jsonb
                         LIMIT 10;
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 else if (req.query.category === 'Sale') {
                     const saleProducts = await sql`
-                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category
+                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category, product_sale_price
                         FROM products
                         WHERE products.product_sales_category @> '["Sale"]'::jsonb
                         LIMIT 10;
@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 else if (req.query.category === 'Best Sellers') {
                     const bestSellersProducts = await sql`
-                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category
+                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category, product_sale_price
                         FROM products
                         WHERE products.product_sales_category @> '["Best Sellers"]'::jsonb
                         LIMIT 10;
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 else if (req.query.category === 'New Arrivals') {
                     const newArrivalsProducts = await sql`
-                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category
+                        SELECT products.product_id, products.product_name, products.product_images, products.product_producer, products.product_price, products.product_sales_category, product_sale_price
                         FROM products
                         ORDER BY products.product_created_at DESC
                         LIMIT 10;
@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 else if (req.query.category === 'Producer') {
                     const producerProducts = await sql`
-                        SELECT 0 AS product_id, NULL::text AS product_name, '[]'::jsonb AS product_images, products.product_producer, 0 AS product_price, '[]'::jsonb AS product_sales_category
+                        SELECT 0 AS product_id, NULL::text AS product_name, '[]'::jsonb AS product_images, products.product_producer, 0 AS product_price, '[]'::jsonb AS product_sales_category, 0 AS product_sale_price
                         FROM products
                         GROUP BY products.product_producer;
                     `;
@@ -95,7 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 else if (req.query.category === 'Clothing') {
                     const clothingProducts = await sql`
-                        SELECT 0 AS product_id, NULL::text AS product_name, '[]'::jsonb AS product_images, products.product_type AS product_producer, 0 AS product_price, '[]'::jsonb AS product_sales_category
+                        SELECT 0 AS product_id, NULL::text AS product_name, '[]'::jsonb AS product_images, products.product_type AS product_producer, 0 AS product_price, '[]'::jsonb AS product_sales_category, 0 AS product_sale_price
                         FROM products
                         GROUP BY products.product_type;
                     `;

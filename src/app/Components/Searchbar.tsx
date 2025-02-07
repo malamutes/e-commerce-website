@@ -73,7 +73,7 @@ export default function Searchbar(props: SearchbarProps) {
         <div className={`w-screen fixed h-screen top-0 left-0 bg-black bg-opacity-50
             ${props.show ? "lg:block hidden" : "hidden"} `}
             onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
-            <div className="h-[55vh] bg-white flex flex-col"
+            <div className="h-fit pb-3 bg-white flex flex-col"
                 onClick={(event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()}>
                 <div className="bg-gray-200 w-full">
                     <div className="w-1/2 flex flex-row mx-auto p-5 gap-5 justify-center items-center">
@@ -104,7 +104,7 @@ export default function Searchbar(props: SearchbarProps) {
                 <div className="font-bold text-xl mx-auto xl:w-[1000px] w-[900px] mt-[15px] pl-2">
                     {(props.noResultMessage === "FOUND" && props.showLoadingUI === false) ? "TOP SEARCH RESULTS" : ""}
                 </div>
-                <div className="xl:w-[1000px] w-[900px] p-2 flex flex-row gap-10 justify-center mx-auto ">
+                <div className="xl:max-w-[1000px] max-w-[900px] p-2 flex flex-row gap-10 justify-center mx-auto ">
                     {
                         (props.showLoadingUI ?
                             (
