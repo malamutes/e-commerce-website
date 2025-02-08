@@ -210,7 +210,8 @@ export default function WishlistDetailPage() {
                                                             itemCount: 0 as number,
                                                             itemID: product.product_id as string,
                                                             itemImage: (product.product_images as string[])[0] as string,
-                                                            itemPrice: product.product_sale_price > 0 ? product.product_sale_price : product.product_price as number,
+                                                            itemPrice: (product.product_sale_price > 0 && product.product_sales_category.includes("Sale"))
+                                                                ? product.product_sale_price : product.product_price as number,
                                                             itemTitle: product.product_name as string
                                                         },
                                                         specificItemInfo: {}
@@ -259,7 +260,8 @@ export default function WishlistDetailPage() {
                                                                     itemCount: 0 as number,
                                                                     itemID: product.product_id as string,
                                                                     itemImage: (product.product_images as string[])[0] as string,
-                                                                    itemPrice: product.product_sale_price > 0 ? product.product_sale_price : product.product_price as number,
+                                                                    itemPrice: (product.product_sale_price > 0 && product.product_sales_category.includes("Sale"))
+                                                                        ? product.product_sale_price : product.product_price as number,
                                                                     itemTitle: product.product_name as string
                                                                 }
 

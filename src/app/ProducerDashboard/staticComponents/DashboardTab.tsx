@@ -25,7 +25,7 @@ export default function DashboardTab() {
     const { data: session, status } = useSession();
 
     useEffect(() => {
-        setCurrentTab(params?.get('tab') ?? "Overview");
+        setCurrentTab(params?.get('tab') ?? "");
     }, [params])
 
     return <>

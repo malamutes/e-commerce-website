@@ -14,7 +14,7 @@ export default function ProducerDashboard() {
 
     const searchParams = useSearchParams();
 
-    let currentTab = ""
+    let currentTab = "Overview"
 
     if (searchParams) {
         currentTab = searchParams.get('tab') ?? "";

@@ -194,7 +194,7 @@ export default function ProductPage() {
                         </div>
 
                         <span className="mb-3 text-xl text-gray-700">
-                            {currentProduct[0].product_sale_price > 0
+                            {(currentProduct[0].product_sale_price > 0 && currentProduct[0].product_sales_category.includes("Sale"))
                                 ?
                                 (
                                     <div className="flex flex-col gap-3">
@@ -230,7 +230,8 @@ export default function ProductPage() {
                                     itemCount: 0 /*...cartItem, itemCount: 1 makes it so its overriden to be 1 no matter what
                                         in shopping cart logic*/,
                                     itemImage: ((currentProduct[0].product_images)[0]),
-                                    itemPrice: Number(currentProduct[0].product_sale_price > 0 ? currentProduct[0].product_sale_price : currentProduct[0].product_price),
+                                    itemPrice: Number((currentProduct[0].product_sale_price > 0 && currentProduct[0].product_sales_category.includes("Sale"))
+                                        ? currentProduct[0].product_sale_price : currentProduct[0].product_price),
                                     itemCartKey: ""
                                 })
                             }>

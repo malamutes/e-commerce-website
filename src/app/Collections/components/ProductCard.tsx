@@ -107,7 +107,7 @@ export default function ProductCard(props: ProductCard) {
                         </span>
 
                         <span className="mb-2 text-sm">
-                            {props.product.product_sale_price > 0
+                            {props.product.product_sale_price > 0 && props.product.product_sales_category.includes('Sale')
                                 ?
                                 (
                                     <div className="flex flex-col gap-3">
