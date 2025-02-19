@@ -7,8 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         case 'PATCH': {
             try {
                 console.log(req.body, req.query);
-                if (req.query.request === 'UpdateProduct') {
-                    const sql = neon(process.env.DATABASE_URL!);
+                const sql = neon(process.env.DATABASE_URL!);
+                if (req.query.request === 'UpdateProductPrices') {
                     if (req.body.onSale === true) {
                         await sql`
                             UPDATE products 
@@ -44,6 +44,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
 
                 }
+                else if (req.query.request === 'UpdateProductDetails') {
+                    await sql`
+                    UPDATE products 
+                    SET 
+                        product_audience = ${req.body.productAudience},
+                        product_type = ${req.body.productType},
+                        product_description = ${req.body.productDescription},
+                        product_details = ${req.body.productDetails},
+                        product_name = ${req.body.productName}
+                    WHERE product_id = ${req.body.productID};   
+                    `;
+
+                    return res.status(200).json({ message: "Product details updated successfully" });
+                }
+
 
 
             } catch (error) {
@@ -74,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const sql = neon(process.env.DATABASE_URL!);
 
                     const data = await sql`
-                            SELECT product_price, product_sale_price FROM products
+                            SELECT product_price, product_sale_price, product_description, product_details, product_type, product_audience, product_name FROM products
                             WHERE product_id = ${req.query.productID};
                         `
                     console.log("REQ.QUEY.UpdateProduct FROM BACKEND SALE TRUE");
