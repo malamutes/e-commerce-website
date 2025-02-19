@@ -133,7 +133,7 @@ export default function AddProduct() {
                 </select>
 
                 <span className='font-bold italic text-gray-600 mt-5'>
-                    *ADDING IMAGES FEATURE TBA*
+                    *ADDING IMAGES FEATURE TBA, NEED EXTERNAL CDN*
                 </span>
                 <div className='flex flex-col'>
                     <span className={fieldLabelClass}>

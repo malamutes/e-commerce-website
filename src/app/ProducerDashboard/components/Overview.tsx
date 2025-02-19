@@ -211,6 +211,10 @@ export default function Overview() {
                 </div>
             </div>
 
+            <span className='font-bold italic text-gray-600 text-center'>
+                *THIS IS FRONTEND MOCKUP ONLY, NO BACKEND ATM*
+            </span>
+
         </div >
     </>
 }

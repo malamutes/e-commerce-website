@@ -242,6 +242,11 @@ export default function UpdateProductPage() {
                                 />
                             </div>
 
+
+                            <span className='font-bold italic text-gray-600'>
+                                *UPDATING IMAGES FEATURE TBA, NEED EXTERNAL CDN*
+                            </span>
+
                             <button type="submit" className="bg-black text-white w-fit p-5 rounded-full">
                                 UPDATE DETAILS
                             </button>
