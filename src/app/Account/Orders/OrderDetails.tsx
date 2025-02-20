@@ -144,7 +144,7 @@ export default function OrderDetails() {
                                         Subtotal
                                     </span>
                                     <span>
-                                        ${userOrderHistoryDetails.orders_total_price - userOrderHistoryDetails.orders_shipping_price}
+                                        ${(userOrderHistoryDetails.orders_total_price - userOrderHistoryDetails.orders_shipping_price).toFixed(2)}
                                     </span>
                                 </div>
 

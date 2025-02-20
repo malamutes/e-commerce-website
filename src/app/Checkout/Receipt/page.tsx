@@ -155,7 +155,7 @@ export default function CheckoutReceiptPage() {
                     </p>
 
                     <p className="break-word">
-                        Hey Paul, <br />
+                        Hey {orderReceipt.shippingAddress.firstName}, <br />
                         We’re stoked you placed an order with us—you're awesome!  <br />
                         Our team is already on it, getting your products packed up and ready to ship out.  <br />
                         Once it’s on the way, we’ll
