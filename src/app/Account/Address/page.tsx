@@ -122,7 +122,7 @@ export default function EditAddressBook() {
         if (session?.user.address) {
             const { [addressKey]: removedAddress, ...newAddress } = session.user.address;
 
-            console.log("NEW ADDRESS", newAddress);
+            console.log("NEW ADDRESS", newAddress, removedAddress);
 
             const response = await fetch('/api/Users?edit=Address', {
                 method: 'PATCH',

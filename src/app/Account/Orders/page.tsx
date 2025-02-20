@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AddressInterface, UserOrderHistoryDetailsItem } from "@/app/DataInterfaces";
+import { AddressInterface } from "@/app/DataInterfaces";
 import { UserOrderHistoryDetails } from "@/app/DataInterfaces";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
