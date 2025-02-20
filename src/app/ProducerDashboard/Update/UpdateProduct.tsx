@@ -1,9 +1,12 @@
 "use client";
 
+/*
 import { clothingCategory, sexCategory } from "@/app/CollectionTypes";
 import LoadingComponent from "@/app/components/LoadingComponent";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
+*/
 
 export default function UpdateProduct() {
     /*
