@@ -8,7 +8,7 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { GlobalLoginTypeContext } from '@/app/(Contexts)/GlobalLoginPromptContext';
+import { GlobalLoginTypeContext } from '@/app/Contexts/GlobalLoginPromptContext';
 import LoginError from './LoginSignupError';
 import { PasswordValidator } from './PasswordValidator';
 import { FullScreenLoadingComponent } from '@/app/components/LoadingComponent';

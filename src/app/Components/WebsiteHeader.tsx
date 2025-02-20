@@ -18,8 +18,8 @@ export const HeadlineDropwdownMap: { [key: string]: string[] } = {
 import WebsiteHeaderSmall from "./WebsiteHeaderSmall";
 import WebsiteHeaderLarge from "./WebsiteHeaderLarge";
 import { Session } from "next-auth";
-import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
-import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
+import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
+import { GlobalLoginPromptContext } from "../Contexts/GlobalLoginPromptContext";
 import { ProductCardInterface } from "../DataInterfaces";
 import { FullScreenLoadingComponent } from "./LoadingComponent";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLInputTypeAttribute, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { WishlistContext } from "./WishlistModalContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark, faSave } from "@fortawesome/free-solid-svg-icons";

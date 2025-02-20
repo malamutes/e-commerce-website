@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import Carousel from "@/app/components/Carousel";
-import { ShoppingCartContext, ShoppingCartItem } from "@/app/(Contexts)/ShoppingCartContext";
+import { ShoppingCartContext, ShoppingCartItem } from "@/app/Contexts/ShoppingCartContext";
 import ShoppingCart from "@/app/components/ShoppingCart";
 import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";

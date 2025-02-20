@@ -3,9 +3,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faRuler, faDollarSign, faPalette, faDollar, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
 import { Context, SetStateAction, useContext } from "react";
-import { ShoppingCartContext, ShoppingCartItem } from "../(Contexts)/ShoppingCartContext";
+import { ShoppingCartContext, ShoppingCartItem } from "../Contexts/ShoppingCartContext";
 import Image from "next/image";
-import { ShoppingCartContextType } from "../(Contexts)/ShoppingCartContext";
+import { ShoppingCartContextType } from "../Contexts/ShoppingCartContext";
 import { useRouter } from "next/navigation";
 
 interface ShoppingCartProps {

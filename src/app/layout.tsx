@@ -4,11 +4,11 @@ import "./globals.css";
 import WebsiteHeader from "./components/WebsiteHeader";
 import WebsiteFooter from "./components/WebsiteFooter";
 import ClientSessionProvider from "./sessionProvider";
-import ShoppingCartContextWrapper from "./(Contexts)/ShoppingCartContextWrapper";
-import GlobalLoginPromptContextWrapper from "./(Contexts)/GlobalLoginPromptContextWrapper";
-import { GlobalLoginTypeContextWrapper } from "./(Contexts)/GlobalLoginPromptContextWrapper";
-import WishlistContextWrapper from "./(Contexts)/WishlistModalContextWrapper";
-import GlobalWishlistTrackerContextWrapper from "./(Contexts)/GlobalWishlistTrackerContextWrapper";
+import ShoppingCartContextWrapper from "./Contexts/ShoppingCartContextWrapper";
+import GlobalLoginPromptContextWrapper from "./Contexts/GlobalLoginPromptContextWrapper";
+import { GlobalLoginTypeContextWrapper } from "./Contexts/GlobalLoginPromptContextWrapper";
+import WishlistContextWrapper from "./Contexts/WishlistModalContextWrapper";
+import GlobalWishlistTrackerContextWrapper from "./Contexts/GlobalWishlistTrackerContextWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

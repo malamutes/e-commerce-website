@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { useState, useContext, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { GlobalLoginPromptContext } from "../(Contexts)/GlobalLoginPromptContext";
-import { WishlistContext } from "../(Contexts)/WishlistModalContext";
+import { GlobalLoginPromptContext } from "../Contexts/GlobalLoginPromptContext";
+import { WishlistContext } from "../Contexts/WishlistModalContext";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
+import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 
 //<a href="https://www.flaticon.com/free-icons/saved" title="saved icons">Saved icons created by NX Icon - Flaticon</a>
 //<a href="https://www.flaticon.com/free-icons/bookmark" title="bookmark icons">Bookmark icons created by Freepik - Flaticon</a>

@@ -3,11 +3,11 @@
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import { GlobalWishlistTrackerContext } from "@/app/(Contexts)/GlobalWishlistTrackerContext";
-import { WishlistContext } from "@/app/(Contexts)/WishlistModalContext";
+import { GlobalWishlistTrackerContext } from "@/app/Contexts/GlobalWishlistTrackerContext";
+import { WishlistContext } from "@/app/Contexts/WishlistModalContext";
 import { Product } from "@/app/ProducerDashboard/components/Products";
 import ProductCard from "@/app/Collections/components/ProductCard";
-import { ShoppingCartContext } from "@/app/(Contexts)/ShoppingCartContext";
+import { ShoppingCartContext } from "@/app/Contexts/ShoppingCartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircleXmark, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import LoadingComponent, { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";

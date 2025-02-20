@@ -1,8 +1,8 @@
 "use client";
 
 import { useContext } from "react";
-import { WishlistContext } from "../(Contexts)/WishlistModalContext";
-import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
+import { WishlistContext } from "../Contexts/WishlistModalContext";
+import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 import Link from "next/link";
 
 export default function WishlistOverviewPage() {

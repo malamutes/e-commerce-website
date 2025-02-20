@@ -12,8 +12,8 @@ import { useSession } from "next-auth/react";
 import { useEffect, useContext, useState } from "react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
-import { ShoppingCartContext } from "../(Contexts)/ShoppingCartContext";
-import { GlobalWishlistTrackerContext } from "../(Contexts)/GlobalWishlistTrackerContext";
+import { ShoppingCartContext } from "../Contexts/ShoppingCartContext";
+import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import Searchbar from "./Searchbar";
 
