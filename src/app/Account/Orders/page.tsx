@@ -8,8 +8,17 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default function OrderDetails() {
+export default function OrdersPageWithSuspense() {
+    return (
+        <Suspense >
+            <OrderDetails />
+        </Suspense>
+    )
+};
+
+export function OrderDetails() {
     const searchParams = useSearchParams();
 
     const [ordersID, setOrdersID] = useState("");
