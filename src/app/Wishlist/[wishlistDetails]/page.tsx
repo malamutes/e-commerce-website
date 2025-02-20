@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { GlobalWishlistTrackerContext } from "@/app/Contexts/GlobalWishlistTrackerContext";
 import { WishlistContext } from "@/app/Contexts/WishlistModalContext";
-import { Product } from "@/app/ProducerDashboard/components/Products";
 import ProductCard from "@/app/Collections/components/ProductCard";
 import { ShoppingCartContext } from "@/app/Contexts/ShoppingCartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +27,7 @@ interface addToCartMapType {
 }
 
 interface ProductCardVariantInterface extends ProductCardInterface {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     variant_combination: {}
 }
 
@@ -253,7 +253,6 @@ export default function WishlistDetailPage() {
                                                                 const newAddToCartMap = new Map(addToCartMap);
 
                                                                 const currentProductInfo = newAddToCartMap.get(product.product_id as string);
-                                                                const currentProductVariantCombination = currentProductInfo?.specificItemInfo;
 
                                                                 const generalItemInfo = currentProductInfo?.generalItemInfo ?? {
                                                                     itemBrand: product['product_producer'] as string,

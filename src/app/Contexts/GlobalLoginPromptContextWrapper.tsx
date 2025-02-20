@@ -1,6 +1,6 @@
 "use client";
 
-import { SetStateAction, useContext, useEffect, useState } from "react"
+import { SetStateAction, useContext, useState } from "react"
 import { GlobalLoginPromptContext, GlobalLoginTypeContext } from "./GlobalLoginPromptContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";

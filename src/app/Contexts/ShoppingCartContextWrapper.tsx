@@ -61,7 +61,7 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
         setShoppingCart((prevShoppingCart) => {
             if (prevShoppingCart[itemCartKey].itemCount === 1) {
                 //if there is only 1 count of item, remove it from shopping cart altogether
-                const { [itemCartKey]: _, ...updatedShoppingCart } = prevShoppingCart;
+                const { [itemCartKey]: _, ...updatedShoppingCart } = prevShoppingCart; // eslint-disable-line @typescript-eslint/no-unused-vars
                 return updatedShoppingCart;
             }
             else {
@@ -82,7 +82,7 @@ export default function ShoppingCartContextWrapper({ children }: { children: Rea
 
         setShoppingCart((prevShoppingCart) => {
             //just removes the item from the cart altogether 
-            const { [itemCartKey]: _, ...updatedShoppingCart } = prevShoppingCart;
+            const { [itemCartKey]: _, ...updatedShoppingCart } = prevShoppingCart; // eslint-disable-line @typescript-eslint/no-unused-vars
             return updatedShoppingCart;
         })
     }

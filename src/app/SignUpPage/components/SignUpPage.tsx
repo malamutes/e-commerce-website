@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { businessLocations, businessTypes } from "@/app/CollectionTypes";
 import Link from "next/link";
 import { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
@@ -34,7 +33,7 @@ export default function SignUpPage() {
 
     const { data: session, status, update } = useSession();
 
-    console.log(session?.user.user_id, session?.user.email, status);
+    console.log(session?.user.user_id, session?.user.email, status, update);
     //need to handle removing UI from the dom after selection probably
 
     const handleProducerSubmit = async (e: React.FormEvent) => {
@@ -174,7 +173,7 @@ export default function SignUpPage() {
                     <span>
                         <strong>Note:</strong> Your producer dashboard will be available on the next login,
                         and it will be accessible under the
-                        <FontAwesomeIcon icon={faUser} className="ml-1 text-gray-900" /> (profile icon) OR "Producer Dashboard" dropdown.
+                        <FontAwesomeIcon icon={faUser} className="ml-1 text-gray-900" /> (profile icon) OR &quot;Producer Dashboard&quot; dropdown.
                     </span>
                 </div>
 

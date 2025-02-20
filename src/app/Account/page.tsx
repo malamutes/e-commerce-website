@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AddressFormat } from "./Address/components/AddressFormat";
@@ -21,7 +21,6 @@ export default function AccountPage() {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
 
-    const [updatedInfo, setUpdatedInfo] = useState(false);
     const [userAddress, setUserAddress] = useState<DBAddressInterface>({});
 
     const [userOrderHistory, setUserOrderHistory] = useState<UserOrderHistory[]>([]);
@@ -56,7 +55,7 @@ export default function AccountPage() {
 
             if (response.ok) {
                 setUserOrderHistory(reply.userOrderHistory);
-                console.log(reply.userOrderHistory);
+                console.log(reply);
             }
             else {
                 console.log(response.status, response.statusText);

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { neon } from '@neondatabase/serverless'; // Import Neon or your preferred database client
-import { getServerSession } from "next-auth/next"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {

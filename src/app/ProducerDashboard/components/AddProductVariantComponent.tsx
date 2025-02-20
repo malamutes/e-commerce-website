@@ -48,11 +48,11 @@ function AddProductVariantQuantity(props: ProductVariantQuantityProps) {
     const handleRemoveVariant = (colour: string) => {
         if (props.productVariant[props.size][colour]) {
             const updatedProductVariant = { ...props.productVariant }
-            const { [colour]: _, ...keepProductVariant } = updatedProductVariant[props.size]
+            const { [colour]: _, ...keepProductVariant } = updatedProductVariant[props.size] // eslint-disable-line @typescript-eslint/no-unused-vars
             if (Object.keys(keepProductVariant).length === 0) {
                 //if there are no more variants inside the size just remove size altogether
                 //need to check if : _ the _ is varaible to access value of removed key?
-                const { [props.size]: _, ...removedEmptySizeVariant } = updatedProductVariant;
+                const { [props.size]: _, ...removedEmptySizeVariant } = updatedProductVariant; // eslint-disable-line @typescript-eslint/no-unused-vars
                 props.setProductVariant(removedEmptySizeVariant);
             }
             else {

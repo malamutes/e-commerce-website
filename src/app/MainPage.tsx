@@ -4,8 +4,6 @@ import { useSession } from "next-auth/react";
 import MainPageHeader from "./components/MainPageHeader";
 import { useEffect, useState } from "react";
 import { ProductCardInterface } from "./DataInterfaces";
-import LoadingComponent from "./components/LoadingComponent";
-
 
 export default function MainPage() {
     const { data: session, status } = useSession();

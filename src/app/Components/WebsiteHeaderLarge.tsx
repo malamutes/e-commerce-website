@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { faChevronDown, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +27,7 @@ interface HeadlineDropdownProps {
     headline: string
     show: boolean
     headlineDropdownItems: string[],
-    numColumns: Number
+    numColumns: number
 }
 
 function HeadlineDropdown(props: HeadlineDropdownProps) {

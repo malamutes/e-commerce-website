@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     const sql = neon(process.env.DATABASE_URL!);
                     console.log("API BACKEND USERPROFILE USER ID", session.user.user_id)
-                    const updateUserProfile = await sql`
+                    await sql`
                     UPDATE users 
                     SET user_first_name = ${req.body.firstName ?? session.user.firstName},
                         user_last_name = ${req.body.lastName ?? session.user.lastName},

@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 
 export default function DashboardTopBar() {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     return <>
         <div className="flex flex-row pt-10 pb-10">
             <div>

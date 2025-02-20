@@ -8,7 +8,6 @@ import { ShoppingCartContext, ShoppingCartItem } from "@/app/Contexts/ShoppingCa
 import ShoppingCart from "@/app/components/ShoppingCart";
 import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";
-import ProductCard from "../../components/ProductCard";
 import MainPageHeader from "@/app/components/MainPageHeader";
 import LoadingComponent from "@/app/components/LoadingComponent";
 
@@ -101,7 +100,7 @@ export default function ProductPage() {
     //getting available colours based on size
     useEffect(() => {
         setCurrentColours(variantCombination[selectedSize]);
-    }, [selectedSize])
+    }, [selectedSize, variantCombination])
 
     return <>
         <ShoppingCart show={showCart} setShow={setShowCart} />

@@ -1,11 +1,10 @@
 'use client';
 
-import Form from 'next/form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons/faXTwitter';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { GlobalLoginTypeContext } from '@/app/Contexts/GlobalLoginPromptContext';

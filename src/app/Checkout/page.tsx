@@ -45,12 +45,6 @@ export default function CheckoutPage() {
 
     const shoppingCartContext = useContext(ShoppingCartContext);
 
-    useEffect(() => {
-        if (session?.user.address && selectedShippingAddress === "") {
-            setSelectedShippingAddress(addressKeys[0]);
-        }
-    }, [session])
-
     const addressKeys = Object.keys(session?.user.address ?? {});
     const [showAddAddressForm, setShowAddAddressForm] = useState(false);
 
@@ -63,6 +57,12 @@ export default function CheckoutPage() {
         shippingMethod: "Standard Shipping (3 - 7 business days)",
         shippingPrice: shippingMethods['Standard Shipping (3 - 7 business days)']
     });
+
+    useEffect(() => {
+        if (session?.user.address && selectedShippingAddress === "") {
+            setSelectedShippingAddress(addressKeys[0]);
+        }
+    }, [session, selectedShippingAddress, addressKeys])
 
     const handleAddAddress = async (address: AddressInterface) => {
         const addressId = uuidv4();
@@ -147,7 +147,7 @@ export default function CheckoutPage() {
 
     const handleDeleteAddress = async (addressKey: string) => {
         if (session?.user.address) {
-            const { [addressKey]: removedAddress, ...newAddress } = session.user.address;
+            const { [addressKey]: _, ...newAddress } = session.user.address;
 
 
             const response = await fetch('/api/Users?edit=Address', {

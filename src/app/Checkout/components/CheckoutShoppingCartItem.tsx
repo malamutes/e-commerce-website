@@ -1,8 +1,5 @@
 "use client";
 
-import { ShoppingCartContext, ShoppingCartItem } from "@/app/ShoppingCartContext";
-import { ShoppingCartContextType } from "@/app/ShoppingCartContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { ShoppingCartItemComponentProps } from "@/app/components/ShoppingCart";
 

@@ -71,7 +71,7 @@ export default function GlobalWishlistTrackerContextWrapper({ children }: { chil
     const removeWishlist = (wishlistToDel: string) => {
         setAllWishlistedItems((prevItems) => {
             const removeWishlistFromMap = new Map(prevItems);
-            for (let [productID, wishlistArray] of removeWishlistFromMap.entries()) {
+            for (const [productID, wishlistArray] of removeWishlistFromMap.entries()) {
                 if (wishlistArray.includes(wishlistToDel)) {
                     removeWishlistFromMap.set(productID, wishlistArray.filter(wishlist => wishlist !== wishlistToDel))
                 }

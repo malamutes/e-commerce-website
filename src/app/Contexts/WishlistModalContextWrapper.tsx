@@ -41,7 +41,7 @@ function WishlistModal(props: WishlistModalProps) {
 
     const handleAddToWishlists = async () => {
         setShowFullScreenLoading(true);
-        let newSet = new Set(currentlySelectedWishlists);
+        const newSet = new Set(currentlySelectedWishlists);
         let sendNewListName = "";
         if (newListSelected === true) {
             newSet.add(newListName);
@@ -83,7 +83,7 @@ function WishlistModal(props: WishlistModalProps) {
 
     const handleUpdateWishlists = async () => {
         setShowFullScreenLoading(true);
-        let newSet = new Set(currentlySelectedWishlists);
+        const newSet = new Set(currentlySelectedWishlists);
         let sendNewListName = "";
         if (newListSelected === true) {
             newSet.add(newListName);
@@ -104,7 +104,7 @@ function WishlistModal(props: WishlistModalProps) {
         })
 
         if (response.ok) {
-            const reply = await response.json()
+            //const reply = await response.json()
             //alert("NEW ITEM ADDED TO WISHLIST");
             props.setShowModal(false);
             //IM USING SELECTED WISHLIST TO TRIGGER REFETCH TO GET UPDATED ARRAYS FROM DB

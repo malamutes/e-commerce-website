@@ -27,14 +27,14 @@ export default function WishlistBookmark(props: WishlistBookmarkProps) {
         setCurrentItemImage, setCurrentItemName, setCurrentItemID, setUpdate }
         = useContext(WishlistContext);
 
-    const { isItemWishlisted, allWishlistedItems, updateWishlistedItem } = useContext(GlobalWishlistTrackerContext);
+    const { isItemWishlisted, allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
     const [itemWishlisted, setItemWishlisted] = useState(isItemWishlisted(props.currentItemID))
 
     useEffect(() => {
         setItemWishlisted(isItemWishlisted(props.currentItemID));
     }, [allWishlistedItems])
 
-    const { data: session, status } = useSession();
+    const { status } = useSession();
 
     const addToWishlist = async () => {
         if (status === 'unauthenticated') {

@@ -1,4 +1,4 @@
-import NextAuth, { DefaultUser, Session, User, Account, Profile } from "next-auth";
+import NextAuth, { DefaultUser, Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { neon } from '@neondatabase/serverless';
 import { JWT } from "next-auth/jwt";
@@ -11,7 +11,7 @@ export const authOptions = {
                 userEmail: { label: "UserEmail", type: "email" },
                 userPassword: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
                 const userEmail = credentials?.userEmail;
                 const userPassword = credentials?.userPassword;
 

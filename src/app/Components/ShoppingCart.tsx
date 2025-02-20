@@ -1,8 +1,8 @@
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX, faRuler, faDollarSign, faPalette, faDollar, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
-import { Context, SetStateAction, useContext } from "react";
+import { faX, faRuler, faDollarSign, faPalette, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
+import { SetStateAction, useContext } from "react";
 import { ShoppingCartContext, ShoppingCartItem } from "../Contexts/ShoppingCartContext";
 import Image from "next/image";
 import { ShoppingCartContextType } from "../Contexts/ShoppingCartContext";

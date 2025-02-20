@@ -12,14 +12,21 @@ interface GlobalWishlistTrackerContextType {
 
 const GlobalWishlistTrackerContext = createContext<GlobalWishlistTrackerContextType>({
     allWishlistedItems: new Map(),
-    addToWishlistedItems: (productID: string, wishListNames: string[]) => console.error('WishlistContext not provided: addToWishlist is missing'),
-    updateWishlistedItem: (productID: string, wishListNames: string[]) => console.error('WishlistContext not provided: updateWishlistedItem is missing'),
-    removeFromWishlistedItems: (productID: string) => console.error('WishlistContext not provided: removeFromWishlist is missing'),
+    addToWishlistedItems: (productID: string, wishListNames: string[]) => {
+        console.error('WishlistContext not provided: addToWishlist is missing', { productID, wishListNames });
+    },
+    updateWishlistedItem: (productID: string, wishListNames: string[]) => {
+        console.error('WishlistContext not provided: updateWishlistedItem is missing', { productID, wishListNames });
+    },
+    removeFromWishlistedItems: (productID: string) => {
+        console.error('WishlistContext not provided: removeFromWishlist is missing', { productID });
+    },
     isItemWishlisted: (productID: string) => {
-        console.error('WishlistContext not provided: isItemWishlisted is missing');
+        console.error('WishlistContext not provided: isItemWishlisted is missing', { productID });
         return false;
     },
     removeWishlist: () => { }
 });
+
 
 export { GlobalWishlistTrackerContext }

@@ -114,6 +114,7 @@ export default function Collections() {
         const searchBar = params?.get('searchBarQuery');
         if (clothingCategory) {
             setClothingFilter(clothingCategory);
+            setCurrCat(clothingCategory);
         }
         if (featuredCategory) {
             setCurrFeatured(featuredCategory)

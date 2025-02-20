@@ -22,7 +22,7 @@ export default function DashboardTab() {
     const dashboardTabs = ['Overview', 'Products', 'Sales', 'Orders', 'Operations', 'Settings'];
 
     const [currentTab, setCurrentTab] = useState(params?.get('tab') ?? "Overview");
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
 
     useEffect(() => {
         setCurrentTab(params?.get('tab') ?? "");
@@ -34,7 +34,7 @@ export default function DashboardTab() {
             <div className="flex flex-col items-center overflow-hidden">
                 <div className="lg:p-5 md:p-3 text-lg font-bold relative lg:bg-gray-900 ">
                     <div className="xl:ml-[25px] lg:block hidden">
-                        {session?.user.business?.businessName}'s Dashboard
+                        {session?.user.business?.businessName}&apos;s Dashboard
                     </div>
 
                     <FontAwesomeIcon icon={faDesktop} className="text-[25px] text-gray-400 lg:hidden block mb-[15px]" />

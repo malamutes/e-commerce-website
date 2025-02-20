@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { clothingCategory, clothingColours, clothingSizes, sexCategory } from '@/app/CollectionTypes';
+import { clothingCategory, sexCategory } from '@/app/CollectionTypes';
 import AddProductVariantComponent from './AddProductVariantComponent';
 import { customAlphabet } from 'nanoid';
 
@@ -50,7 +50,6 @@ export default function AddProduct() {
             }),
         });
 
-        const data = await response.json();
         if (response.ok) {
             alert("Product added successfully");
             router.push(`/ProducerDashboard?tab=Products`);

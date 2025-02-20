@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { faAngleDown, faUser, faX } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +16,6 @@ import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerC
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import { DropdownMenu } from "./WebsiteHeader";
 import { SearchbarSmall } from "./Searchbar";
-import { ProductCardInterface } from "../DataInterfaces";
 
 const iconSize = "25px";
 const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";

@@ -22,7 +22,7 @@ export interface ShoppingCartContextType {
     removeItemFromCart: (item: ShoppingCartItem) => void,
     setCountAmount: (item: ShoppingCartItem, count: number) => void,
     clearShoppingCart: () => void,
-    getTotal: () => Number
+    getTotal: () => number
 }
 
 const ShoppingCartContext = createContext<ShoppingCartContextType>({

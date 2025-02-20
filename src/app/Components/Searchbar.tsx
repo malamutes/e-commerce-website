@@ -2,7 +2,7 @@
 
 import { faMagnifyingGlass, faSquareXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { SetStateAction, useEffect, useState } from "react"
+import { SetStateAction } from "react"
 import { ProductCardInterface } from "../DataInterfaces"
 import ProductCard from "../Collections/components/ProductCard"
 import Image from "next/image"

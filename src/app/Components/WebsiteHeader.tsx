@@ -17,8 +17,6 @@ export const HeadlineDropwdownMap: { [key: string]: string[] } = {
 }
 import WebsiteHeaderSmall from "./WebsiteHeaderSmall";
 import WebsiteHeaderLarge from "./WebsiteHeaderLarge";
-import { Session } from "next-auth";
-import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 import { GlobalLoginPromptContext } from "../Contexts/GlobalLoginPromptContext";
 import { ProductCardInterface } from "../DataInterfaces";
 import { FullScreenLoadingComponent } from "./LoadingComponent";
@@ -124,7 +122,7 @@ export default function WebsiteHeader() {
 
     const { setShowLoginPrompt, setMessage } = useContext(GlobalLoginPromptContext);
 
-    const { data: session, status } = useSession();
+    const { status } = useSession();
 
     const router = useRouter();
 
@@ -146,7 +144,7 @@ export default function WebsiteHeader() {
     const handleUserSignOut = async () => {
         try {
             setShowFullScreenLoading(true);
-            const logoutResult = await signOut({ callbackUrl: '/' });
+            await signOut({ callbackUrl: '/' });
             setShowFullScreenLoading(false);
         }
         catch (error) {
