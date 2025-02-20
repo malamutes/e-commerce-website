@@ -1,13 +1,12 @@
 "use client";
 
 import { Suspense } from "react";
+import ProducerDashboard from "./ProducerDashboard";
 
-export default function ProductDashboardPage() {
+export default function ProducerDashboardPage() {
     return (
         <Suspense>
-            <span>
-                hello
-            </span>
+            <ProducerDashboard />
         </Suspense>
     )
 }

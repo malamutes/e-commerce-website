@@ -1,6 +1,4 @@
 "use client";
-
-
 //if i get router not mounted need to change from next/next or whatever to next/navigation
 import Overview from "./components/Overview";
 import Orders from "./components/Orders";
@@ -9,10 +7,10 @@ import Settings from "./components/Settings";
 import Products from "./components/Products";
 import Operations from "./components/Operations";
 import AddProduct from "./components/AddProduct";
+import { useSearchParams } from "next/navigation";
 
 export default function ProducerDashboard() {
 
-    /*
     const searchParams = useSearchParams();
 
     let currentTab = "Overview"
@@ -20,7 +18,7 @@ export default function ProducerDashboard() {
     if (searchParams) {
         currentTab = searchParams.get('tab') ?? "";
     }
-        */
+
 
     const tabComponentMap: { [key: string]: React.ReactNode } = {
         'Overview': <Overview />,
@@ -35,7 +33,7 @@ export default function ProducerDashboard() {
 
     return <>
         <div className={`max-h-[750px] overflow-y-auto`}>
-            {tabComponentMap['Overview']}
+            {tabComponentMap[currentTab]}
         </div>
 
     </>
