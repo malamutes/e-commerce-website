@@ -154,7 +154,7 @@ export default function Products() {
 
                                                 <Link
                                                     className={`bg-yellow-600 hover:bg-orange-600 text-white ${gridTableLinkClass}`}
-                                                    href={``}
+                                                    href={`ProducerDashboard/Update?productID=${product['product_id']}`}
                                                 >
                                                     <span>Update</span>
                                                 </Link>
