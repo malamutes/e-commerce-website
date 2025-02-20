@@ -12,6 +12,7 @@ export default function PaginationComponent(props: PaginationComponentProps) {
     const window = 2; //determines how many pages before it turns to ellipsis
     const [paginationPages, setPaginationPages] = useState<string[]>([]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         const updatePagesArray = [...paginationPages];
 
@@ -58,7 +59,7 @@ export default function PaginationComponent(props: PaginationComponentProps) {
 
         setPaginationPages(updatePagesArray);
 
-    }, [props.currentPage]);
+    }, [props.currentPage, props.numOfPages]);
 
     useEffect(() => {
         console.log(props.currentPage, paginationPages);

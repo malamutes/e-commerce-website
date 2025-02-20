@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/app/components/LoadingComponent";
 
 export interface Product {
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-ty
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     [key: string]: string | string[] | object
 }
 
