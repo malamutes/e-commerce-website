@@ -138,7 +138,7 @@ export default function LoginMenu() {
     }
 
     return <>
-        <div className='bg-gray-100'>
+        <div >
             <div className="flex flex-col justify-center items-center
                 lg:container mx-auto sm:pr-[50px] sm:pl-[50px] lg:pr-0 lg:pl-0 
                 pr-[15px] pl-[25px] min-w-[270px]">
@@ -204,6 +204,12 @@ export default function LoginMenu() {
                                         required={true}
                                     />
 
+                                    <span className='font-bold italic text-gray-600 mt-3 block text-sm cursor-pointer hover:underline'
+                                        onClick={() => { alert("NOT ADDED SINCE WE NEED EMAIL INTERACTION") }}
+                                    >
+                                        Forgot Password?
+                                    </span>
+
                                     <button className='bg-black text-white pt-2 pb-2 pl-5 pr-5 rounded-full 
                                 mt-7 w-fit block mx-auto'
                                         type='submit'
@@ -228,34 +234,33 @@ export default function LoginMenu() {
                                     ... with Socials
                                 </h1>
 
-                                <div className=' p-2.5 w-5/6 text-white bg-blue-900 
-                                    flex justify-between items-center cursor-pointer 
-                                    hover:bg hover:brightness-150 transition-all duration-300
-                                    mb-5 mt-10 gap-3' >
-                                    Sign in with Facebook
-                                    <FontAwesomeIcon icon={faFacebookF} />
-                                </div>
-
-                                <div className=' p-2.5 w-5/6 text-white bg-red-900
-                                    flex justify-between items-center cursor-pointer 
-                                    hover:bg hover:brightness-150 transition-all duration-300
-                                    mb-5 gap-3' >
-                                    Sign in with Google
-                                    <div>
-                                        <FontAwesomeIcon icon={faGoogle} />
+                                <div className="flex 3xs:flex-row flex-col justify-center gap-5 p-5">
+                                    <div className="flex flex-col items-center p-5 bg-blue-900 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                        <FontAwesomeIcon icon={faFacebookF} size="2x" />
+                                        <span className="mt-2 text-sm">Facebook</span>
                                     </div>
 
+                                    <div className="flex flex-col items-center p-5 bg-red-900 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                        <FontAwesomeIcon icon={faGoogle} size="2x" />
+                                        <span className="mt-2 text-sm">Google</span>
+                                    </div>
+
+                                    <div className="flex flex-col items-center p-5 bg-cyan-600 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                        <FontAwesomeIcon icon={faXTwitter} size="2x" />
+                                        <span className="mt-2 text-sm">Twitter</span>
+                                    </div>
                                 </div>
 
-                                <div className=' p-2.5 w-5/6 text-white bg-cyan-600
-                                    flex justify-between items-center cursor-pointer 
-                                    hover:bg hover:brightness-150 transition-all duration-300
-                                    mb-5 gap-3' >
-                                    Sign in with Twitter
-                                    <FontAwesomeIcon icon={faXTwitter} />
-                                </div>
+                                <span className='font-bold italic text-gray-600 text-center block text-sm'>
+                                    *THIS IS FRONTEND MOCKUP ONLY, USE EMAIL INSTEAD*
+                                </span>
 
-
+                                <span className='font-bold italic text-gray-600 text-center block text-sm'>
+                                    *A sample user account is: david.jones63@gmail.com, D@v1dJ0n3s!*
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -363,32 +368,30 @@ export default function LoginMenu() {
                                     ... with Socials
                                 </h1>
 
-                                <div className=' p-2.5 w-5/6 text-white bg-blue-900 
-                                    flex justify-between items-center cursor-pointer 
-                                    hover:bg hover:brightness-150 transition-all duration-300
-                                    mb-2.5 mt-10 gap-3' >
-                                    Sign up with Facebook
-                                    <FontAwesomeIcon icon={faFacebookF} />
-                                </div>
-
-                                <div className=' p-2.5 w-5/6 text-white bg-red-900
-                                    flex justify-between items-center cursor-pointer 
-                                    hover:bg hover:brightness-150 transition-all duration-300
-                                    mb-2.5 mt-10 gap-3' >
-                                    Sign up with Google
-                                    <div>
-                                        <FontAwesomeIcon icon={faGoogle} />
+                                <div className="flex 3xs:flex-row flex-col justify-center gap-5 p-5">
+                                    <div className="flex flex-col items-center p-5 bg-blue-900 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                        <FontAwesomeIcon icon={faFacebookF} size="2x" />
+                                        <span className="mt-2 text-sm">Facebook</span>
                                     </div>
 
+                                    <div className="flex flex-col items-center p-5 bg-red-900 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                        <FontAwesomeIcon icon={faGoogle} size="2x" />
+                                        <span className="mt-2 text-sm">Google</span>
+                                    </div>
+
+                                    <div className="flex flex-col items-center p-5 bg-cyan-600 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                        <FontAwesomeIcon icon={faXTwitter} size="2x" />
+                                        <span className="mt-2 text-sm">Twitter</span>
+                                    </div>
                                 </div>
 
-                                <div className=' p-2.5 w-5/6 text-white bg-cyan-600
-                                    flex justify-between items-center cursor-pointer 
-                                    hover:bg hover:brightness-150 transition-all duration-300
-                                    mb-2.5 mt-10 gap-3' >
-                                    Sign up with Twitter
-                                    <FontAwesomeIcon icon={faXTwitter} />
-                                </div>
+
+                                <span className='font-bold italic text-gray-600 text-center block text-sm'>
+                                    *THIS IS FRONTEND MOCKUP ONLY, USE EMAIL SIGN UP INSTEAD*
+                                </span>
                             </div>
                         </div>
                     </div>

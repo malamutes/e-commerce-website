@@ -135,6 +135,11 @@ export default function Settings() {
                 </div>
             </form>
 
+
+            <span className='font-bold italic text-gray-600 text-center block text-sm'>
+                *THIS IS FRONTEND MOCKUP ONLY*
+            </span>
+
         </div>
     </>
 }

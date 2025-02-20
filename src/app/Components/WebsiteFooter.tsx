@@ -57,7 +57,7 @@ export default function WebsiteFooter() {
 
                     <div className="flex flex-col items-center">
                         <span className={footerTitleClass}>
-                            HELP
+                            Help
                         </span>
                         {['Shipping & Delivery', 'FAQs', 'Contact Us', 'Terms of sale',
                             'Gifting', 'Payment Methods'
@@ -229,6 +229,10 @@ export default function WebsiteFooter() {
                         BACK TO TOP
                     </span>
                 </div>
+
+                <span className='font-bold italic text-gray-600 text-center block'>
+                    *THIS IS FRONTEND MOCKUP ONLY, NO BACKEND ATM*
+                </span>
             </div>
         </div>
     </>
