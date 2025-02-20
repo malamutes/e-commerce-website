@@ -9,7 +9,7 @@ interface AddAddressFormProps {
     setShow: React.Dispatch<SetStateAction<boolean>>,
     address: AddressInterface,
     setAddress: React.Dispatch<SetStateAction<AddressInterface>>,
-    handleAddAddress: (address: AddressInterface) => Promise<void>,
+    handleAddAddress?: (address: AddressInterface) => Promise<void>,
     handleEditAddress?: (address: AddressInterface, addressKey: string) => Promise<void>,
     addressKey?: string,
 }
@@ -30,9 +30,11 @@ export default function AddAddressForm(props: AddAddressFormProps) {
                 await props.handleEditAddress(props.address, props.addressKey);
                 setShowFullLoading(false);
             } else {
-                setShowFullLoading(true);
-                await props.handleAddAddress(props.address);
-                setShowFullLoading(false);
+                if (props.handleAddAddress) {
+                    setShowFullLoading(true);
+                    await props.handleAddAddress(props.address);
+                    setShowFullLoading(false);
+                }
             }
             props.setShow(false);
         }}>

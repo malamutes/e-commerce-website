@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AddressInterface } from "@/app/DataInterfaces";
-import { shippingMethods } from "../page";
+import { shippingMethods } from "../shippingTypes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import Image from "next/image";

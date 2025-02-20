@@ -8,7 +8,7 @@ export interface AddressFormatEditProps {
     address: AddressInterface
     handleDeleteAddress: (addressKey: string) => void,
     addressKey: string,
-    handleEditAddress: (address: AddressInterface, addressKey: string) => void
+    handleEditAddress: (address: AddressInterface, addressKey: string) => Promise<void>,
 }
 
 export default function AddressFormatEdit(props: AddressFormatEditProps) {
@@ -53,8 +53,6 @@ export default function AddressFormatEdit(props: AddressFormatEditProps) {
                 setShow={setEditAddress}
                 address={address}
                 setAddress={setAddress}
-                handleAddAddress={() => {/* DUMMY FUNCTION NOTHING TO DO HERE, WE CAN PROLLY
-                EDIT THIS COMPONENT SO BOTH ARE OPTIONAL*/}}
                 handleEditAddress={() => props.handleEditAddress(address, props.addressKey)}
                 addressKey={props.addressKey} />
         </div>
