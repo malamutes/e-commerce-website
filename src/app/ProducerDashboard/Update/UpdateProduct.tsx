@@ -1,15 +1,13 @@
 "use client";
 
-/*
 import { clothingCategory, sexCategory } from "@/app/CollectionTypes";
 import LoadingComponent from "@/app/components/LoadingComponent";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-*/
 
 export default function UpdateProduct() {
-    /*
+
     const params = useSearchParams();
 
     const [salePrice, setSalePrice] = useState(0);
@@ -105,16 +103,9 @@ export default function UpdateProduct() {
         setLoadingUI(false);
     }
 
-    */
-    return <>
-        <span>
-            SUSPENSE ISSUES
-        </span>
-    </>
-}
 
-/* 
-<div className="bg-gray-200 max-h-[600px] overflow-auto">
+    return <>
+        <div className="bg-gray-200 max-h-[600px] overflow-auto">
             {loadingUI
                 ?
                 (
@@ -267,4 +258,7 @@ export default function UpdateProduct() {
                 )}
 
         </div>
-        */
+    </>
+}
+
+

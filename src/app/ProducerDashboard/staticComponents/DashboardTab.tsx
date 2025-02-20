@@ -1,6 +1,5 @@
 "use client";
 
-/*
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faGear, faChartBar, faScrewdriverWrench, faCircleInfo, faBox, IconDefinition, faDesktop } from "@fortawesome/free-solid-svg-icons";
@@ -100,18 +99,4 @@ export function DashboardTabSmall() {
     </>
 }
 
-*/
 
-export default function DashboardTab() {
-    return <>
-        <span>
-            SUSPENSE ISSUES
-        </span></>
-}
-
-export function DashboardTabSmall() {
-    return <>
-        <span>
-            SUSPENSE ISSUES
-        </span></>
-}
