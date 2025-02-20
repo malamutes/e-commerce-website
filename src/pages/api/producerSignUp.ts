@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         //i might not even add that functionality, if u want to be a producer do it upfront not swapping
 
 
-        const insertProducer = await sql`
+        await sql`
         INSERT INTO producers (user_id, business_name, business_type, business_registration_number, business_location)
         OVERRIDING SYSTEM VALUE
         VALUES (${session.user.user_id}, ${req.body.businessName}, ${req.body.businessType}, ${req.body.businessRegistrationNumber}, ${req.body.businessLocation});

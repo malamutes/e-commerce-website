@@ -147,8 +147,8 @@ export default function CheckoutPage() {
 
     const handleDeleteAddress = async (addressKey: string) => {
         if (session?.user.address) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [addressKey]: _, ...newAddress } = session.user.address;
-
 
             const response = await fetch('/api/Users?edit=Address', {
                 method: 'PATCH',

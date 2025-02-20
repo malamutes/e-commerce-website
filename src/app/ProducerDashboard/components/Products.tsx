@@ -6,7 +6,7 @@ import LoadingComponent from "@/app/components/LoadingComponent";
 
 export interface Product {
     // eslint-disable-next-line @typescript-eslint/no-empty-object-ty
-    [key: string]: string | string[] | {}
+    [key: string]: string | string[] | object
 }
 
 export default function Products() {

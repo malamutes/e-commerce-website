@@ -86,7 +86,7 @@ export default function AccountPage() {
             })
         })
 
-        const reply = await response.json()
+        await response.json()
 
         if (response.ok) {
             console.log("it worked");
