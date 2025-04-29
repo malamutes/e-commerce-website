@@ -12,8 +12,6 @@ const nextConfig: NextConfig = {
     ],
     dangerouslyAllowSVG: true,
   },
-  // Set i18n to undefined to fix lambda route issues
-  i18n: undefined,
 };
 
 export default nextConfig;

@@ -7,7 +7,8 @@ import AddressFormatEdit from "./components/AddressFormat";
 import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/navigation";
-import LoadingComponent, { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
+import { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
+import LoadingComponent from "@/app/components/LoadingComponent";
 
 export default function EditAddressBook() {
     const [showAddAddressForm, setShowAddAddressForm] = useState(false);

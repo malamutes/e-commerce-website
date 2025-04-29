@@ -2,7 +2,7 @@
 "use client";
 import { SetStateAction, useState } from "react";
 import { AddressInterface } from "@/app/DataInterfaces";
-import { FullScreenLoadingComponent } from "../../../components/LoadingComponent";
+import { FullScreenLoadingComponent } from "@/app/components/LoadingComponent";
 
 interface AddAddressFormProps {
     show: boolean,
