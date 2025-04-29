@@ -137,9 +137,12 @@ export default function CheckoutReceiptPage() {
 
     useEffect(() => {
         const orderID = localStorage.getItem('CheckoutReceiptID');
-        getOrderReceipt(orderID ?? "");
-
-    }, [])
+        if (!orderID) {
+            console.error('No checkout receipt ID found in localStorage.');
+            return;
+        }
+        getOrderReceipt(orderID);
+    }, []);
 
     useEffect(() => {
         console.log("ORDER RECEIPT", orderReceipt);
