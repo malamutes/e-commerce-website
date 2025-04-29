@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleRight, faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
-import { clampFunc } from "../../components/Carousel";
+import { clampFunc } from "@/app/components/Carousel";
 import Link from "next/link";
 import { useMatchMediaQuery } from "@/app/MatchMediaQuery";
 
