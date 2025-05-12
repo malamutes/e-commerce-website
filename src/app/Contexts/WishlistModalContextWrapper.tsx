@@ -8,6 +8,8 @@ import Image from "next/image";
 import { GlobalWishlistTrackerContext } from "./GlobalWishlistTrackerContext";
 import { faCircle } from "@fortawesome/free-regular-svg-icons/faCircle";
 import { FullScreenLoadingComponent } from "../components/LoadingComponent";
+import Lottie from "lottie-react";
+import checkmark from '@/assets/CheckMark.json';
 
 interface WishlistModalProps {
     showModal: boolean,
@@ -176,7 +178,7 @@ function WishlistModal(props: WishlistModalProps) {
                                         {wishList}
                                     </span>
 
-                                    <div className={'w-[35px] h-[35px] cursor-pointer grid place-items-center'}
+                                    <div className={'w-[40px] h-[40px] cursor-pointer grid place-items-center'}
                                         onClick={() => setCurrentlySelectedWishlists((currentlySelectedWishlists) => {
                                             const returnSet = new Set(currentlySelectedWishlists);
                                             if (currentlySelectedWishlists.has(wishList)) {
@@ -190,10 +192,11 @@ function WishlistModal(props: WishlistModalProps) {
                                         })}>
                                         {currentlySelectedWishlists.has(wishList)
                                             ? (
-                                                <FontAwesomeIcon icon={faCircleCheck} className="text-[25px] " />
+                                                <Lottie animationData={checkmark} loop={false} className="w-[40px] h-[40px] scale-[1.25] " />
+
                                             )
                                             : (
-                                                <FontAwesomeIcon icon={faCircle} className="text-[25px]" />
+                                                <FontAwesomeIcon icon={faCircle} className="text-[22.5px]" />
                                             )}
                                     </div>
                                 </div>
@@ -232,7 +235,8 @@ function WishlistModal(props: WishlistModalProps) {
 
                 <div className="flex 2xs:flex-row flex-col 2xs:gap-0 gap-3 items-center ">
                     <button className="p-3 bg-black text-white rounded-full font-bold text-sm 2xs:mr-3
-                     w-fit disabled:bg-gray-200"
+                     w-fit disabled:bg-gray-200 transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black"
                         onClick={() => { setShowCreateList(true); setNewListSelected(true) }}
                         disabled={showCreateList === true}
                     >CREATE NEW LIST</button>
@@ -241,16 +245,18 @@ function WishlistModal(props: WishlistModalProps) {
                         ?
                         (<div className="p-3 bg-black text-white rounded-full 
                             font-bold text-sm w-fit cursor-pointer flex flex-row gap-2 items-center
-                            whitespace-nowrap"
+                            whitespace-nowrap transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black"
                             onClick={handleUpdateWishlists}>UPDATE LIST
                             <FontAwesomeIcon icon={faSave} className="text-[20px]" />
                         </div>)
                         :
                         (<div className="p-3 bg-black text-white rounded-full 
                             font-bold text-sm w-fit cursor-pointer flex flex-row gap-2 items-center
-                            whitespace-nowrap"
+                            whitespace-nowrap transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black"
                             onClick={handleAddToWishlists}>ADD TO LIST
-                            <FontAwesomeIcon icon={faSave} className="text-[20px]" />
+                            <FontAwesomeIcon icon={faSave} className="text-[20px] " />
                         </div>)}
                 </div>
             </div>

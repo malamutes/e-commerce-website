@@ -2,7 +2,7 @@
 
 import { faMagnifyingGlass, faSquareXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { SetStateAction } from "react"
+import { SetStateAction, useEffect, useRef, useState } from "react"
 import { ProductCardInterface } from "../DataInterfaces"
 import ProductCard from "../Collections/components/ProductCard"
 import Image from "next/image"
@@ -68,87 +68,109 @@ const handleEnterSearch = (event: React.KeyboardEvent, searchQuery: string,
 }
 
 export default function Searchbar(props: SearchbarProps) {
+    const backdropRef = useRef(null);
+    const [animate, setAnimate] = useState(false);
+
+    useEffect(() => {
+        if (props.show) {
+            setAnimate(true);
+        }
+        else {
+            setAnimate(false)
+        }
+    }, [props.show]);
 
     return <>
-        <div className={`w-screen fixed h-screen top-0 left-0 bg-black bg-opacity-50
+        {props.show && (
+            <div className={`w-screen fixed h-screen top-0 left-0 bg-black bg-opacity-50
             ${props.show ? "lg:block hidden" : "hidden"} `}
-            onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
-            <div className="h-fit pb-3 bg-white flex flex-col"
-                onClick={(event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()}>
-                <div className="bg-gray-200 w-full">
-                    <div className="w-1/2 flex flex-row mx-auto p-5 gap-5 justify-center items-center">
-                        <div className="relative w-5/6">
-                            <input
-                                type="text"
-                                className="w-full p-3 pl-5 rounded-lg border-[1px] border-black border-opacity-25"
-                                placeholder="Search products or brands"
-                                value={props.searchQuery}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setSearchQuery(event.target.value)}
-                                style={{ boxShadow: "2.5px 2.5px 5px rgba(0,0,0,0.1)" }}
-                                onKeyDown={(event: React.KeyboardEvent) => handleEnterSearch(event, props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage,
-                                    props.setSearchQueryTotalCount, props.setShowLoadingUI)}
-                            />
-                            <FontAwesomeIcon
-                                icon={faMagnifyingGlass}
-                                className="absolute right-5 top-1/2 transform -translate-y-1/2 text-[18px]
-                            text-gray-500 cursor-pointer hover:scale-125 ease-in-out duration-500"
-                                onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage, props.setSearchQueryTotalCount,
-                                    props.setShowLoadingUI
-                                )}
-                            />
-                        </div>
-                        <FontAwesomeIcon icon={faSquareXmark} className="text-[40px] cursor-pointer"
-                            onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }} />
-                    </div>
-                </div>
-                <div className="font-bold text-xl mx-auto xl:w-[1000px] w-[900px] mt-[15px] pl-2">
-                    {(props.noResultMessage === "FOUND" && props.showLoadingUI === false) ? "TOP SEARCH RESULTS" : ""}
-                </div>
-                <div className="xl:max-w-[1000px] max-w-[900px] p-2 flex flex-row gap-10 justify-center mx-auto ">
-                    {
-                        (props.showLoadingUI ?
-                            (
-                                <LoadingComponent
-                                    width="100"
-                                    height="100"
-                                    minHeight="min-h-[300px]"
+                onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}
+                ref={backdropRef}>
+
+                <div className={`h-fit pb-3 bg-white flex flex-col transition-all duration-500 ${animate ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}
+                    onClick={(event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()}>
+
+                    <div className={`bg-gray-200 w-full transition-all duration-1000 ${animate ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"}`}>
+
+                        <div className="w-1/2 flex flex-row mx-auto p-5 gap-5 justify-center items-center">
+                            <div className={`relative w-5/6 transition-all delay-300 duration-500 ${animate ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"}`}>
+                                <input
+                                    type="text"
+                                    className="w-full p-3 pl-5 rounded-lg border-[1px] border-black border-opacity-25"
+                                    placeholder="Search products or brands"
+                                    value={props.searchQuery}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setSearchQuery(event.target.value)}
+                                    style={{ boxShadow: "2.5px 2.5px 5px rgba(0,0,0,0.1)" }}
+                                    onKeyDown={(event: React.KeyboardEvent) => handleEnterSearch(event, props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage,
+                                        props.setSearchQueryTotalCount, props.setShowLoadingUI)}
                                 />
-                            )
-                            :
-                            (
-                                (props.searchQueryProducts && props.searchQueryProducts.length !== 0) ? props.searchQueryProducts.map((product) => (
-                                    <ProductCard
-                                        key={product.product_id}
-                                        product={product}
-                                        style={{ boxShadow: 'none' }}
-                                        showTags={false}
-                                        seachBarSetShow={props.setShow}
-                                        seachBarQuery={props.setSearchQuery}
+                                <FontAwesomeIcon
+                                    icon={faMagnifyingGlass}
+                                    className="absolute right-5 top-1/2 transform -translate-y-1/2 text-[18px]
+                            text-gray-500 cursor-pointer hover:scale-125 ease-in-out duration-500"
+                                    onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage, props.setSearchQueryTotalCount,
+                                        props.setShowLoadingUI
+                                    )}
+                                />
+                            </div>
+                            <FontAwesomeIcon icon={faSquareXmark} className={`text-[40px] cursor-pointer transition-all delay-300 duration-1000 
+                            ${animate ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"}`}
+                                onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }} />
+                        </div>
+                    </div>
+                    <div className="font-bold text-xl mx-auto xl:w-[1000px] w-[900px] mt-[15px] pl-2">
+                        {(props.noResultMessage === "FOUND" && props.showLoadingUI === false) ? "TOP SEARCH RESULTS" : ""}
+                    </div>
+                    <div className="xl:max-w-[1000px] max-w-[900px] p-2 flex flex-row gap-10 justify-center mx-auto mt-[20px] mb-[20px]">
+                        {
+                            (props.showLoadingUI ?
+                                (
+                                    <LoadingComponent
+                                        width="100"
+                                        height="100"
+                                        minHeight="min-h-[300px]"
                                     />
-                                ))
-                                    :
-                                    (
-                                        < div className="italic text-gray-600 text-lg">
-                                            {(props.noResultMessage === "" || props.noResultMessage === "FOUND") ? "Make a search now!" : props.noResultMessage}
+                                )
+                                :
+                                (
+                                    (props.searchQueryProducts && props.searchQueryProducts.length !== 0) ? props.searchQueryProducts.map((product) => (
+                                        <div key={product.product_id}>
+                                            <ProductCard
+                                                product={product}
+                                                style={{ boxShadow: 'none' }}
+                                                showTags={false}
+                                                seachBarSetShow={props.setShow}
+                                                seachBarQuery={props.setSearchQuery}
+                                            />
                                         </div>
-                                    )
-                            )
+
+                                    ))
+                                        :
+                                        (
+                                            < div className="italic text-gray-600 text-lg">
+                                                {(props.noResultMessage === "" || props.noResultMessage === "FOUND") ? "Make a search now!" : props.noResultMessage}
+                                            </div>
+                                        )
+                                )
+                            )}
+                    </div>
+                    {(props.searchQueryProducts && props.searchQueryProducts.length !== 0 && props.showLoadingUI === false) ? (
+                        <div className="mb-3 text-center">
+                            <Link className="text-white bg-black rounded-full p-3 font-bold block w-fit mx-auto transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black"
+                                href={`/Collections?searchBarQuery=${props.searchQuery}`}
+                                onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
+                                VIEW ALL SEARCH RESULTS ({props.searchQueryTotalCount})
+                            </Link>
+                        </div>
+                    ) :
+                        (
+                            null
                         )}
                 </div>
-                {(props.searchQueryProducts && props.searchQueryProducts.length !== 0 && props.showLoadingUI === false) ? (
-                    <div className="mt-3 text-center">
-                        <Link className="font-bold text-lg hover:underline"
-                            href={`/Collections?searchBarQuery=${props.searchQuery}`}
-                            onClick={() => { props.setShow(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}>
-                            VIEW ALL SEARCH RESULTS ({props.searchQueryTotalCount})
-                        </Link>
-                    </div>
-                ) :
-                    (
-                        null
-                    )}
-            </div>
-        </div >
+            </div >
+        )}
+
     </>
 }
 
@@ -195,7 +217,7 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
                             />
                         </div>
                     </div>
-                    <div className="font-bold text-lg mx-auto w-full pl-2">
+                    <div className="font-bold text-lg mx-auto w-full flex justify-center items-center">
                         {(props.noResultMessage === "FOUND" && props.showLoadingUI === false) ? "TOP SEARCH RESULTS" : ""}
                     </div>
                     <div className="w-full p-5 flex flex-col gap-5 justify-center mx-auto">
@@ -209,7 +231,8 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
                             (props.searchQueryProducts && props.searchQueryProducts.length !== 0) ? (
                                 props.searchQueryProducts.map((product) => (
                                     <Link
-                                        className="flex 2xs:flex-row flex-col gap-3 items-center"
+                                        className="flex 2xs:flex-row flex-col gap-3 items-center transition-all duration-500 bg-gray-100 
+                                        hover:-translate-y-4 hover:ring-2 hover:ring-black hover:ring-opacity-50 hover:shadow-black/75 p-2"
                                         key={product.product_id}
                                         href={`/Collections/All/Products/?productID=${product.product_id}`}
                                         onClick={() => {
@@ -241,7 +264,8 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
 
                         {(props.searchQueryProducts && props.searchQueryProducts.length !== 0 && props.showLoadingUI === false) ? (
                             <Link
-                                className="font-bold text-lg hover:underline"
+                                className="text-white bg-black rounded-full p-3 font-bold block w-fit mx-auto transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black"
                                 href={`/Collections?searchBarQuery=${props.searchQuery}`}
                                 onClick={() => {
                                     props.setMenuOffCanvas(false);

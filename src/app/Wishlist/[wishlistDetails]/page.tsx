@@ -130,7 +130,7 @@ export default function WishlistDetailPage() {
             <div className="flex flex-col gap-5 items-center p-5 min-w-[280px]">
                 <span className="font-bold text-2xl leading-relaxed text-center">
                     {params?.wishlistDetails} <br />
-                    <span className="italic text-gray-400 text-xl">{wishlists.length} Items</span>
+                    <span className="italic text-gray-600 text-lg">You have wishlisted {wishlists.length} items!</span>
                 </span>
 
 
@@ -158,14 +158,17 @@ export default function WishlistDetailPage() {
 
                 </div>
 
-                <div className="flex 3xs:flex-row flex-col gap-10 mt-[25px] max-w-[4/5]">
-                    <button className="bg-black p-3 text-white"
+                <div className="flex 3xs:flex-row flex-col gap-10 mt-[25px] 3xs:w-auto w-11/12">
+                    <button className="bg-black p-3 text-white transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black font-bold"
                         onClick={() => handleRemoveWishlist(params?.wishlistDetails as string)}>REMOVE WISHLIST</button>
 
-                    <button className="bg-black p-3 text-white"
+                    <button className="bg-black p-3 text-white transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black font-bold"
                         onClick={() => { router.push('/Wishlist') }}>BACK TO WISHLISTS</button>
 
-                    <button className="bg-black p-3 text-white"
+                    <button className="bg-black p-3 text-white transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black font-bold"
                         onClick={() => setShowAddToCartModal(true)}>ADD TO CART</button>
                 </div>
 
@@ -298,7 +301,8 @@ export default function WishlistDetailPage() {
                                 </div>
                             ))}
                         </div>
-                        <button className="bg-black p-3 text-white rounded-xl"
+                        <button className="bg-black p-3 text-white rounded-xl  transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black"
                             onClick={() => handleAddToCart()}>ADD TO CART</button>
                     </div>
 

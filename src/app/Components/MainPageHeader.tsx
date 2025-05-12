@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { clampFunc } from "./Carousel";
@@ -9,6 +9,7 @@ import { ProductCardInterface } from "../DataInterfaces";
 import ProductCard from "../Collections/components/ProductCard";
 import { useMatchMediaQuery } from "../MatchMediaQuery";
 import LoadingComponent from "./LoadingComponent";
+import ObserverIntersectionUseEffect from "@/ObserverUseEffect";
 
 interface MainPageHeaderProps {
     categoryArray: ProductCardInterface[],
@@ -33,6 +34,14 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
     const [distance, setDistance] = useState(0);
     const totalNumItems = props.categoryArray.length;
 
+    const [scrollPast, setScrollPast] = useState(false);
+
+    const ComponentRef = useRef<HTMLDivElement>(null);
+
+    const checkScrollPast = ObserverIntersectionUseEffect({
+        scrollPast: scrollPast, setScrollPast: setScrollPast,
+        compRef: ComponentRef, threshold: 0.1
+    })
 
     const [numItemsDisplay, setNumItemsDisplay] = useState(5);
     const more1024px = useMatchMediaQuery({ size: 1024 });
@@ -51,7 +60,9 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
 
 
     return <>
-        <div className={`flex flex-col mt-[50px] shadow-xl p-[25px] rounded-[25px] ${props.headerStyle} min-w-[250px]`}>
+        <div className={`flex flex-col mt-[50px] shadow-xl p-[25px] rounded-[25px] 
+        ${props.headerStyle} min-w-[250px] transition-all duration-1000 ${scrollPast ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1/2"}`}
+            ref={ComponentRef}>
             <div className="flex 2xs:flex-row flex-col items-center justify-between">
                 <div className="w-full p-[25px] sm:block hidden">
                     <hr className="border-t-2 border-gray-300" />

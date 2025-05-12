@@ -112,7 +112,7 @@ export function DropdownMenu(props: DropdownMenu) {
 export default function WebsiteHeader() {
     const iconSize = "25px";
     const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
-    const dropDownMenuItemClass = "text-white pl-[50px] pt-[12.5px] pb-[12.5px] font-bold text-sm";
+    const dropDownMenuItemClass = "text-white ml-[40px] font-bold text-sm hover:bg-gray-200 hover:text-black w-fit p-3 cursor-pointer rounded-lg";
 
     const [userIn, setUserIn] = useState(false);
     const [displayUserDropdown, setDisplayUserDrowndown] = useState(false);

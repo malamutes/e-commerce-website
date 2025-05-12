@@ -6,6 +6,8 @@ import { shippingMethods } from "../shippingTypes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import Image from "next/image";
+import Lottie from "lottie-react";
+import CheckoutCheckmark from "@/assets/CheckmarkCheckout.json"
 
 const monthNamesShort = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -149,12 +151,12 @@ export default function CheckoutReceiptPage() {
     }, [orderReceipt])
 
     return <>
-        <div className="lg:container mx-auto mt-[100px] ">
-            <div className="xl:w-2/5 lg:w-3/5 w-5/6 mx-auto flex flex-col">
+        <div className="lg:container mx-auto mt-[100px]  mb-[100px] pb-[25px]">
+            <div className="xl:w-2/5 lg:w-3/5 w-5/6 mx-auto flex flex-col p-[25px] bg-gray-100 ">
                 <div className="leading-super-loose mb-[50px]">
+                    <Lottie animationData={CheckoutCheckmark} className="w-[250px] h-[250px] -ml-[25px]" loop={false} />
                     <p className="text-2xl font-bold">
                         THANK YOU FOR SHOPPING WITH US!
-                        <FontAwesomeIcon icon={faCircleCheck} className="text-[30px] ml-[5px] " />
                     </p>
 
                     <p className="break-word">
@@ -196,7 +198,7 @@ export default function CheckoutReceiptPage() {
                                 </span>
 
                                 <span className="text-black font-bold">
-                                    ${orderReceipt.orderTotalPrice - orderReceipt.shippingPrice}
+                                    ${(orderReceipt.orderTotalPrice - orderReceipt.shippingPrice).toFixed(2)}
                                 </span>
                             </div>
 
@@ -232,7 +234,7 @@ export default function CheckoutReceiptPage() {
 
                             <div className="flex flex-row justify-between">
                                 <span className="text-gray-600 font-bold">
-                                    Date of Order
+                                    Order Date
                                 </span>
 
                                 <span className="text-black font-bold">

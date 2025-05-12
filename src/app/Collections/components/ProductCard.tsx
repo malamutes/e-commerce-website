@@ -5,7 +5,8 @@ import { faTrophy, faCrown, faTags, IconDefinition, faBoxOpen } from "@fortaweso
 import Link from "next/link";
 import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
+import ObserverIntersectionUseEffect from "@/ObserverUseEffect";
 
 //for now just assume the image aspect ratio is 4:3 and in db it is 800:600px
 const productSalesCategoryMap: { [key: string]: string } = {
@@ -74,13 +75,26 @@ function ProductCardSalesCategory(props: ProductCardSalesCategory) {
 }
 
 export default function ProductCard(props: ProductCard) {
+    const [scrollPast, setScrollPast] = useState(false);
+
+    const ComponentRef = useRef<HTMLDivElement>(null);
+
+    const checkScrollPast = ObserverIntersectionUseEffect({
+        scrollPast: scrollPast, setScrollPast: setScrollPast,
+        compRef: ComponentRef, threshold: 0.1
+    })
 
     return <>
         {props.product['product_id'] ? (<div className="relative h-full">
             <div
-                className="flex flex-col text-center w-fit mx-auto max-w-[600px] shadow-lg cursor-pointer h-full 
+                style={{
+                    transition: 'opacity 1s, transform 1s'
+                }}
+                className={`flex flex-col text-center w-fit mx-auto max-w-[600px] shadow-lg cursor-pointer h-full 
                     transition-all duration-500 bg-gray-400 hover:-translate-y-4 hover:ring-2 
-                    hover:ring-black hover:ring-opacity-50 hover:shadow-black/75">
+                    hover:ring-black hover:ring-opacity-50 hover:shadow-black/75 
+                    ${scrollPast ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1/2"}`}
+                ref={ComponentRef}>
                 <Link
                     href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
                     style={props.style}

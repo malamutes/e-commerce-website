@@ -14,7 +14,7 @@ export default function PaginationComponent(props: PaginationComponentProps) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        const updatePagesArray = [...paginationPages];
+        const updatePagesArray = [];
 
         if (props.numOfPages <= 5) {
             for (let i = 1; i <= props.numOfPages; i++) {
@@ -62,7 +62,7 @@ export default function PaginationComponent(props: PaginationComponentProps) {
     }, [props.currentPage, props.numOfPages]);
 
     useEffect(() => {
-        console.log(props.currentPage, paginationPages);
+        //console.log(props.currentPage, paginationPages);
     }, [paginationPages])
 
     return <>

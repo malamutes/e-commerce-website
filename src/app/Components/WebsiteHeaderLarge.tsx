@@ -9,13 +9,16 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../Contexts/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import Searchbar from "./Searchbar";
+import Lottie from "lottie-react";
+import Bookmark from "@/assets/Bookmark.json"
+import { LottieRefCurrentProps } from 'lottie-react';
 
 export const HeadlineDropdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
@@ -34,10 +37,9 @@ function HeadlineDropdown(props: HeadlineDropdownProps) {
     return <>
 
         <div className={`absolute top-[100px] left-0 top-0 w-full
-                grid gap-x-4 bg-gray-400 pl-[100px] pr-[100px] 
-                pb-[20px] font-bold place-items-center
-                ${props.show ? "block" : "hidden"}`}
-            style={{ gridTemplateColumns: `repeat(${props.numColumns}, minmax(0, 1fr))` }}>
+                flex flex-row justify-between bg-gray-400 pl-[100px] pr-[100px] 
+                pb-[20px] font-bold place-items-center transition-all duration-300
+                ${props.show ? "block opacity-100" : "opacity-0 pointer-events-none"}`}>
 
             {props.headlineDropdownItems.map((item, index) => {
                 let dynamicUrl: string = "";
@@ -78,6 +80,18 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
 
     const [showSearchbar, setShowSearchbar] = useState(false);
+    const [hoverBookmark, setHoverBookmark] = useState(false);
+
+    const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+
+    useEffect(() => {
+        if (hoverBookmark) {
+            lottieRef.current?.play();
+        }
+        else {
+            lottieRef.current?.goToAndStop(30, true);
+        }
+    }, [hoverBookmark]);
 
     useEffect(() => {
         if (status === "loading") {
@@ -140,15 +154,15 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
 
                     <div className="flex flex-row items-center">
                         <div className="flex flex-row items-center">
-                            <div
-                                onMouseEnter={() => {
-                                    if (props.userIn) {
-                                        props.setDisplayUserDrowndown(true);
-                                    }
-                                }}
-                                onMouseLeave={() => props.setDisplayUserDrowndown(false)}>
-                                <div className="border-2 border-black p-2 rounded-full cursor-pointer relative"
+                            <div>
+                                <div className="border-2 border-black p-2 rounded-xl relative"
                                     onClick={props.loginSubmit}
+                                    onMouseLeave={() => props.setDisplayUserDrowndown(false)}
+                                    onMouseEnter={() => {
+                                        if (props.userIn) {
+                                            props.setDisplayUserDrowndown(true);
+                                        }
+                                    }}
                                 >
                                     <div className={props.userIn ? "hidden" : "block"}>
                                         <span>
@@ -157,17 +171,34 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                                     </div>
 
                                     <div className={props.userIn ? "block " : "hidden"}>
-                                        <span>
+                                        <span >
                                             {session?.user.email}
 
                                         </span>
                                         <FontAwesomeIcon icon={faChevronDown}
-                                            className={`ml-2 ${props.displayUserDropdown ? "rotate-180" : "rotate-0"}`} />
+                                            className={`ml-2 transition-transform duration-300 ${props.displayUserDropdown ? "rotate-180" : "rotate-0"}`} />
 
                                         <div
-                                            className={`absolute ${props.displayUserDropdown ? "block" : "hidden"} 
-                                        left-1/2 transform -translate-x-1/2 pt-[15px] w-full `}>
-                                            <div className="bg-gray-500 flex flex-col text-gray-200 pt-[12.5px] pb-[12.5px] min-w-[200px]">
+                                            className={`absolute transition-all mt-[5px] duration-300
+                                                ${props.displayUserDropdown ? "block opacity-100 translate-y-0" : "opacity-0 -translate-y-[10px] pointer-events-none"} 
+                                                left-1/2 -translate-x-1/2 pt-[15px] w-full `}>
+
+                                            <div className="bg-black font-bold text-white">
+                                                <div className={`bg-blue-500 h-1 transition-all duration-700 
+                                                    rounded-sm mb-2 ${props.displayUserDropdown ? "w-full" : "w-0"} `}></div>
+
+                                                <div className="pl-[20px] text-lg">
+                                                    <span>
+                                                        {session?.user.firstName} {session?.user.lastName}
+                                                    </span>
+                                                </div>
+
+
+                                                <div className="w-full h-[1px] bg-gray-200 mt-2"></div>
+                                            </div>
+
+                                            <div className="bg-black flex flex-col text-gray-200 pb-[12.5px] min-w-[200px] pt-[12.5px]">
+
                                                 <span className={`${props.dropDownMenuItemClass}`}
                                                     onClick={props.handleAccount}>
                                                     Account
@@ -194,10 +225,9 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                                 className={props.iconClass} onClick={() => setShowSearchbar(true)} />
 
                             <div onClick={props.handleWishlistClick}
-                                className={` ${props.iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl`}>
-                                <FontAwesomeIcon icon={faBookmark}
-                                    style={{ fontSize: props.iconSize }}
-                                />
+                                onMouseEnter={() => setHoverBookmark(true)} onMouseLeave={() => setHoverBookmark(false)}
+                                className={` ${props.iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl overflow-hidden`}>
+                                <Lottie animationData={Bookmark} className="w-[25px] h-[25px] scale-[3]" lottieRef={lottieRef} />
 
                                 <div className="bg-black text-white w-[25px] aspect-square grid 
                                                             place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">

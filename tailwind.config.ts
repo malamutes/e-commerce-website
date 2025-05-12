@@ -24,6 +24,7 @@ export default {
         'extra-loose': '2.5',
         'super-loose': '3',
       },
+
     },
   },
   plugins: [],

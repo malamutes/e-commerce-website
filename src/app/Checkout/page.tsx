@@ -348,10 +348,15 @@ export default function CheckoutPage() {
                         <hr className="border-t-[1px] border-black opacity-25 mt-5" />
                     </div>
 
-                    <button className="bg-green-800 mx-auto w-full p-4 font-bold text-white rounded-lg lg:block hidden"
+                    <button className="bg-green-800 mx-auto w-full p-4 font-bold text-white rounded-lg lg:block hidden transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-green hover:ring-offset-[3px] hover:bg-white hover:text-custom-green"
                         onClick={handlePayNow}
                     >PAY NOW</button>
-                    <span className="mt-3 text-center text-blue-800 cursor-pointer">
+
+                    <span className="bg-blue-800 mx-auto w-full p-4 font-bold cursor-pointer text-white rounded-lg lg:block hidden transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-blue hover:ring-offset-[3px] hover:bg-white hover:text-custom-blue text-center mt-[15px]"
+                        onClick={() => alert("TBA")}
+                    >
                         Checkout as guest instead
                     </span>
 
@@ -406,9 +411,17 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                <button className="bg-green-800 mx-auto sm:w-2/3 w-full p-5 font-bold text-white rounded-lg lg:hidden block"
+                <button className="bg-green-800 mx-auto sm:w-2/3 w-full p-5 font-bold text-white rounded-lg lg:hidden block transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-green hover:ring-offset-[3px] hover:bg-white hover:text-custom-green"
                     onClick={handlePayNow}
                 >PAY NOW</button>
+
+                <span className="bg-blue-800 mx-auto sm:w-2/3 w-full p-5 cursor-pointer font-bold text-white rounded-lg block lg:hidden transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-blue hover:ring-offset-[3px] hover:bg-white hover:text-custom-blue text-center mt-[15px]"
+                    onClick={() => alert("TBA")}
+                >
+                    Checkout as guest instead
+                </span>
             </div>
 
         </div>)

@@ -2,7 +2,7 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faRuler, faDollarSign, faPalette, faPlusSquare, faMinusSquare } from "@fortawesome/free-solid-svg-icons";
-import { SetStateAction, useContext } from "react";
+import { SetStateAction, useContext, useEffect, useState } from "react";
 import { ShoppingCartContext, ShoppingCartItem } from "../Contexts/ShoppingCartContext";
 import Image from "next/image";
 import { ShoppingCartContextType } from "../Contexts/ShoppingCartContext";
@@ -91,6 +91,16 @@ export function ShoppingCartItemComponent(props: ShoppingCartItemComponentProps)
 }
 
 export default function ShoppingCart(props: ShoppingCartProps) {
+    const [animateShoppingCart, setAnimateShoppingCart] = useState(false);
+
+    useEffect(() => {
+        if (props.show) {
+            setAnimateShoppingCart(true)
+        }
+        else {
+            setAnimateShoppingCart(false)
+        }
+    }, [props.show])
 
     const shoppingCartContext = useContext(ShoppingCartContext);
     const router = useRouter();
@@ -106,7 +116,8 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
         </div>
 
-        <div className={`bg-white right-0 top-0 3xs:w-[500px] w-11/12 h-screen ${props.show ? "fixed" : "hidden"}
+        <div className={`bg-white right-0 top-0 h-screen ${props.show ? `fixed transition-all duration-500 
+        ${animateShoppingCart ? "3xs:w-[500px] w-11/12 " : "w-[0px]"}` : "hidden"}
                 z-50`}>
             <div className={`flex flex-col h-[80vh] overflow-y-scroll pb-5 
              ${Object.keys(shoppingCartContext.cartState).length === 0
@@ -114,11 +125,11 @@ export default function ShoppingCart(props: ShoppingCartProps) {
                     : "border-b-2 border-b-gray-500"}
             `}>
                 <div className="flex flex-row justify-between p-5">
-                    <span className="font-bold">
+                    <span className="font-bold text-[20px]">
                         YOUR SHOPPING CART
                     </span>
                     <FontAwesomeIcon icon={faX}
-                        className="cursor-pointer text-[16px]"
+                        className="cursor-pointer text-[25px]"
                         onClick={() => props.setShow(false)}
                     />
 
@@ -156,7 +167,9 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
                     </div>
 
-                    <button className="bg-green-700 text-white p-4 rounded-full w-2/3 block mx-auto disabled:bg-gray-400" onClick={handleCheckout}>
+                    <button className="bg-green-700 text-white p-4 rounded-full w-2/3 
+                    block mx-auto disabled:bg-gray-400 transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-green hover:ring-offset-[3px] hover:bg-white hover:text-custom-green" onClick={handleCheckout}>
                         <span className="font-bold">
                             Checkout Products!
                         </span>
