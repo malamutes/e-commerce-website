@@ -1,6 +1,7 @@
 "use client";
 
 import { SetStateAction } from "react";
+
 interface LoadingComponentProps {
     height: string,
     width: string,

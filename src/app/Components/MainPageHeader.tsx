@@ -42,6 +42,11 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
         scrollPast: scrollPast, setScrollPast: setScrollPast,
         compRef: ComponentRef, threshold: 0.1
     }) // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    if (checkScrollPast) {
+
+    }
+
     //console.log(checkScrollPast);
     const [numItemsDisplay, setNumItemsDisplay] = useState(5);
     const more1024px = useMatchMediaQuery({ size: 1024 });

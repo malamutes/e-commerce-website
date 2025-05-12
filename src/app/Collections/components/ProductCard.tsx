@@ -84,6 +84,9 @@ export default function ProductCard(props: ProductCard) {
         compRef: ComponentRef, threshold: 0.1
     }) // eslint-disable-line @typescript-eslint/no-unused-vars
 
+    if (checkScrollPast) {
+
+    }
     //console.log(checkScrollPast);
     return <>
         {props.product['product_id'] ? (<div className="relative h-full">

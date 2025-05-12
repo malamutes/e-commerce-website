@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import MainPageHeader from "./components/MainPageHeader";
 import { useEffect, useState } from "react";
 import { ProductCardInterface } from "./DataInterfaces";
+//https://stackoverflow.com/questions/77612357/referenceerror-with-lottie-react-on-next-js-13-ssr-incompatibility
 
 export default function MainPage() {
     const { data: session, status } = useSession();
