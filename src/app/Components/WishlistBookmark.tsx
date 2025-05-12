@@ -71,12 +71,35 @@ export default function WishlistBookmark(props: WishlistBookmarkProps) {
                 onMouseEnter={() => setShowText(true)}
                 onMouseLeave={() => setShowText(false)}
                 onClick={updateWishList}>
-                <FontAwesomeIcon icon={faCheck} className="w-[20px] h-[20px]" />
 
-                <span className={`${showText ? "relative inline transition-all delay-250 duration-500 opacity-100"
-                    : "absolute opacity-0"} text-xs ml-[5px] font-bold`}>
-                    Item Wishlisted!
-                </span>
+                {
+                    props.left
+                        ?
+                        (
+                            <>
+                                <span className={`${showText ? "relative inline transition-all delay-250 duration-500 opacity-100"
+                                    : "absolute opacity-0"} text-xs ml-[10px] font-bold`}>
+                                    Item Wishlisted!
+                                </span>
+
+                                <FontAwesomeIcon icon={faCheck} className="w-[20px] h-[20px]" />
+                            </>
+
+
+                        )
+                        :
+                        (
+                            <>
+                                <FontAwesomeIcon icon={faCheck} className="w-[20px] h-[20px]" />
+                                <span className={`${showText ? "relative inline transition-all delay-250 duration-500 opacity-100"
+                                    : "absolute opacity-0"} text-xs ml-[5px] font-bold`}>
+                                    Item Wishlisted!
+                                </span>
+                            </>
+
+                        )
+                }
+
             </div>)
             :
             (<div className="bg-white border-2 border-black border-opacity-75 w-[40px]

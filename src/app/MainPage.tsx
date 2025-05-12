@@ -74,7 +74,6 @@ export default function MainPage() {
         <>
             <div className="container mx-auto mb-[100px]" >
                 <div className="w-11/12 xl:w-5/6 mx-auto flex flex-col ">
-
                     <MainPageHeader
                         categoryArray={exclusiveProducts}
                         categoryTitle="Exclusive"

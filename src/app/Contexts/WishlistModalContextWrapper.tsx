@@ -8,8 +8,6 @@ import Image from "next/image";
 import { GlobalWishlistTrackerContext } from "./GlobalWishlistTrackerContext";
 import { faCircle } from "@fortawesome/free-regular-svg-icons/faCircle";
 import { FullScreenLoadingComponent } from "../components/LoadingComponent";
-import Lottie from "lottie-react";
-import checkmark from '@/assets/CheckMark.json';
 
 interface WishlistModalProps {
     showModal: boolean,
@@ -192,7 +190,7 @@ function WishlistModal(props: WishlistModalProps) {
                                         })}>
                                         {currentlySelectedWishlists.has(wishList)
                                             ? (
-                                                <Lottie animationData={checkmark} loop={false} className="w-[40px] h-[40px] scale-[1.25] " />
+                                                <FontAwesomeIcon icon={faCircleCheck} className="text-[22.5px]" />
 
                                             )
                                             : (

@@ -3,11 +3,8 @@
 import { useEffect, useState } from "react";
 import { AddressInterface } from "@/app/DataInterfaces";
 import { shippingMethods } from "../shippingTypes";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+
 import Image from "next/image";
-import Lottie from "lottie-react";
-import CheckoutCheckmark from "@/assets/CheckmarkCheckout.json"
 
 const monthNamesShort = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -154,7 +151,6 @@ export default function CheckoutReceiptPage() {
         <div className="lg:container mx-auto mt-[100px]  mb-[100px] pb-[25px]">
             <div className="xl:w-2/5 lg:w-3/5 w-5/6 mx-auto flex flex-col p-[25px] bg-gray-100 ">
                 <div className="leading-super-loose mb-[50px]">
-                    <Lottie animationData={CheckoutCheckmark} className="w-[250px] h-[250px] -ml-[25px]" loop={false} />
                     <p className="text-2xl font-bold">
                         THANK YOU FOR SHOPPING WITH US!
                     </p>

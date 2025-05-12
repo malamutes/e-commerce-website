@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext } from "react";
+import { createContext, SetStateAction } from "react";
 interface GlobalWishlistTrackerContextType {
     allWishlistedItems: Map<string, string[]>,
+    setAllWishlistedItems: React.Dispatch<SetStateAction<Map<string, string[]>>>,
     addToWishlistedItems: (productID: string, wishListNames: string[]) => void,
     removeFromWishlistedItems: (productID: string) => void,
     updateWishlistedItem: (productID: string, wishListNames: string[]) => void,
@@ -12,6 +13,7 @@ interface GlobalWishlistTrackerContextType {
 
 const GlobalWishlistTrackerContext = createContext<GlobalWishlistTrackerContextType>({
     allWishlistedItems: new Map(),
+    setAllWishlistedItems: () => { },
     addToWishlistedItems: (productID: string, wishListNames: string[]) => {
         console.error('WishlistContext not provided: addToWishlist is missing', { productID, wishListNames });
     },

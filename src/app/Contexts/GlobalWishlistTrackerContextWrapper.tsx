@@ -89,6 +89,7 @@ export default function GlobalWishlistTrackerContextWrapper({ children }: { chil
         <GlobalWishlistTrackerContext.Provider
             value={{
                 allWishlistedItems,
+                setAllWishlistedItems,
                 addToWishlistedItems,
                 updateWishlistedItem,
                 removeFromWishlistedItems,

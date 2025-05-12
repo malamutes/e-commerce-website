@@ -1,9 +1,6 @@
 "use client";
 
 import { SetStateAction } from "react";
-import Lottie from "lottie-react";
-import Loading from '@/assets/Loading.json'
-
 interface LoadingComponentProps {
     height: string,
     width: string,
@@ -18,31 +15,7 @@ export default function LoadingComponent(props: LoadingComponentProps) {
 
     return (
         <div className={`flex flex-row justify-center w-full items-center ${props.minHeight}`}>
-            <Lottie animationData={Loading} className="w-[150px] h-[150px]" />
-        </div>
-    );
-}
-
-interface FullScreenLoadingComponentProps {
-    show: boolean,
-    setShow: React.Dispatch<SetStateAction<boolean>>,
-    zIndex?: number
-}
-
-export function FullScreenLoadingComponent(props: FullScreenLoadingComponentProps) {
-    return (
-        <div className={`w-screen h-screen fixed top-0 left-0 bg-white bg-opacity-75 ${props.show ? "block" : "hidden"}`} style={{ zIndex: props.zIndex }}>
-            <LoadingComponent
-                width="100"
-                height="100"
-                minHeight="min-h-screen"
-            />
-        </div>
-    )
-}
-
-/* 
- <svg
+            <svg
                 width={props.width}
                 height={props.height}
                 viewBox={`0 0 ${props.width} ${props.height}`}
@@ -79,4 +52,28 @@ export function FullScreenLoadingComponent(props: FullScreenLoadingComponentProp
                 </rect>
             </svg>
 
+        </div>
+    );
+}
+
+interface FullScreenLoadingComponentProps {
+    show: boolean,
+    setShow: React.Dispatch<SetStateAction<boolean>>,
+    zIndex?: number
+}
+
+export function FullScreenLoadingComponent(props: FullScreenLoadingComponentProps) {
+    return (
+        <div className={`w-screen h-screen fixed top-0 left-0 bg-white bg-opacity-75 ${props.show ? "block" : "hidden"}`} style={{ zIndex: props.zIndex }}>
+            <LoadingComponent
+                width="100"
+                height="100"
+                minHeight="min-h-screen"
+            />
+        </div>
+    )
+}
+
+/* 
+ 
             */

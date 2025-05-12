@@ -9,7 +9,7 @@ import { ProductCardInterface } from "../DataInterfaces";
 import ProductCard from "../Collections/components/ProductCard";
 import { useMatchMediaQuery } from "../MatchMediaQuery";
 import LoadingComponent from "./LoadingComponent";
-import ObserverIntersectionUseEffect from "@/ObserverUseEffect";
+import ObserverIntersectionUseEffect from "@/app/ObserverUseEffect";
 
 interface MainPageHeaderProps {
     categoryArray: ProductCardInterface[],
@@ -41,8 +41,8 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
     const checkScrollPast = ObserverIntersectionUseEffect({
         scrollPast: scrollPast, setScrollPast: setScrollPast,
         compRef: ComponentRef, threshold: 0.1
-    })
-
+    }) // eslint-disable-line @typescript-eslint/no-unused-vars
+    //console.log(checkScrollPast);
     const [numItemsDisplay, setNumItemsDisplay] = useState(5);
     const more1024px = useMatchMediaQuery({ size: 1024 });
     const more640px = useMatchMediaQuery({ size: 640 });

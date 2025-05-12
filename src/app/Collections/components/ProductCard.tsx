@@ -6,7 +6,7 @@ import Link from "next/link";
 import WishlistBookmark from "@/app/components/WishlistBookmark";
 import { ProductCardInterface } from "@/app/DataInterfaces";
 import { SetStateAction, useRef, useState } from "react";
-import ObserverIntersectionUseEffect from "@/ObserverUseEffect";
+import ObserverIntersectionUseEffect from "@/app/ObserverUseEffect";
 
 //for now just assume the image aspect ratio is 4:3 and in db it is 800:600px
 const productSalesCategoryMap: { [key: string]: string } = {
@@ -82,8 +82,9 @@ export default function ProductCard(props: ProductCard) {
     const checkScrollPast = ObserverIntersectionUseEffect({
         scrollPast: scrollPast, setScrollPast: setScrollPast,
         compRef: ComponentRef, threshold: 0.1
-    })
+    }) // eslint-disable-line @typescript-eslint/no-unused-vars
 
+    //console.log(checkScrollPast);
     return <>
         {props.product['product_id'] ? (<div className="relative h-full">
             <div

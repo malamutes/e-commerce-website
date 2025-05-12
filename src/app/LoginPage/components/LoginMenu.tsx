@@ -11,6 +11,8 @@ import { GlobalLoginTypeContext } from '@/app/Contexts/GlobalLoginPromptContext'
 import LoginError from './LoginSignupError';
 import { PasswordValidator } from './PasswordValidator';
 import { FullScreenLoadingComponent } from '@/app/components/LoadingComponent';
+import { AssociatedWishlistsWithProduct } from '@/app/Contexts/GlobalWishlistTrackerContextWrapper';
+import { GlobalWishlistTrackerContext } from '@/app/Contexts/GlobalWishlistTrackerContext';
 
 export default function LoginMenu() {
     const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)
@@ -24,6 +26,8 @@ export default function LoginMenu() {
     const [showErrorSignIn, setShowErrorSignIn] = useState(false);
 
     const router = useRouter();
+
+    const { setAllWishlistedItems } = useContext(GlobalWishlistTrackerContext);
 
     const [lengthValid, setLengthValid] = useState(false);
     const [lowercaseValid, setLowercaseValid] = useState(false);
@@ -67,7 +71,28 @@ export default function LoginMenu() {
 
 
         if (loginResult?.ok) {
+            const getCurrentlyWishlistedItems = async () => {
+                const response = await fetch(`/api/Wishlist?requestType=getWishlistedItems`, {
+                    method: "GET",
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+
+                if (response.ok) {
+                    const reply: AssociatedWishlistsWithProduct[] = await response.json()
+
+                    //console.log("WISHLSITED ITEMS IN GLOBAL TRACEKR", reply);
+                    setAllWishlistedItems((new Map(reply.map((item) => [item.product_id, item.associated_wishlists]))));
+
+                }
+                else {
+                    //alert("DIDNT WORK TO GET WISHLISTED ITEMS IN TRACKER CONTEXT")
+                }
+            }
+
             console.log(loginResult, "LOGIN RESULT");
+            await getCurrentlyWishlistedItems();
             router.push('/');
         }
         else {

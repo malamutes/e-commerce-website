@@ -3,22 +3,19 @@
 import Image from "next/image";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
-import { useEffect, useContext, useState, useRef } from "react";
+import { useEffect, useContext, useState } from "react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../Contexts/ShoppingCartContext";
 import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 import { WebsiteHeaderInterface } from "./WebsiteHeader";
 import Searchbar from "./Searchbar";
-import Lottie from "lottie-react";
-import Bookmark from "@/assets/Bookmark.json"
-import { LottieRefCurrentProps } from 'lottie-react';
+import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 
 export const HeadlineDropdownMap: { [key: string]: string[] } = {
     'Products': clothingCategory,
@@ -80,18 +77,6 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
 
     const [showSearchbar, setShowSearchbar] = useState(false);
-    const [hoverBookmark, setHoverBookmark] = useState(false);
-
-    const lottieRef = useRef<LottieRefCurrentProps | null>(null);
-
-    useEffect(() => {
-        if (hoverBookmark) {
-            lottieRef.current?.play();
-        }
-        else {
-            lottieRef.current?.goToAndStop(30, true);
-        }
-    }, [hoverBookmark]);
 
     useEffect(() => {
         if (status === "loading") {
@@ -155,7 +140,7 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                     <div className="flex flex-row items-center">
                         <div className="flex flex-row items-center">
                             <div>
-                                <div className="border-2 border-black p-2 rounded-xl relative"
+                                <div className="border-2 border-black p-2 rounded-xl relative cursor-pointer"
                                     onClick={props.loginSubmit}
                                     onMouseLeave={() => props.setDisplayUserDrowndown(false)}
                                     onMouseEnter={() => {
@@ -225,9 +210,10 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                                 className={props.iconClass} onClick={() => setShowSearchbar(true)} />
 
                             <div onClick={props.handleWishlistClick}
-                                onMouseEnter={() => setHoverBookmark(true)} onMouseLeave={() => setHoverBookmark(false)}
                                 className={` ${props.iconClass} flex 2xs:flex-row flex-col items-center w-fit bg-gray-400 p-[7.5px] rounded-xl overflow-hidden`}>
-                                <Lottie animationData={Bookmark} className="w-[25px] h-[25px] scale-[3]" lottieRef={lottieRef} />
+                                <FontAwesomeIcon icon={faBookmark}
+                                    style={{ fontSize: props.iconSize }}
+                                />
 
                                 <div className="bg-black text-white w-[25px] aspect-square grid 
                                                             place-items-center rounded-lg 2xs:mt-[0px] mt-[5px] 2xs:ml-[5px] ml-[0px]">

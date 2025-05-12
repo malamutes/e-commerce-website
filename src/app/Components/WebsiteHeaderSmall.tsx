@@ -19,7 +19,7 @@ import { SearchbarSmall } from "./Searchbar";
 
 const iconSize = "25px";
 const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
-const dropDownMenuItemClass = "text-white pl-[50px] pt-[12.5px] pb-[12.5px] font-bold text-sm";
+//const dropDownMenuItemClass = "text-white pl-[50px] pt-[12.5px] pb-[12.5px] font-bold text-sm";
 
 
 export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
@@ -115,52 +115,61 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
                         onMouseEnter={() => props.setDisplayUserDrowndown(true)}
                         onMouseLeave={() => props.setDisplayUserDrowndown(false)}
                     >
-                        <div className="cursor-pointer">
+                        <div className="cursor-pointer" onClick={props.loginSubmit}>
                             <span>
                                 <FontAwesomeIcon icon={faUser} style={{ fontSize: iconSize }} />
                             </span>
                         </div>
 
-                        <div
-                            className={`absolute transition-all duration-300
+                        {props.userIn
+                            ?
+                            (
+                                <div
+                                    className={`absolute transition-all duration-300
                             ${props.displayUserDropdown ? "block opacity-100 translate-y-0" : "opacity-0 -translate-y-[10px] pointer-events-none"} 
                             left-1/2 -translate-x-1/2 pt-[15px] w-full `}>
 
-                            <div className="bg-black flex flex-col text-gray-200 pb-[12.5px] min-w-[200px]">
+                                    <div className="bg-black flex flex-col text-gray-200 pb-[12.5px] min-w-[200px]">
 
-                                <div className="bg-black font-bold text-white ">
-                                    <div className={`bg-blue-500 h-1 transition-all duration-700 
+                                        <div className="bg-black font-bold text-white ">
+                                            <div className={`bg-blue-500 h-1 transition-all duration-700 
                           rounded-sm mb-2 ${props.displayUserDropdown ? "w-full" : "w-0"} `}></div>
 
-                                    <div className="pl-[20px] text-lg">
-                                        <span>
-                                            {session?.user.firstName} {session?.user.lastName}
-                                        </span>
-                                    </div>
+                                            <div className="pl-[20px] text-lg">
+                                                <span>
+                                                    {session?.user.firstName} {session?.user.lastName}
+                                                </span>
+                                            </div>
 
-                                    <div className="w-full h-[1px] bg-gray-200 mt-2"></div>
-                                </div>
+                                            <div className="w-full h-[1px] bg-gray-200 mt-2"></div>
+                                        </div>
 
-                                <div className="pt-[15px] pb-[15px]">
-                                    <span className={`${props.dropDownMenuItemClass}`}
-                                        onClick={props.handleAccount}>
-                                        Account
-                                    </span>
+                                        <div className="pt-[15px] pb-[15px]">
+                                            <span className={`${props.dropDownMenuItemClass}`}
+                                                onClick={props.handleAccount}>
+                                                Account
+                                            </span>
 
-                                    <span className={`${props.dropDownMenuItemClass} 
+                                            <span className={`${props.dropDownMenuItemClass} 
                                 ${session?.user.isUserProducer === true ? "block" : "hidden"}`}
-                                        onClick={props.handleProducerDashboard}>
-                                        Producer Dashboard
-                                    </span>
+                                                onClick={props.handleProducerDashboard}>
+                                                Producer Dashboard
+                                            </span>
 
-                                    <span className={`${props.dropDownMenuItemClass}`}
-                                        onClick={props.handleUserSignOut}>
-                                        Sign Out
-                                    </span>
+                                            <span className={`${props.dropDownMenuItemClass}`}
+                                                onClick={props.handleUserSignOut}>
+                                                Sign Out
+                                            </span>
+                                        </div>
+
+                                    </div>
                                 </div>
+                            )
+                            :
+                            (
+                                null
+                            )}
 
-                            </div>
-                        </div>
                     </div>
                 </div>
 
