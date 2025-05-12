@@ -11,6 +11,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "custom-green": "#15803D",
+        "custom-blue": "#1E40AF"
       },
       screens: {
         '3xs': '550px',

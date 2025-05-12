@@ -44,7 +44,8 @@ export default function GlobalErrorComponent() {
                 The page you were looking for does not exist.
             </p>
 
-            <Link className="text-white bg-black rounded-full p-3 font-bold block" href={"/"}>
+            <Link className="text-white bg-black rounded-full p-3 font-bold block transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-black hover:ring-offset-[3px] hover:bg-white hover:text-black" href={"/"}>
                 <span className="block w-full text-center">HOME</span>
             </Link>
 

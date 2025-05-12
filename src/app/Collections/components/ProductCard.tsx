@@ -77,27 +77,30 @@ export default function ProductCard(props: ProductCard) {
 
     return <>
         {props.product['product_id'] ? (<div className="relative h-full">
-            <Link
-                className="w-fit"
-                href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
-                style={props.style}
-                onClick={() => {
-                    if (props.seachBarSetShow && props.seachBarQuery) {
-                        props.seachBarSetShow(false);
-                        props.seachBarQuery("")
-                    }
-                }}
-            >
+            <div
+                className="flex flex-col text-center w-fit mx-auto max-w-[600px] shadow-lg cursor-pointer h-full 
+                    transition-all duration-500 bg-gray-400 hover:-translate-y-4 hover:ring-2 
+                    hover:ring-black hover:ring-opacity-50 hover:shadow-black/75">
+                <Link
+                    href={`/Collections/All/Products/?productID=${props.product['product_id']}`}
+                    style={props.style}
+                    onClick={() => {
+                        if (props.seachBarSetShow && props.seachBarQuery) {
+                            props.seachBarSetShow(false);
+                            props.seachBarQuery("")
+                        }
+                    }}
+                >
+                    <div style={{ zIndex: 0 }}>
+                        <Image src={(props.product['product_images'])[0]}
+                            alt={(props.product['product_images'])[0]}
+                            width={600}
+                            height={600}
+                        />
+                    </div>
 
-                <div className="flex flex-col text-center w-fit mx-auto
-                max-w-[600px] shadow-lg cursor-pointer h-full">
-                    <Image src={(props.product['product_images'])[0]}
-                        alt={(props.product['product_images'])[0]}
-                        width={600}
-                        height={600}
-                    />
-
-                    <div className="flex flex-col bg-gray-400 pb-5 gap-1 p-1 flex-grow justify-center">
+                    <div
+                        className="flex flex-col bg-gray-400 pb-5 gap-1 p-1 flex-grow justify-center">
                         <span className="mt-2 italic text-sm  break-word">
                             {props.product.product_producer}
                         </span>
@@ -126,8 +129,9 @@ export default function ProductCard(props: ProductCard) {
 
                         </span>
 
-                        <div className={`2xs:w-full 2xs:flex 2xs:flex-row 2xs:justify-center grid grid-cols-2 justify-items-center
-                             mx-auto 3xs:gap-2 gap-1.5 ${props.showTags === false ? "hidden" : ""}`}>
+                        <div
+                            className={`2xs:w-full flex flex-row justify-center justify-items-center
+                             mx-auto 3xs:gap-2 gap-1.5`}>
                             {(props.product.product_sales_category ?? [])
                                 .filter(cat => cat !== 'Regular')
                                 .map((category, index) => (
@@ -138,17 +142,20 @@ export default function ProductCard(props: ProductCard) {
                                 ))}
                         </div>
                     </div>
-                </div>
-            </Link>
+                </Link>
 
-            <div className="absolute top-0 right-0 m-2">
-                <WishlistBookmark
-                    currentItemBrand={props.product.product_producer ?? "NO CURRENT ITEM BRAND FOUND"}
-                    currentItemImage={(props.product.product_images)[0] ?? "NO CURRENT ITEM IMAGE FOUND"}
-                    currentItemName={props.product.product_name ?? "NO CURRENT ITEM NAME FOUND"}
-                    currentItemID={props.product.product_id ?? "NO CURRENT ITEM ID FOUND"}
-                />
+                <div
+                    className="absolute top-0 right-0 m-2">
+                    <WishlistBookmark
+                        currentItemBrand={props.product.product_producer ?? "NO CURRENT ITEM BRAND FOUND"}
+                        currentItemImage={(props.product.product_images)[0] ?? "NO CURRENT ITEM IMAGE FOUND"}
+                        currentItemName={props.product.product_name ?? "NO CURRENT ITEM NAME FOUND"}
+                        currentItemID={props.product.product_id ?? "NO CURRENT ITEM ID FOUND"}
+                    />
+                </div>
             </div>
+
+
 
         </div>) : (null)}
 

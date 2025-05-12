@@ -231,7 +231,7 @@ export default function WebsiteFooter() {
                 </div>
 
                 <span className='font-bold italic text-gray-600 text-center block'>
-                    *THIS IS FRONTEND MOCKUP ONLY, NO BACKEND ATM*
+                    *FRONTEND MOCKUP ONLY*
                 </span>
             </div>
         </div>

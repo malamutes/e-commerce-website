@@ -96,7 +96,8 @@ export default function WebsiteHeaderLarge(props: WebsiteHeaderInterface) {
                  mx-auto h-full">
                     <Link href={"/"} >
                         <Image src={"/Logo.png"} alt="WebsiteLogo"
-                            width={100} height={100} className="mt-[2.5px] ml-5" />
+                            width={100} height={100} className="mt-[2.5px] ml-5 scale-90
+                            transition-transform hover:scale-105" />
                     </Link>
 
 

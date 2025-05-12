@@ -36,6 +36,8 @@ export default function ProductPage() {
 
     const [showCart, setShowCart] = useState(false);
 
+    const [currentImageSelected, setCurrentImageSelected] = useState(0);
+
     const shoppingCartContext = useContext(ShoppingCartContext);
 
     const getRelatedProducts = async (pId: string) => {
@@ -102,21 +104,45 @@ export default function ProductPage() {
         setCurrentColours(variantCombination[selectedSize]);
     }, [selectedSize, variantCombination])
 
+    const handleScrollWithOffset = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, index: number) => {
+        event.preventDefault(); // Prevent the default anchor scroll
+
+        setCurrentImageSelected(index);
+        const target = document.querySelector(event.currentTarget.getAttribute("href") || "") as HTMLAnchorElement;
+
+        if (target) {
+            window.scrollTo({
+                top: target.offsetTop,
+                behavior: "smooth"
+            });
+        }
+
+    };
+
+    useEffect(() => {
+        console.log(currentImageSelected)
+    }, [currentImageSelected]);
     return <>
         <ShoppingCart show={showCart} setShow={setShowCart} />
         <div className="lg:container mx-auto mt-[25px] min-w-[275px]">
             {currentProduct[0] ? (
-                <div className=" flex md:flex-row flex-col justify-between xl:w-11/12 w-full mx-auto pl-[25px] pr-[25px]">
-                    <div className="w-1/12 flex flex-col lg:block hidden">
-                        {(currentProduct[0].product_images).map((image, index) => (
-                            <Image
-                                src={image}
-                                alt={`ProductImage${index}`}
-                                width={500}
-                                height={500}
-                                key={index}
-                                className="mb-5"
-                            />
+                <div className="flex md:flex-row flex-col justify-between xl:w-11/12 w-full mx-auto pl-[25px] pr-[25px]">
+                    <div className="w-1/12 flex flex-col lg:block hidden flex flex-col sticky top-[11vh]
+                    max-h-[800px] overflow-auto custom-scrollbar pr-[5px]">
+                        {(currentProduct[0].product_images).map((image, index) =>
+                        (
+                            <a key={index} href={`#ProductImage-${Math.floor(index / 2)}`}
+                                onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => handleScrollWithOffset(e, Math.floor(index / 2))}>
+                                <Image
+                                    src={image}
+                                    alt={`ProductImage${index}`}
+                                    width={500}
+                                    height={500}
+                                    className={`mb-5 ${currentImageSelected === Math.floor(index / 2)
+                                        ? "border-2" : "border-0"}
+                                    border-black p-[2px]`}
+                                />
+                            </a>
                         ))}
                     </div>
 
@@ -129,6 +155,7 @@ export default function ProductPage() {
                                     width={1000}
                                     height={1000}
                                     key={index}
+                                    id={`ProductImage-${Math.floor(index / 2)}`}
                                 />
                             ))}
                         </div>
@@ -139,7 +166,8 @@ export default function ProductPage() {
                     </div>
 
                     <div className="lg:w-3/12 md:w-4/12 w-full flex flex-col md:mt-[0px] 
-                    mt-[25px] md:text-start text-center">
+                    mt-[25px] md:text-start text-center sticky top-[11vh]
+                    max-h-[800px] custom-scrollbar pr-[5px]">
                         <span className="text-2xl italic mb-3">
                             {currentProduct[0].product_producer}
                         </span>
@@ -218,7 +246,8 @@ export default function ProductPage() {
 
                         <button className="bg-green-700 p-4 text-white
                         w-5/6 mb-3 md:mx-0 mx-auto
-                        font-bold rounded-full"
+                        font-bold rounded-full transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-green hover:ring-offset-[3px] hover:bg-white hover:text-custom-green"
                             onClick={() => addToCartSubmit(
                                 {
                                     itemID: (currentProduct[0].product_id),
@@ -243,6 +272,7 @@ export default function ProductPage() {
                                 currentItemID={currentProduct[0].product_id}
                                 currentItemImage={(currentProduct[0].product_images)[0]}
                                 currentItemName={currentProduct[0].product_name}
+                                left={true}
                             />
                         </div>
 

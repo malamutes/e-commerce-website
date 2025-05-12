@@ -62,7 +62,10 @@ function GlobalLoginPrompt(props: GlobalLoginPromptProps) {
                             setLogIn(false)
                         }}
                         className="p-3 font-bold text-sm rounded-full 
-                    bg-green-800 text-white w-1/2 text-center whitespace-nowrap ">
+                        bg-green-800 text-white w-1/2 text-center whitespace-nowrap
+                        transition-all duration-300
+                        hover:ring-[2.5px] hover:ring-custom-green hover:ring-offset-[3px] hover:bg-white 
+                        hover:text-custom-green ">
                         <span>
                             Join us!
                         </span>
@@ -80,8 +83,10 @@ function GlobalLoginPrompt(props: GlobalLoginPromptProps) {
                             setLogIn(true)
                         }}
                         className="p-3 font-bold text-sm rounded-full 
-                    bg-blue-800 text-white w-1/2 text-center 2xs:whitespace-nowrap
-                    break-auto">
+                        bg-blue-800 text-white w-1/2 text-center 2xs:whitespace-nowrap
+                        transition-all duration-300
+                        break-auto bg-blue-800 hover:ring-[2.5px] hover:ring-custom-blue hover:ring-offset-[3px] hover:bg-white 
+                        hover:text-custom-blue">
                         <span >
                             Welcome back!
                         </span>

@@ -44,7 +44,7 @@ export default function MainPage() {
             } else if (category === 'Producer') {
                 setProducerProducts(reply as ProductCardInterface[]);
             }
-            console.log(reply);
+            //console.log(reply);
         } else {
             console.log(response.status, response.statusText);
             return [];  // Return an empty array in case of error

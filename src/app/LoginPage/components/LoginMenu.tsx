@@ -58,6 +58,7 @@ export default function LoginMenu() {
 
         setShowFullScreenLoading(true);
 
+        console.log(email, password)
         const loginResult = await signIn('credentials', {
             redirect: false,
             userEmail: email,
@@ -66,6 +67,7 @@ export default function LoginMenu() {
 
 
         if (loginResult?.ok) {
+            console.log(loginResult, "LOGIN RESULT");
             router.push('/');
         }
         else {

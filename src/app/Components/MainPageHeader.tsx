@@ -65,16 +65,16 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                 <div className="flex flex-row w-full items-center 2xs:pl-[25px] 2xs:justify-end justify-center ">
                     <hr className="border-t-2 border-gray-300 w-full sm:block hidden" />
                     <FontAwesomeIcon icon={faArrowAltCircleLeft}
-                        className={`2xs:pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === 0 ? "text-gray-400" : "cursor-pointer"}
-                            md:text-4xl text-3xl`}
+                        className={`2xs:pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === 0 ? "text-gray-400" : "cursor-pointer hover:scale-110"}
+                            md:text-4xl text-3xl transition-all duration-300 `}
                         onClick={() => setDistance(
                             distance => clampFunc(distance + 100, -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100, 0)
                         )} />
                     {/* the 10 here is because i hardcoded backend to take 10 items can be dynamic if needed*/}
 
                     <FontAwesomeIcon icon={faArrowAltCircleRight}
-                        className={`pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100 ? "text-gray-400" : "cursor-pointer"}
-                            md:text-4xl text-3xl`}
+                        className={`pl-[12.5px] mt-[10px] 2xs:mt-[0px] ${distance === -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100 ? "text-gray-400" : "cursor-pointer hover:scale-110"}
+                            md:text-4xl text-3xl transition-all duration-300`}
                         onClick={() => setDistance(
                             distance => clampFunc(distance - 100, -((1 / (numItemsDisplay / totalNumItems)) - 1) * 100, 0)
                         )} />
@@ -91,7 +91,7 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
                     {props.categoryArray.length !== 0 ? (
                         props.categoryArray.map((product, index) =>
                         (
-                            <div key={index} className="pl-2 pr-2 pt-0 pb-4 flex flex-grow"
+                            <div key={index} className="pl-2 pr-2 pt-1 pb-4 flex flex-grow"
                                 style={{
                                     minWidth: `${100 / numItemsDisplay}%`,
                                 }}
@@ -144,8 +144,10 @@ export default function MainPageHeader(props: MainPageHeaderProps) {
             </div>
 
             {props.showButton === false ? (null) : (
-                <Link className="bg-black text-white w-fit p-5 
-            rounded-full mx-auto mt-[5px] font-bold text-center"
+                <Link className="bg-black text-white w-fit p-4
+           rounded-full mx-auto mt-[5px] font-bold text-center
+           transition-all duration-300
+           hover:ring-[2.5px] hover:ring-black hover:ring-offset-[5px] hover:bg-white hover:text-black"
                     href={urlNavLinkMap[props.categoryTitle]}>
                     SHOP {(props.categoryTitle).toUpperCase()}</Link>
             )}
