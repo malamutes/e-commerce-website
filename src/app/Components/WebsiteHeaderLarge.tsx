@@ -8,7 +8,7 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 import { clothingCategory, headers, salesCategories } from "../CollectionTypes";
 import ShoppingCart from "./ShoppingCart";
 import { ShoppingCartContext } from "../Contexts/ShoppingCartContext";
@@ -31,12 +31,32 @@ interface HeadlineDropdownProps {
 }
 
 function HeadlineDropdown(props: HeadlineDropdownProps) {
-    return <>
+    const scrollRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const handleWheel = (e: WheelEvent) => {
+            // Only trigger if horizontal scroll is possible
+            if (e.deltaY !== 0) {
+                e.preventDefault(); // prevent vertical scroll
+                el.scrollLeft += e.deltaY;
+            }
+        };
+
+        el.addEventListener("wheel", handleWheel, { passive: false });
+
+        return () => {
+            el.removeEventListener("wheel", handleWheel);
+        };
+    }, []);
+
+    return <>
         <div className={`absolute top-[100px] left-0 top-0 w-full
-                flex flex-row justify-between bg-gray-400 pl-[100px] pr-[100px] 
+                flex flex-row overflow-x-scroll justify-between bg-gray-400 pl-[100px] pr-[100px] 
                 pb-[20px] font-bold place-items-center transition-all duration-300
-                ${props.show ? "block opacity-100" : "opacity-0 pointer-events-none"}`}>
+                ${props.show ? "block opacity-100" : "opacity-0 pointer-events-none"}`} ref={scrollRef}>
 
             {props.headlineDropdownItems.map((item, index) => {
                 let dynamicUrl: string = "";
@@ -52,18 +72,16 @@ function HeadlineDropdown(props: HeadlineDropdownProps) {
 
                 return (
                     <Link key={index} href={dynamicUrl} className="hover:shadow-lg 
-                    p-1.5 rounded-lg 
+                    p-1.5 rounded-lg flex justify-center
                     cursor-pointer mt-[25px] 
-                    hover:bg-gray-300 w-fit">
+                    hover:bg-gray-300 min-w-[200px]">
                         <span >
                             {item}
                         </span>
                     </Link>
                 );
             })}
-
         </div>
-
     </>
 }
 

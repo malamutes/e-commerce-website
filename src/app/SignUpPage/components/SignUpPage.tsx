@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from "react";
-import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import { businessLocations, businessTypes } from "@/app/CollectionTypes";
 import Link from "next/link";
@@ -31,9 +30,6 @@ export default function SignUpPage() {
 
     const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
 
-    const { data: session, status, update } = useSession();
-
-    console.log(session?.user.user_id, session?.user.email, status, update);
     //need to handle removing UI from the dom after selection probably
 
     const handleProducerSubmit = async (e: React.FormEvent) => {

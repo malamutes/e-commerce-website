@@ -11,6 +11,10 @@ declare module "next-auth/jwt" {
         lastName?: string,
         phone?: string,
         address?: DBAddressInterface,
+        newUser?: boolean,
+        google_id?: string,
+        github_id?: string,
+        discord_id?: string,
         business?: {
             businessName: string,
             businessLocation: string,
@@ -33,6 +37,10 @@ declare module "next-auth" {
             lastName?: string,
             phone?: string,
             address?: DBAddressInterface,
+            newUser?: boolean,
+            google_id?: string,
+            github_id?: string,
+            discord_id?: string,
             business?: {
                 businessName: string,
                 businessLocation: string,
@@ -47,13 +55,14 @@ declare module "next-auth" {
         lastName?: string,
         phone?: string,
         address?: DBAddressInterface,
+        newUser?: boolean,
+        google_id?: string,
         business?: {
             businessName: string,
             businessLocation: string,
             businessType: string
         }
     }
-
 }
 
 //https://next-auth.js.org/getting-started/typescript

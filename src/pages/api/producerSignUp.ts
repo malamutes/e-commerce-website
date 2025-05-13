@@ -3,7 +3,6 @@ import { neon } from '@neondatabase/serverless';
 import { authOptions } from './auth/[...nextauth]';
 import { getServerSession } from "next-auth/next"
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const session = await getServerSession(req, res, authOptions)

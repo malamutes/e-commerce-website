@@ -9,8 +9,6 @@ import { ProductCardInterface } from "./DataInterfaces";
 export default function MainPage() {
     const { data: session, status } = useSession();
 
-    console.log(session?.user.user_id, session?.user.email, status);
-
     const [exclusiveProducts, setExclusiveProducts] = useState<ProductCardInterface[]>([]);
     const [bestSellersProducts, setBestSellersProducts] = useState<ProductCardInterface[]>([]);
     const [saleProducts, setSaleProducts] = useState<ProductCardInterface[]>([]);

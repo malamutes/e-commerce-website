@@ -1,10 +1,9 @@
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
-import { faXTwitter } from '@fortawesome/free-brands-svg-icons/faXTwitter';
+import { faDiscord, faGithubSquare } from '@fortawesome/free-brands-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { GlobalLoginTypeContext } from '@/app/Contexts/GlobalLoginPromptContext';
@@ -13,6 +12,7 @@ import { PasswordValidator } from './PasswordValidator';
 import { FullScreenLoadingComponent } from '@/app/components/LoadingComponent';
 import { AssociatedWishlistsWithProduct } from '@/app/Contexts/GlobalWishlistTrackerContextWrapper';
 import { GlobalWishlistTrackerContext } from '@/app/Contexts/GlobalWishlistTrackerContext';
+import { useSession } from 'next-auth/react';
 
 export default function LoginMenu() {
     const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)
@@ -38,13 +38,12 @@ export default function LoginMenu() {
     const [showFullScreenLoading, setShowFullScreenLoading] = useState(false);
 
     //regex stuff done using chat
-    const finalPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,24}$/;
+    const finalPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>\/])[A-Za-z\d!@#$%^&*(),.?":{}|<>\/]{8,24}$/;
     const lengthRegex = /^.{8,24}$/;
     const lowercaseRegex = /(?=.*[a-z])/;
     const uppercaseRegex = /(?=.*[A-Z])/;
     const numberRegex = /(?=.*\d)/;
-    const specialCharRegex = /(?=.*[!@#$%^&*(),.?":{}|<>])/;
-
+    const specialCharRegex = /(?=.*[!@#$%^&*(),.?":{}|<>\/])/;
 
     const handlePasswordChange = (password: string) => {
         setPassword(password);
@@ -56,6 +55,42 @@ export default function LoginMenu() {
         setNumberValid(numberRegex.test(password));
         setSpecialCharValid(specialCharRegex.test(password));
     };
+
+    const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            if (session?.user.google_id) {
+                console.log("USER SIGNED IN WITH GOOGLE");
+                if (session.user.newUser) {
+                    router.push('/SignUpPage');
+                }
+                else {
+                    //for logged in user
+                    router.push('/');
+                }
+            }
+            else if (session.user.github_id) {
+                console.log("USER SIGNED IN WITH GITHUB");
+                if (session.user.newUser) {
+                    router.push('/SignUpPage');
+                }
+                else {
+                    router.push('/')
+                }
+            }
+            else if (session.user.discord_id) {
+                console.log("USER SIGNED IN WITH DSICORD");
+                if (session.user.newUser) {
+                    router.push('/SignUpPage');
+                }
+                else {
+                    router.push('/')
+                }
+            }
+        }
+
+    }, [status]);
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -142,7 +177,6 @@ export default function LoginMenu() {
                         console.log("Error:", loginResult?.error);
                         //alert("Could not sign in!")
                     }
-
                 }
 
                 else {
@@ -157,10 +191,31 @@ export default function LoginMenu() {
                 setPassword("");
                 setShowFullScreenLoading(false);
             }
+            else {
+                alert("Double Check password requirements please")
+            }
         }
         catch (error) {
             console.error(error, "Issues with creating account");
         }
+    }
+
+    const handleGoogleSignIn = async () => {
+        setShowFullScreenLoading(true);
+        await signIn('google', { redirect: false });
+        setShowFullScreenLoading(false);
+    }
+
+    const handleDiscordSignIn = async () => {
+        setShowFullScreenLoading(true);
+        await signIn('discord', { redirect: false });
+        setShowFullScreenLoading(false);
+    }
+
+    const handleGithubSignIn = async () => {
+        setShowFullScreenLoading(true);
+        await signIn('github', { redirect: false });
+        setShowFullScreenLoading(false);
     }
 
     return <>
@@ -261,27 +316,27 @@ export default function LoginMenu() {
                                 </h1>
 
                                 <div className="flex 3xs:flex-row flex-col justify-center gap-5 p-5">
-                                    <div className="flex flex-col items-center p-5 bg-blue-900 text-white w-[100px] h-[100px]
-                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
-                                        <FontAwesomeIcon icon={faFacebookF} size="2x" />
-                                        <span className="mt-2 text-sm">Facebook</span>
+                                    <div className="flex flex-col items-center p-5 bg-black text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 " onClick={handleGithubSignIn}>
+                                        <FontAwesomeIcon icon={faGithubSquare} size="2x" />
+                                        <span className="mt-2 text-sm">Github</span>
                                     </div>
 
                                     <div className="flex flex-col items-center p-5 bg-red-900 text-white w-[100px] h-[100px]
-                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300" onClick={handleGoogleSignIn}>
                                         <FontAwesomeIcon icon={faGoogle} size="2x" />
                                         <span className="mt-2 text-sm">Google</span>
                                     </div>
 
-                                    <div className="flex flex-col items-center p-5 bg-cyan-600 text-white w-[100px] h-[100px]
-                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
-                                        <FontAwesomeIcon icon={faXTwitter} size="2x" />
-                                        <span className="mt-2 text-sm">Twitter</span>
+                                    <div className="flex flex-col items-center p-5 bg-blue-800 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 " onClick={handleDiscordSignIn}>
+                                        <FontAwesomeIcon icon={faDiscord} size="2x" />
+                                        <span className="mt-2 text-sm">Discord</span>
                                     </div>
                                 </div>
 
                                 <span className='font-bold italic text-gray-600 text-center block text-sm'>
-                                    *THIS IS FRONTEND MOCKUP ONLY, USE EMAIL INSTEAD*
+                                    *Log in with authentications OR*
                                 </span>
 
                                 <span className='font-bold italic text-gray-600 text-center block text-sm'>
@@ -318,9 +373,7 @@ export default function LoginMenu() {
                                             />
                                         </div>
 
-                                        <div className='w-1/12 lg:block hidden'>
-
-                                        </div>
+                                        <div className='w-1/12 lg:block hidden'></div>
 
                                         <div className='flex flex-col w-auto'>
                                             <label htmlFor="lastName"
@@ -395,28 +448,28 @@ export default function LoginMenu() {
                                 </h1>
 
                                 <div className="flex 3xs:flex-row flex-col justify-center gap-5 p-5">
-                                    <div className="flex flex-col items-center p-5 bg-blue-900 text-white w-[100px] h-[100px]
-                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
-                                        <FontAwesomeIcon icon={faFacebookF} size="2x" />
-                                        <span className="mt-2 text-sm">Facebook</span>
+                                    <div className="flex flex-col items-center p-5 bg-black text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300" onClick={handleGithubSignIn} >
+                                        <FontAwesomeIcon icon={faGithubSquare} size="2x" />
+                                        <span className="mt-2 text-sm">Github</span>
                                     </div>
 
                                     <div className="flex flex-col items-center p-5 bg-red-900 text-white w-[100px] h-[100px]
-                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 " onClick={handleGoogleSignIn}>
                                         <FontAwesomeIcon icon={faGoogle} size="2x" />
                                         <span className="mt-2 text-sm">Google</span>
                                     </div>
 
-                                    <div className="flex flex-col items-center p-5 bg-cyan-600 text-white w-[100px] h-[100px]
-                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300 ">
-                                        <FontAwesomeIcon icon={faXTwitter} size="2x" />
-                                        <span className="mt-2 text-sm">Twitter</span>
+                                    <div className="flex flex-col items-center p-5 bg-blue-800 text-white w-[100px] h-[100px]
+                                    rounded-full cursor-pointer hover:brightness-150 transition-all duration-300" onClick={handleDiscordSignIn}>
+                                        <FontAwesomeIcon icon={faDiscord} size="2x" />
+                                        <span className="mt-2 text-sm">Discord</span>
                                     </div>
                                 </div>
 
 
                                 <span className='font-bold italic text-gray-600 text-center block text-sm'>
-                                    *THIS IS FRONTEND MOCKUP ONLY, USE EMAIL SIGN UP INSTEAD*
+                                    *Log in with authentications OR*
                                 </span>
                             </div>
                         </div>
