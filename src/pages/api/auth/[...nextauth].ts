@@ -5,6 +5,7 @@ import { neon } from '@neondatabase/serverless';
 import { JWT } from "next-auth/jwt";
 import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord"
 import GitHubProvider, { GithubProfile } from "next-auth/providers/github";
+import { DBAddressInterface } from "@/app/DataInterfaces";
 
 type UserRow = {
     user_id: number;
@@ -13,7 +14,7 @@ type UserRow = {
     user_email: string | null;
     user_password: string | null;
     user_phone: string | null;
-    user_address: Record<string, any> | null; // You can adjust this based on the actual shape of the address
+    user_address: DBAddressInterface | null;
     google_id: string | null;
     github_id: string | null;
     discord_id: string | null;
@@ -106,13 +107,13 @@ export const authOptions = {
                 //inserting new user into db
                 if (userLoginQuery.length === 0) {
                     console.log("GOOGLE INSERTING USER")
-                    const setUserUp = await sql`INSERT INTO users(user_first_name, user_last_name, user_email, google_id, new_user) 
+                    await sql`INSERT INTO users(user_first_name, user_last_name, user_email, google_id, new_user) 
                     VALUES (${googleProfile?.given_name}, ${googleProfile?.family_name}, ${googleProfile?.email}, ${googleProfile?.sub?.toString()}, ${true});`
 
                     return true
                 }
                 else {
-                    const updateNotNewUser = await sql`UPDATE users SET new_user = ${false} WHERE user_id = ${userLoginQuery[0].user_id};`
+                    await sql`UPDATE users SET new_user = ${false} WHERE user_id = ${userLoginQuery[0].user_id};`
                     return true
                 }
 
@@ -128,13 +129,13 @@ export const authOptions = {
                 //inserting new user into db
                 if (userLoginQuery.length === 0) {
                     //console.log("GITHUB INSERTING USER")
-                    const setUserUp = await sql`INSERT INTO users(user_first_name, user_email, github_id, new_user) 
+                    await sql`INSERT INTO users(user_first_name, user_email, github_id, new_user) 
                     VALUES (${githubProfile?.login}, ${githubProfile?.email}, ${githubProfile?.id?.toString()}, ${true});`
 
                     return true
                 }
                 else {
-                    const updateNotNewUser = await sql`UPDATE users SET new_user = ${false} WHERE user_id = ${userLoginQuery[0].user_id};`
+                    await sql`UPDATE users SET new_user = ${false} WHERE user_id = ${userLoginQuery[0].user_id};`
                     return true
                 }
             }
@@ -149,13 +150,13 @@ export const authOptions = {
                 //inserting new user into db
                 if (userLoginQuery.length === 0) {
                     //console.log("GITHUB INSERTING USER")
-                    const setUserUp = await sql`INSERT INTO users(user_first_name, user_email, discord_id, new_user) 
+                    await sql`INSERT INTO users(user_first_name, user_email, discord_id, new_user) 
                     VALUES (${discordProfile?.username}, ${discordProfile?.email}, ${discordProfile?.id?.toString()}, ${true});`
 
                     return true
                 }
                 else {
-                    const updateNotNewUser = await sql`UPDATE users SET new_user = ${false} WHERE user_id = ${userLoginQuery[0].user_id};`
+                    await sql`UPDATE users SET new_user = ${false} WHERE user_id = ${userLoginQuery[0].user_id};`
                     return true
                 }
             }
@@ -466,7 +467,7 @@ export const authOptions = {
             session.user.lastName = token.lastName;
             session.user.phone = token.phone;
             session.user.address = token.address
-            console.log("TOKEN CHECK IF UPDATED");
+            console.log("TOKEN CHECK IF UPDATED", user);
             console.log("Session updated:");
             return session;
         },

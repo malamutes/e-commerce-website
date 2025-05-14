@@ -13,6 +13,7 @@ import { FullScreenLoadingComponent } from '@/app/components/LoadingComponent';
 import { AssociatedWishlistsWithProduct } from '@/app/Contexts/GlobalWishlistTrackerContextWrapper';
 import { GlobalWishlistTrackerContext } from '@/app/Contexts/GlobalWishlistTrackerContext';
 import { useSession } from 'next-auth/react';
+import { WishlistContext } from '@/app/Contexts/WishlistModalContext';
 
 export default function LoginMenu() {
     const { logIn, setLogIn } = useContext(GlobalLoginTypeContext)
@@ -28,6 +29,7 @@ export default function LoginMenu() {
     const router = useRouter();
 
     const { setAllWishlistedItems } = useContext(GlobalWishlistTrackerContext);
+    const { setWishListArray } = useContext(WishlistContext);
 
     const [lengthValid, setLengthValid] = useState(false);
     const [lowercaseValid, setLowercaseValid] = useState(false);
@@ -116,9 +118,31 @@ export default function LoginMenu() {
 
                 if (response.ok) {
                     const reply: AssociatedWishlistsWithProduct[] = await response.json()
-
+                    console.log("WISHLIST: ", reply)
                     //console.log("WISHLSITED ITEMS IN GLOBAL TRACEKR", reply);
                     setAllWishlistedItems((new Map(reply.map((item) => [item.product_id, item.associated_wishlists]))));
+
+                    const wishlistResponse = await fetch(`/api/Wishlist?requestType=Modal`, {
+                        method: "GET",
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (wishlistResponse.ok) {
+                        const wishlistReply = await wishlistResponse.json()
+                        console.log("GETTING WISHLISTED ARRAYS", wishlistReply)
+                        if (wishlistReply.length !== 0) {
+                            setWishListArray(wishlistReply[0].array_agg);
+                        }
+                        else {
+                            setWishListArray([]);
+                        }
+
+                    }
+                    else {
+                        console.log(response.statusText)
+                    }
 
                 }
                 else {
@@ -467,9 +491,12 @@ export default function LoginMenu() {
                                     </div>
                                 </div>
 
-
                                 <span className='font-bold italic text-gray-600 text-center block text-sm'>
                                     *Log in with authentications OR*
+                                </span>
+
+                                <span className='font-bold italic text-gray-600 text-center block text-sm'>
+                                    *A sample user account is: david.jones63@gmail.com, D@v1dJ0n3s!*
                                 </span>
                             </div>
                         </div>

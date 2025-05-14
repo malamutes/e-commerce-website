@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { WishlistContext } from "../Contexts/WishlistModalContext";
 import { GlobalWishlistTrackerContext } from "../Contexts/GlobalWishlistTrackerContext";
 import Link from "next/link";
@@ -8,6 +8,10 @@ import Link from "next/link";
 export default function WishlistOverviewPage() {
     const { wishListArray } = useContext(WishlistContext);
     const { allWishlistedItems } = useContext(GlobalWishlistTrackerContext);
+
+    useEffect(() => {
+        console.log(wishListArray);
+    }, [wishListArray])
 
     return <>
         <div className="min-h-[500px] min-w-[300px]">

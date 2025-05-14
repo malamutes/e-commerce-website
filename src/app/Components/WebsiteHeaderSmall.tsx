@@ -58,37 +58,39 @@ export default function WebsiteHeaderSmall(props: WebsiteHeaderInterface) {
             {/* for <div> <link image> <div> both divs have the same width so the image is centered
                     with justify between as parent div*/}
 
-            <div className={`overflow-y-scroll h-screen 
+            <div
+                className={`overflow-y-scroll h-screen whitespace-nowrap
             ${menuOffCanvas ? `fixed transition-all duration-500 ${animateOffCanvas
-                    ? `2xs:w-[80vw] w-[85vw] max-w-[500px]` : "w-[0px]"}` : "hidden"} 
+                        ? `3xs:w-[80vw] w-full max-w-[525px]` : "w-[0px]"}` : "hidden"} 
                 bg-white z-20 top-0 left-0 flex flex-col`}>
-                <div className="flex flex-row justify-between">
-                    <span className="text-2xl italic p-5">
-                        Navigation
-                    </span>
-                    <FontAwesomeIcon icon={faX}
-                        onClick={() => { setMenuOffCanvas(false); props.setSearchQuery(""); props.setSearchQueryProducts([]); props.setNoResultMessage("") }}
-                        className="cursor-pointer p-5 text-[25px]" />
-                </div>
 
-                <SearchbarSmall
-                    searchQuery={props.searchQuery}
-                    setSearchQuery={props.setSearchQuery}
-                    setNoResultMessage={props.setNoResultMessage}
-                    noResultMessage={props.noResultMessage}
-                    setSearchQueryProducts={props.setSearchQueryProducts}
-                    searchQueryProducts={props.searchQueryProducts}
-                    setMenuOffCanvas={setMenuOffCanvas}
-                    searchQueryTotalCount={props.searchQueryTotalCount}
-                    setSearchQueryTotalCount={props.setSearchQueryTotalCount}
-                    showLoadingUI={props.showLoadingUI}
-                    setShowLoadingUI={props.setShowLoadingUI}
-                />
+                <div style={{ transitionDuration: `${500}ms`, transitionDelay: '100ms' }}
+                    className={`transition-all
+                    ${animateOffCanvas ? "translate-x-0 opacity-100" : "opacity-0 -translate-x-full"}`}>
+                    <SearchbarSmall
+                        searchQuery={props.searchQuery}
+                        setSearchQuery={props.setSearchQuery}
+                        setNoResultMessage={props.setNoResultMessage}
+                        noResultMessage={props.noResultMessage}
+                        setSearchQueryProducts={props.setSearchQueryProducts}
+                        searchQueryProducts={props.searchQueryProducts}
+                        setMenuOffCanvas={setMenuOffCanvas}
+                        searchQueryTotalCount={props.searchQueryTotalCount}
+                        setSearchQueryTotalCount={props.setSearchQueryTotalCount}
+                        showLoadingUI={props.showLoadingUI}
+                        setShowLoadingUI={props.setShowLoadingUI}
+                    />
+
+                </div>
 
                 <div className="flex flex-col">
                     {props.headers.map((headline, index) => (
                         <DropdownMenu dropdownTitle={headline} key={index}
-                            dropdownItems={HeadlineDropdownMap[headline]} />
+                            dropdownItems={HeadlineDropdownMap[headline]}
+                            style={{ transitionDelay: `${index * 200 + (200 - index * 50)}ms` }}
+                            classname={`transition-all duration-500
+                                ${animateOffCanvas ? "opacity-100 -translate-x-0"
+                                    : "opacity-0 -translate-x-[150px]"}`} />
                     ))}
 
                 </div>

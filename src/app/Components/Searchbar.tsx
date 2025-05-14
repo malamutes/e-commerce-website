@@ -195,7 +195,7 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
             <div className="flex items-center"
                 onClick={(event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()}>
                 <div className="flex flex-col w-full ">
-                    <div className="w-full flex flex-row mx-auto p-5 gap-5 
+                    <div className="w-full flex flex-row mx-auto p-5 pr-1 gap-5 
                     justify-center items-center ">
                         <div className="relative w-full">
                             <input
@@ -215,6 +215,13 @@ export function SearchbarSmall(props: SearchBarSmallProps) {
                                 onClick={() => handleSearch(props.searchQuery, props.setSearchQueryProducts, props.setNoResultMessage,
                                     props.setSearchQueryTotalCount, props.setShowLoadingUI)}
                             />
+                        </div>
+                        <div className="cursor-pointer"
+                            onClick={() => {
+                                props.setMenuOffCanvas(false); props.setSearchQuery("");
+                                props.setSearchQueryProducts([]); props.setNoResultMessage("")
+                            }}>
+                            <FontAwesomeIcon icon={faSquareXmark} style={{ fontSize: '55px' }} />
                         </div>
                     </div>
                     <div className="font-bold text-lg mx-auto w-full flex justify-center items-center">

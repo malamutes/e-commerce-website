@@ -9,6 +9,8 @@ interface FilterTabMenuMultiProps {
     categoryArray: string[],
     filterStateArray: string[],
     filterSetStateArray: React.Dispatch<React.SetStateAction<string[]>>;
+    classname?: string,
+    style?: React.CSSProperties
 }
 
 interface FilterTabMenuSingleProps {
@@ -16,6 +18,8 @@ interface FilterTabMenuSingleProps {
     categoryArray: string[],
     filterState: string,
     filterSetState: React.Dispatch<React.SetStateAction<string>>;
+    classname?: string,
+    style?: React.CSSProperties
 }
 
 const titleClass = "flex justify-between pt-3 items-center cursor-pointer ";
@@ -36,7 +40,7 @@ export default function FilterTabMenuMulti(props: FilterTabMenuMultiProps) {
     };
 
     return <>
-        <div className="pl-5">
+        <div className={`pl-5 ${props.classname}`} style={props.style}>
             <div className={titleClass}
                 onClick={() => setShowMenu(showMenu => !showMenu)}
             >
@@ -87,7 +91,7 @@ export function FilterTabMenuSingle(props: FilterTabMenuSingleProps) {
     const [showMenu, setShowMenu] = useState(false);
 
     return <>
-        <div className="pl-5">
+        <div className={`pl-5 ${props.classname}`} style={props.style}>
             <div className={titleClass}
                 onClick={() => setShowMenu(showMenu => !showMenu)}
             >

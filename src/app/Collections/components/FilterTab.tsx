@@ -116,7 +116,8 @@ export function FilterTabSmall(props: FilterTabProps) {
             style={{ zIndex: 40 }}>
         </div>
 
-        <div className={`${filterOffCanvas ? "fixed" : "hidden"}
+        <div className={`transition-all duration-500 fixed ${filterOffCanvas
+            ? "-translate-x-0" : "-translate-x-full"}
             w-5/6 bg-white flex flex-col h-screen top-0 left-0 p-3`}
             style={{ zIndex: 50 }}
         >

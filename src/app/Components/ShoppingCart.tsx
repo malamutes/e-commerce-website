@@ -116,7 +116,8 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
         </div>
 
-        <div className={`bg-white right-0 top-0 h-screen ${props.show ? `fixed transition-all duration-500 
+        <div className={`bg-white right-0 top-0 h-screen
+         ${props.show ? `fixed transition-all duration-500 
         ${animateShoppingCart ? "3xs:w-[500px] w-11/12 " : "w-[0px]"}` : "hidden"}
                 z-50`}>
             <div className={`flex flex-col h-[80vh] overflow-y-scroll pb-5 
@@ -124,7 +125,7 @@ export default function ShoppingCart(props: ShoppingCartProps) {
                     ? ""
                     : "border-b-2 border-b-gray-500"}
             `}>
-                <div className="flex flex-row justify-between p-5">
+                <div className="flex flex-row justify-between p-5 whitespace-nowrap">
                     <span className="font-bold text-[20px]">
                         YOUR SHOPPING CART
                     </span>
@@ -135,7 +136,7 @@ export default function ShoppingCart(props: ShoppingCartProps) {
 
                 </div>
 
-                <div className={`h-[20vh] ${Object.keys(shoppingCartContext.cartState).length === 0 ? "block" : "hidden"} pl-5`}>
+                <div className={`h-[20vh] whitespace-nowrap ${Object.keys(shoppingCartContext.cartState).length === 0 ? "block" : "hidden"} pl-5`}>
                     <span className="italic">
                         There are currently no items in your cart!
                     </span>

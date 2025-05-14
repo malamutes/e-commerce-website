@@ -59,14 +59,16 @@ export interface WebsiteHeaderInterface {
 
 interface DropdownMenu {
     dropdownItems: string[],
-    dropdownTitle: string
+    dropdownTitle: string,
+    classname?: string,
+    style?: React.CSSProperties
 }
 
 export function DropdownMenu(props: DropdownMenu) {
     const [closeMenu, setCloseMenu] = useState(true);
     const iconClass = "xs:mx-1.5 mx-1 cursor-pointer transition-transform duration-250 hover:scale-110";
     return <>
-        <div className="flex flex-col p-5">
+        <div className={`flex flex-col p-5 ${props.classname}`} style={props.style}>
             <div
                 className="flex flex-row items-center xl:mx-4 lg:mx-3 font-bold pb-2.5">
                 <div className="cursor-pointer" onClick={() => setCloseMenu(closeMenu => !closeMenu)}>
@@ -80,7 +82,9 @@ export function DropdownMenu(props: DropdownMenu) {
 
             </div>
 
-            <div className={`flex flex-col ${closeMenu ? "hidden" : "block"}`}>
+            <div
+                className={`flex flex-col overflow-hidden transition-all duration-500 ease-in-out
+                ${closeMenu ? "hidden" : "block"}`}>
                 {props.dropdownItems.map((item, index) => {
                     let dynamicUrl: string = "";
                     if (props.dropdownTitle === 'Products') {
@@ -94,12 +98,14 @@ export function DropdownMenu(props: DropdownMenu) {
                     }
 
                     return (
-                        <Link key={index} href={dynamicUrl} className="hover:shadow-lg  rounded-lg 
-                            cursor-pointer p-[5px]
-                            hover:bg-gray-300 w-fit">
-                            <span >
-                                {item}
-                            </span>
+                        <Link
+                            key={index}
+                            href={dynamicUrl}
+                            className={`
+                                hover:shadow-lg rounded-lg cursor-pointer p-[5px] hover:bg-gray-300 w-fit
+                            `}
+                        >
+                            <span>{item}</span>
                         </Link>
                     );
                 })}
@@ -237,7 +243,6 @@ export default function WebsiteHeader() {
                 setShowLoadingUI={setShowLoadingUI}
             />
         </div>
-
 
         <FullScreenLoadingComponent
             show={showFullScreenLoading}
